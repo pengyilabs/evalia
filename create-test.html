@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRCLCN — Crear prueba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --fg: #ffffff;
+  --muted: #737373;
+  --border: #242424;
+  --accent: #63fe13;
+  --accent-soft: color-mix(in oklch, var(--accent) 14%, transparent);
+  --fg-soft: color-mix(in oklch, var(--fg) 6%, transparent);
+  --font-display: 'Albert Sans', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Albert Sans', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  --radius: 8px;
+  --radius-lg: 8px;
+  --sidebar-w: 240px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg);color:var(--fg);display:flex;min-height:100vh;overflow-x:hidden}
+.sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100}
+.sidebar-logo{padding:24px 20px;font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:2px;color:var(--accent);border-bottom:1px solid var(--border)}
+.sidebar-nav{flex:1;padding:12px 8px;display:flex;flex-direction:column;gap:2px}
+.sidebar-nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:background .15s,color .15s}
+.sidebar-nav a:hover{background:var(--fg-soft);color:var(--fg)}
+.sidebar-nav a.active{background:var(--accent-soft);color:var(--accent)}
+.sidebar-nav a svg{width:18px;height:18px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sidebar-user{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.sidebar-user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:13px}
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 32px;font-family:var(--font-display);font-size:16px;font-weight:600;flex-shrink:0}
+.content{flex:1;padding:32px;max-width:960px;width:100%;margin:0 auto}
+.step-indicator{display:flex;align-items:center;margin-bottom:40px}
+.step-item{display:flex;align-items:center}
+.step-item:last-child .step-line{display:none}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid var(--border);color:var(--muted);background:var(--surface);flex-shrink:0;transition:all .2s}
+.step-item.active .step-dot,.step-item.completed .step-dot{border-color:var(--accent);background:var(--accent);color:var(--bg)}
+.step-label{margin-left:10px;font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap}
+.step-item.active .step-label{color:var(--fg)}
+.step-item.completed .step-label{color:var(--accent)}
+.step-line{width:48px;height:2px;background:var(--border);margin:0 8px}
+.step-item.completed+.step-item .step-line{background:var(--accent)}
+.step-item.active+.step-item .step-line{background:linear-gradient(90deg,var(--accent),var(--border))}
+.step-content{display:none}
+.step-content.active{display:block}
+.section-title{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:4px}
+.section-subtitle{font-size:14px;color:var(--muted);margin-bottom:28px}
+.materials-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.material-card{border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;cursor:pointer;transition:border-color .15s,background .15s;position:relative;display:flex;gap:14px}
+.material-card:hover{border-color:#333;background:var(--fg-soft)}
+.material-card.selected{border-color:var(--accent);background:var(--accent-soft)}
+.material-card .checkbox{position:absolute;top:14px;right:14px;width:20px;height:20px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;background:var(--surface);transition:all .15s}
+.material-card.selected .checkbox{border-color:var(--accent);background:var(--accent)}
+.material-card .checkbox svg{display:none;width:12px;height:12px;stroke:var(--bg);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.material-card.selected .checkbox svg{display:block}
+.material-icon{width:40px;height:40px;border-radius:var(--radius);background:var(--fg-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.material-icon svg{width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.material-card.selected .material-icon{background:var(--accent-soft)}
+.material-card.selected .material-icon svg{stroke:var(--accent)}
+.material-info{flex:1;min-width:0}
+.material-name{font-size:14px;font-weight:600;margin-bottom:6px;line-height:1.35;padding-right:24px}
+.material-tag{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px;background:var(--fg-soft);color:var(--muted);margin-bottom:6px}
+.material-card.selected .material-tag{background:color-mix(in oklch,var(--accent) 20%,transparent);color:var(--accent)}
+.material-topics{font-size:12px;color:var(--muted)}
+.selected-count{font-size:13px;color:var(--muted);font-weight:500}
+.selected-count span{color:var(--accent);font-weight:600}
+.config-section{margin-bottom:32px}
+.config-label{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.input-field{width:100%;padding:12px 16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--fg);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color .15s}
+.input-field::placeholder{color:var(--muted)}
+.input-field:focus{border-color:var(--accent)}
+.check-list{display:flex;flex-direction:column;gap:8px}
+.check-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--radius);border:1px solid var(--border);cursor:pointer;transition:all .15s}
+.check-item:hover{background:var(--fg-soft)}
+.check-item.checked{border-color:var(--accent);background:var(--accent-soft)}
+.check-item .cb{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--surface);transition:all .15s}
+.check-item.checked .cb{border-color:var(--accent);background:var(--accent)}
+.check-item .cb svg{display:none;width:11px;height:11px;stroke:var(--bg);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.check-item.checked .cb svg{display:block}
+.check-item-label{font-size:14px;font-weight:500}
+.check-item-count{margin-left:auto;font-size:12px;color:var(--muted);font-family:var(--font-mono)}
+.diff-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.diff-item{padding:14px;border-radius:var(--radius);border:1px solid var(--border);text-align:center}
+.diff-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:500}
+.diff-value{font-size:20px;font-weight:700;font-family:var(--font-mono)}
+.diff-value.easy{color:#4ade80}
+.diff-value.medium{color:#facc15}
+.diff-value.hard{color:#f87171}
+.knowledge-list{display:flex;flex-direction:column;gap:6px}
+.knowledge-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--radius);border:1px solid var(--border)}
+.knowledge-name{font-size:14px;font-weight:500;flex:1}
+.weight-badge{font-size:11px;font-weight:600;padding:2px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
+.weight-badge.high{background:color-mix(in oklch,var(--accent) 18%,transparent);color:var(--accent)}
+.weight-badge.medium{background:color-mix(in oklch,#facc15 18%,transparent);color:#facc15}
+.weight-badge.low{background:color-mix(in oklch,#737373 18%,transparent);color:var(--muted)}
+.total-box{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-radius:var(--radius-lg);border:1px solid var(--accent);background:var(--accent-soft);margin-top:16px}
+.total-label{font-size:14px;font-weight:600}
+.total-number{font-size:28px;font-weight:700;font-family:var(--font-mono);color:var(--accent)}
+.preview-card{border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin-bottom:24px}
+.preview-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.preview-meta{font-size:13px;color:var(--muted);margin-bottom:4px}
+.preview-diff{font-size:13px;color:var(--muted)}
+.preview-diff span{color:var(--fg);font-weight:500}
+.export-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px}
+.export-option{display:flex;align-items:center;gap:10px;padding:14px;border-radius:var(--radius);border:1px solid var(--border);cursor:pointer;transition:all .15s}
+.export-option:hover{background:var(--fg-soft)}
+.export-option.checked{border-color:var(--accent);background:var(--accent-soft)}
+.export-option .cb{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--surface);transition:all .15s}
+.export-option.checked .cb{border-color:var(--accent);background:var(--accent)}
+.export-option .cb svg{display:none;width:11px;height:11px;stroke:var(--bg);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.export-option.checked .cb svg{display:block}
+.export-label{font-size:13px;font-weight:500}
+.online-settings{border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:24px}
+.online-settings-title{font-size:14px;font-weight:600;margin-bottom:16px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:14px;color:var(--muted)}
+.setting-value{font-size:14px;font-weight:500}
+.toggle{width:40px;height:22px;border-radius:11px;border:none;cursor:pointer;position:relative;transition:background .2s}
+.toggle.on{background:var(--accent)}
+.toggle.off{background:var(--border)}
+.toggle::after{content:'';position:absolute;top:3px;width:16px;height:16px;border-radius:50%;background:var(--fg);transition:left .2s}
+.toggle.on::after{left:21px}
+.toggle.off::after{left:3px}
+.nav-buttons{display:flex;gap:12px;justify-content:flex-end;margin-top:40px;padding-top:24px;border-top:1px solid var(--border)}
+.btn{padding:10px 24px;border-radius:var(--radius);font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;border:none;display:inline-flex;align-items:center;gap:8px}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--fg-soft);color:var(--fg);border-color:#444}
+.btn-primary{background:var(--fg);color:var(--bg)}
+.btn-primary:hover{opacity:.9}
+.btn-accent{background:var(--accent);color:var(--bg);font-size:16px;padding:14px 32px;border-radius:var(--radius-lg)}
+.btn-accent:hover{opacity:.9}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sidebar-toggle{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px;cursor:pointer;color:var(--fg)}
+.sidebar-toggle svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .2s}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-toggle{display:flex}
+  .main{margin-left:0}
+  .content{padding:24px 16px}
+  .materials-grid{grid-template-columns:1fr}
+  .diff-grid{grid-template-columns:1fr}
+  .export-grid{grid-template-columns:1fr}
+  .step-label{font-size:11px}
+  .step-line{width:24px}
+}
+</style>
+</head>
+<body>
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+<svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<aside class="sidebar" data-od-id="sidebar">
+<a href="crclcn-landing.html" class="sidebar-logo">CRCLCN</a>
+<nav class="sidebar-nav">
+  <a href="index.html">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Panel
+  </a>
+  <a href="materials.html">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Materiales
+  </a>
+  <a href="create-test.html" class="active">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Crear prueba
+  </a>
+  <a href="test-detail.html">
+    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+    Pruebas
+  </a>
+  <a href="results.html">
+    <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Resultados
+  </a>
+</nav>
+<div class="sidebar-user">
+  <div class="sidebar-user-avatar">PG</div>
+  Prof. Garcia
+</div>
+</aside>
+
+<main class="main" data-od-id="main">
+<div class="topbar">Crear prueba</div>
+<div class="content" data-od-id="content">
+<div class="step-indicator" data-od-id="step-indicator">
+  <div class="step-item active" data-step="1">
+    <div class="step-dot">1</div>
+    <div class="step-label">Seleccionar materiales</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step-item" data-step="2">
+    <div class="step-dot">2</div>
+    <div class="step-label">Configurar prueba</div>
+  </div>
+  <div class="step-line"></div>
+  <div class="step-item" data-step="3">
+    <div class="step-dot">3</div>
+    <div class="step-label">Generar y compartir</div>
+  </div>
+</div>
+
+<div class="step-content active" id="step1" data-od-id="step1-content">
+  <h2 class="section-title">Selecciona los materiales para la prueba</h2>
+  <p class="section-subtitle">La IA analizara el contenido y generara preguntas basadas en los temas principales</p>
+
+  <div class="materials-grid" data-od-id="materials-grid">
+    <div class="material-card selected" onclick="toggleMaterial(this)" data-od-id="mat-1">
+      <div class="checkbox"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="material-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="material-info">
+        <div class="material-name">Biologia - Unidad 3: Genetica molecular</div>
+        <div class="material-tag">Biologia</div>
+        <div class="material-topics">12 temas detectados</div>
+      </div>
+    </div>
+
+    <div class="material-card" onclick="toggleMaterial(this)" data-od-id="mat-2">
+      <div class="checkbox"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="material-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="material-info">
+        <div class="material-name">Matematicas - Ejercicios de algebra lineal</div>
+        <div class="material-tag">Matematicas</div>
+        <div class="material-topics">8 temas detectados</div>
+      </div>
+    </div>
+
+    <div class="material-card selected" onclick="toggleMaterial(this)" data-od-id="mat-3">
+      <div class="checkbox"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="material-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="material-info">
+        <div class="material-name">Historia - La Revolucion Francesa</div>
+        <div class="material-tag">Historia</div>
+        <div class="material-topics">15 temas detectados</div>
+      </div>
+    </div>
+
+    <div class="material-card" onclick="toggleMaterial(this)" data-od-id="mat-4">
+      <div class="checkbox"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="material-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="material-info">
+        <div class="material-name">Quimica - Tabla periodica y enlaces</div>
+        <div class="material-tag">Quimica</div>
+        <div class="material-topics">10 temas detectados</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="selected-count" id="selectedCount"><span>2</span> materiales seleccionados</div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-primary" onclick="goToStep(2)">Siguiente <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  </div>
+</div>
+<div class="step-content" id="step2" data-od-id="step2-content">
+  <h2 class="section-title">Configura tu prueba</h2>
+  <p class="section-subtitle">Define el formato, tipos de pregunta y distribucion de dificultad</p>
+
+  <div class="config-section" data-od-id="test-name">
+    <div class="config-label">Nombre de la prueba</div>
+    <input type="text" class="input-field" placeholder="Nombre de la prueba" value="Examen Parcial - Genetica y Revolucion Francesa">
+  </div>
+
+  <div class="config-section" data-od-id="question-types">
+    <div class="config-label">Tipos de pregunta</div>
+    <div class="check-list">
+      <div class="check-item checked" onclick="toggleCheck(this)" data-count="15">
+        <div class="cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="check-item-label">Opcion unica</div>
+        <div class="check-item-count">15 preguntas</div>
+      </div>
+      <div class="check-item checked" onclick="toggleCheck(this)" data-count="10">
+        <div class="cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="check-item-label">Opcion multiple</div>
+        <div class="check-item-count">10 preguntas</div>
+      </div>
+      <div class="check-item checked" onclick="toggleCheck(this)" data-count="8">
+        <div class="cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="check-item-label">Verdadero / Falso</div>
+        <div class="check-item-count">8 preguntas</div>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this)" data-count="12">
+        <div class="cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="check-item-label">Completar espacios en blanco</div>
+        <div class="check-item-count">12 preguntas</div>
+      </div>
+      <div class="check-item checked" onclick="toggleCheck(this)" data-count="5">
+        <div class="cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="check-item-label">Respuesta corta</div>
+        <div class="check-item-count">5 preguntas</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="config-section" data-od-id="difficulty">
+    <div class="config-label">Distribucion de dificultad</div>
+    <div class="diff-grid">
+      <div class="diff-item">
+        <div class="diff-label">Facil</div>
+        <div class="diff-value easy">30%</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-label">Media</div>
+        <div class="diff-value medium">50%</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-label">Dificil</div>
+        <div class="diff-value hard">20%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="config-section" data-od-id="knowledge-points">
+    <div class="config-label">Temas de conocimiento</div>
+    <div class="knowledge-list">
+      <div class="knowledge-item">
+        <div class="knowledge-name">ADN y ARN</div>
+        <div class="weight-badge high">Alta</div>
+      </div>
+      <div class="knowledge-item">
+        <div class="knowledge-name">Mutaciones geneticas</div>
+        <div class="weight-badge medium">Media</div>
+      </div>
+      <div class="knowledge-item">
+        <div class="knowledge-name">Herencia mendeliana</div>
+        <div class="weight-badge high">Alta</div>
+      </div>
+      <div class="knowledge-item">
+        <div class="knowledge-name">Revolucion Francesa - Causas</div>
+        <div class="weight-badge high">Alta</div>
+      </div>
+      <div class="knowledge-item">
+        <div class="knowledge-name">La guillotina y el Terror</div>
+        <div class="weight-badge low">Baja</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-box" data-od-id="total-box">
+    <div class="total-label">Total de preguntas</div>
+    <div class="total-number" id="totalQuestions">38</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-ghost" onclick="goToStep(1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Anterior</button>
+    <button class="btn btn-primary" onclick="goToStep(3)">Siguiente <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+  </div>
+</div>
+<div class="step-content" id="step3" data-od-id="step3-content">
+  <h2 class="section-title">Revisa y genera tu prueba</h2>
+  <p class="section-subtitle">Verifica la configuracion antes de generar la prueba</p>
+
+  <div class="preview-card" data-od-id="preview-card">
+    <div class="preview-title">Examen Parcial - Genetica y Revolucion Francesa</div>
+    <div class="preview-meta">38 preguntas &middot; 60 minutos</div>
+    <div class="preview-diff">Dificultad: <span>30% facil</span>, <span>50% media</span>, <span>20% dificil</span></div>
+  </div>
+
+  <div class="config-section" data-od-id="export-options">
+    <div class="config-label">Opciones de exportacion</div>
+    <div class="export-grid">
+      <div class="export-option" onclick="toggleCheck(this)">
+        <div class="cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="export-label">PDF con respuestas</div>
+      </div>
+      <div class="export-option" onclick="toggleCheck(this)">
+        <div class="cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="export-label">PDF sin respuestas</div>
+      </div>
+      <div class="export-option" onclick="toggleCheck(this)">
+        <div class="cb"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="export-label">Word (.docx)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="config-section" data-od-id="online-settings">
+    <div class="config-label">Configuracion de prueba en linea</div>
+    <div class="online-settings">
+      <div class="online-settings-title">Ajustes en linea</div>
+      <div class="setting-row">
+        <div class="setting-label">Tiempo limite</div>
+        <div class="setting-value">60 minutos</div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-label">Aleatorizar preguntas</div>
+        <button class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+      </div>
+      <div class="setting-row">
+        <div class="setting-label">Anti-trampa (cambio de pestana)</div>
+        <button class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+      </div>
+      <div class="setting-row">
+        <div class="setting-label">Prevenir copiar/pegar</div>
+        <button class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-ghost" onclick="goToStep(2)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Anterior</button>
+    <button class="btn btn-accent" onclick="alert('Prueba generada exitosamente!')">Generar prueba</button>
+  </div>
+</div>
+
+</div>
+</main>
+<script>
+let currentStep = 1;
+
+function goToStep(n) {
+  currentStep = n;
+  document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  document.querySelectorAll('.step-item').forEach(el => {
+    const s = parseInt(el.dataset.step);
+    el.classList.remove('active', 'completed');
+    if (s === n) el.classList.add('active');
+    else if (s < n) el.classList.add('completed');
+  });
+}
+
+function toggleMaterial(card) {
+  card.classList.toggle('selected');
+  updateCount();
+}
+
+function updateCount() {
+  const count = document.querySelectorAll('.material-card.selected').length;
+  document.getElementById('selectedCount').innerHTML = '<span>' + count + '</span> materiales seleccionados';
+}
+
+function toggleCheck(item) {
+  item.classList.toggle('checked');
+  updateTotal();
+}
+
+function updateTotal() {
+  let total = 0;
+  document.querySelectorAll('#step2 .check-item.checked').forEach(el => {
+    total += parseInt(el.dataset.count || 0);
+  });
+  if (total === 0) total = 38;
+  document.getElementById('totalQuestions').textContent = total;
+}
+</script>
+</body>
+</html>
