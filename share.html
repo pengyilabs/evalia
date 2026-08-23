@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EVALIA — Examen Parcial — Genética</title>
+<title>EVALIA — Examen Parcial — Biología y Matemáticas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,7 +21,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 .btn-primary:hover{opacity:.85}
 .btn-secondary{border:1px solid var(--border);background:var(--surface)}
 .btn-secondary:hover{border-color:var(--muted)}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:12px}
+.btn-ghost{color:var(--muted)}
+.btn-ghost:hover{color:var(--fg)}
 .test-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border)}
 .test-header .timer{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent)}
 .test-body{max-width:720px;margin:0 auto;width:100%;padding:24px;display:flex;flex-direction:column;gap:20px;flex:1}
@@ -37,7 +38,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 .option.selected .opt-circle::after{content:'';width:8px;height:8px;background:#000;border-radius:50%}
 .option .opt-check{width:20px;height:20px;border-radius:4px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .option.selected .opt-check{border-color:var(--accent);background:var(--accent)}
-.option.selected .opt-check::after{content:'✓';font-size:12px;color:#000;font-weight:700}
+.option.selected .opt-check::after{content:'\2713';font-size:12px;color:#000;font-weight:700}
 .q-nav{display:flex;justify-content:space-between;align-items:center}
 .q-dots{display:flex;gap:6px}
 .q-dot{width:10px;height:10px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s}
@@ -48,7 +49,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;max-width:420px;width:90%;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
 .modal h2{font-size:20px;font-weight:700}
 .modal p{font-size:14px;color:var(--muted)}
-@media(max-width:920px){}
 @media(max-width:600px){.test-header{flex-direction:column;text-align:center}}
 </style>
 </head>
@@ -57,26 +57,26 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 <!-- Start screen -->
 <div id="testStartScreen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:24px;padding:24px">
   <div style="font-size:32px;font-weight:700;color:var(--accent)">EVALIA</div>
-  <div style="font-size:18px;font-weight:600;text-align:center">Examen Parcial — Genética</div>
-  <div style="font-size:13px;color:var(--muted);text-align:center;max-width:400px">Tiempo límite: 45 minutos · 5 preguntas<br>Una vez iniciado, el tiempo no se puede pausar.</div>
+  <div style="font-size:18px;font-weight:600;text-align:center">Examen Parcial — Biología y Matemáticas</div>
+  <div style="font-size:13px;color:var(--muted);text-align:center;max-width:400px">15 preguntas · 45 min · Dificultad media<br>Tiempo límite: 45 minutos<br>Una vez iniciado, el tiempo no se puede pausar.</div>
   <div style="width:100%;max-width:360px;display:flex;flex-direction:column;gap:12px">
     <input type="text" placeholder="Tu nombre completo" id="studentName">
     <input type="text" placeholder="Tu clase (ej: 3ro A)" id="studentClass">
   </div>
-  <button class="btn btn-primary" style="min-width:200px" onclick="startTest()">Iniciar prueba</button>
+  <button class="btn btn-primary" style="min-width:200px" onclick="startTest()">Comenzar</button>
 </div>
 
 <!-- Test interface -->
 <div id="testInterface" style="display:none">
   <div class="test-header">
-    <div style="font-size:14px;font-weight:600">Examen Parcial — Genética</div>
+    <div style="font-size:14px;font-weight:600">Examen Parcial — Biología y Matemáticas</div>
     <div class="timer" id="timer">45:00</div>
     <button class="btn btn-primary" onclick="showSubmitModal()">Entregar</button>
   </div>
   <div class="test-body" id="testBody">
     <!-- Question 1 -->
     <div class="question-card" data-q="0">
-      <div class="q-type">Opción única · Pregunta 1 de 5</div>
+      <div class="q-type">Opción única · Pregunta 1 de 15</div>
       <div class="q-text">¿Cuál es la unidad fundamental de la herencia genética?</div>
       <div class="option-list">
         <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>A) Célula</div>
@@ -87,7 +87,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
     </div>
     <!-- Question 2 -->
     <div class="question-card" data-q="1" style="display:none">
-      <div class="q-type">Opción múltiple · Pregunta 2 de 5</div>
+      <div class="q-type">Opción múltiple · Pregunta 2 de 15</div>
       <div class="q-text">Selecciona todos los componentes del dogma central de la biología molecular:</div>
       <div class="option-list">
         <div class="option" onclick="selectOption(this,'multi')"><div class="opt-check"></div>ADN → ARN</div>
@@ -98,7 +98,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
     </div>
     <!-- Question 3 -->
     <div class="question-card" data-q="2" style="display:none">
-      <div class="q-type">Verdadero / Falso · Pregunta 3 de 5</div>
+      <div class="q-type">Verdadero / Falso · Pregunta 3 de 15</div>
       <div class="q-text">El código genético es universal para todos los seres vivos.</div>
       <div class="option-list">
         <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>Verdadero</div>
@@ -107,25 +107,29 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
     </div>
     <!-- Question 4 -->
     <div class="question-card" data-q="3" style="display:none">
-      <div class="q-type">Completar · Pregunta 4 de 5</div>
-      <div class="q-text">El proceso de síntesis de proteínas a partir del ARN se llama ______.</div>
-      <input type="text" placeholder="Escribe tu respuesta" style="width:100%">
+      <div class="q-type">Opción única · Pregunta 4 de 15</div>
+      <div class="q-text">¿Cuál es la función principal de la mitocondria en la célula?</div>
+      <div class="option-list">
+        <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>A) Síntesis de proteínas</div>
+        <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>B) Producción de energía (ATP)</div>
+        <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>C) Almacenamiento de lípidos</div>
+        <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>D) Transporte de iones</div>
+      </div>
     </div>
     <!-- Question 5 -->
     <div class="question-card" data-q="4" style="display:none">
-      <div class="q-type">Respuesta corta · Pregunta 5 de 5</div>
-      <div class="q-text">Explica la diferencia entre genotipo y fenotipo. Incluye al menos un ejemplo.</div>
-      <textarea rows="5" placeholder="Escribe tu respuesta aquí..." style="width:100%;resize:vertical"></textarea>
+      <div class="q-type">Opción única · Pregunta 5 de 15</div>
+      <div class="q-text">¿Cuál es la fórmula para resolver ecuaciones cuadráticas?</div>
+      <div class="option-list">
+        <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>A) x = -b ± √(b² - 4ac) / 2a</div>
+        <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>B) x = b ± √(b² + 4ac) / 2a</div>
+        <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>C) x = -b ± √(b² - 4ac) / a</div>
+        <div class="option" onclick="selectOption(this,'single')"><div class="opt-circle"></div>D) x = -b ± √(b² - 2ac) / 2a</div>
+      </div>
     </div>
     <div class="q-nav">
       <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()" disabled>← Anterior</button>
-      <div class="q-dots">
-        <div class="q-dot active" onclick="goToQuestion(0)"></div>
-        <div class="q-dot" onclick="goToQuestion(1)"></div>
-        <div class="q-dot" onclick="goToQuestion(2)"></div>
-        <div class="q-dot" onclick="goToQuestion(3)"></div>
-        <div class="q-dot" onclick="goToQuestion(4)"></div>
-      </div>
+      <div class="q-dots" id="qDots"></div>
       <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Siguiente →</button>
     </div>
   </div>
@@ -140,12 +144,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
     </div>
     <div style="font-size:20px;font-weight:700">Prueba completada</div>
     <div style="font-size:14px;color:var(--muted);text-align:center;max-width:400px">Tu resultado ha sido registrado. El profesor revisará las preguntas de respuesta corta.</div>
-    <div class="card" style="width:100%;max-width:400px;gap:12px">
+    <div class="card" style="width:100%;max-width:400px;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column">
       <div style="display:flex;justify-content:space-between;font-size:13px"><span>Preguntas correctas</span><span style="font-weight:600">4 / 5</span></div>
       <div style="display:flex;justify-content:space-between;font-size:13px"><span>Tiempo utilizado</span><span style="font-weight:600">32:14</span></div>
       <div style="display:flex;justify-content:space-between;font-size:13px"><span>Fecha</span><span style="font-weight:600">23 mayo 2026</span></div>
     </div>
-    <a href="index.html" class="btn btn-secondary">Volver al panel</a>
+    <a href="index.html#/dashboard" class="btn btn-secondary">Volver al panel</a>
   </div>
 </div>
 
@@ -169,11 +173,24 @@ var timerInterval = null;
 var timeLeft = 45 * 60;
 var answered = new Set();
 
+function buildDots() {
+  var container = document.getElementById('qDots');
+  if (!container) return;
+  container.innerHTML = '';
+  for (var i = 0; i < totalQuestions; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'q-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = (function(idx) { return function() { goToQuestion(idx); }; })(i);
+    container.appendChild(dot);
+  }
+}
+
 function startTest() {
-  var name = document.getElementById('studentName').value.trim();
-  if (!name) { document.getElementById('studentName').focus(); return; }
+  var name = document.getElementById('studentName');
+  if (name && !name.value.trim()) { name.focus(); return; }
   document.getElementById('testStartScreen').style.display = 'none';
   document.getElementById('testInterface').style.display = '';
+  buildDots();
   showQuestion(0);
   startTimer();
 }
@@ -215,7 +232,8 @@ function selectOption(el, type) {
   if (type === 'single') { el.closest('.option-list').querySelectorAll('.option').forEach(function(o) { o.classList.remove('selected'); }); }
   el.classList.toggle('selected');
   answered.add(currentQuestion);
-  document.querySelectorAll('.q-dot')[currentQuestion].classList.add('answered');
+  var dots = document.querySelectorAll('.q-dot');
+  if (dots[currentQuestion]) dots[currentQuestion].classList.add('answered');
 }
 
 function showSubmitModal() { document.getElementById('submitModal').classList.add('open'); }

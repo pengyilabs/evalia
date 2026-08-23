@@ -25,10 +25,57 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 .btn-ghost{color:var(--muted)}
 .btn-ghost:hover{color:var(--fg)}
 
-/* Landing page */
+.badge{display:inline-flex;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.badge-success{background:var(--accent-soft);color:var(--accent)}
+.badge-warning{background:color-mix(in oklch,#f59e0b 14%,transparent);color:#f59e0b}
+.badge-error{background:color-mix(in oklch,#ef4444 14%,transparent);color:#ef4444}
+.badge-neutral{background:var(--fg-soft);color:var(--muted)}
+
+.chip{padding:8px 16px;border-radius:99px;font-size:13px;font-weight:500;border:1px solid var(--border);cursor:pointer;min-height:44px;display:flex;align-items:center}
+.chip.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.chip:not(.active):hover{border-color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:12px}
+.stat-card .stat-value{font-size:28px;font-weight:700}
+.stat-card .stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-lg)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:12px 16px;font-size:12px;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border)}
+td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:transform .25s ease}
+.sidebar-logo{padding:20px 20px 16px;font-size:18px;font-weight:700;letter-spacing:2px;color:var(--accent);cursor:pointer;user-select:none}
+.sidebar-nav{flex:1;display:flex;flex-direction:column;gap:2px;padding:0 8px}
+.sidebar-nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--muted);transition:all .15s ease;min-height:44px}
+.sidebar-nav a:hover{color:var(--fg);background:var(--fg-soft)}
+.sidebar-nav a.active{color:var(--accent);background:var(--accent-soft)}
+.sidebar-nav a svg{width:18px;height:18px;flex-shrink:0}
+.sidebar-create-btn{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);font-size:14px;font-weight:600;color:#000;background:var(--accent);margin:0 8px 8px;min-height:44px;cursor:pointer;transition:opacity .15s}
+.sidebar-create-btn:hover{opacity:.85}
+.sidebar-create-btn svg{width:18px;height:18px;flex-shrink:0}
+.sidebar-user{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sidebar-user .avatar{width:32px;height:32px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--accent)}
+.sidebar-user span{font-size:13px;color:var(--muted)}
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;display:none}
+.sidebar-overlay.open{display:block}
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:101;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:40px;height:40px;align-items:center;justify-content:center}
+.hamburger svg{width:20px;height:20px;color:var(--fg)}
+
+.main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar h1{font-size:22px;font-weight:700;flex:1}
+
+/* Page views */
+.page{display:none;flex-direction:column;flex:1;padding:24px;gap:24px}
+.page.active{display:flex}
+
+/* Landing */
 .landing-header{position:sticky;top:0;z-index:100;background:rgba(0,0,0,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 .landing-header-inner{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:1120px;margin:0 auto;padding:0 24px}
-.landing-logo{font-family:var(--font-display);font-size:1.25rem;font-weight:700;letter-spacing:-.02em;color:var(--accent);cursor:pointer}
+.landing-logo{font-family:var(--font-display);font-size:1.25rem;font-weight:700;letter-spacing:-.02em;color:var(--accent)}
 .landing-nav{display:flex;align-items:center;gap:32px;list-style:none}
 .landing-nav a{font-size:.875rem;font-weight:500;color:var(--muted);transition:color .2s;min-height:44px;display:flex;align-items:center}
 .landing-nav a:hover{color:var(--fg)}
@@ -85,17 +132,15 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 @keyframes scanMove{0%{top:20%;opacity:0}20%{opacity:.7}80%{opacity:.7}100%{top:80%;opacity:0}}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(99,254,19,.4)}50%{box-shadow:0 0 0 8px rgba(99,254,19,0)}}
 @keyframes checkPop{0%{transform:translate(-50%,-50%) scale(0)}60%{transform:translate(-50%,-50%) scale(1.15)}100%{transform:translate(-50%,-50%) scale(1)}}
-.features-section{padding:80px 0;max-width:1120px;margin:0 auto;padding:80px 24px}
+
+.features-section{padding:80px 24px;max-width:1120px;margin:0 auto}
 .features-header{max-width:560px;margin-bottom:48px}
 .features-header .eyebrow{font-family:var(--font-display);font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
 .features-header h2{font-family:var(--font-display);font-size:clamp(1.5rem,3.5vw,2.25rem);font-weight:600;line-height:1.15}
 .feature-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;display:flex;flex-direction:column}
-.feature-icon{width:48px;height:48px;border-radius:var(--radius);background:var(--fg-soft);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
-.feature-icon svg{width:24px;height:24px;stroke:var(--fg);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.feature-demo{height:120px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .feature-card h3{font-size:1.125rem;font-weight:600;margin-bottom:8px}
 .feature-card p{color:var(--muted);font-size:.9375rem;line-height:1.6}
-.feature-demo{height:120px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-/* Upload demo */
 .fd-upload-zone{width:60%;height:60%;border:1.5px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;position:relative}
 .fd-upload-zone svg{width:20px;height:20px;color:var(--muted);stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .fd-file{position:absolute;padding:4px 8px;background:var(--surface);border:1px solid var(--border);border-radius:4px;font-size:8px;font-weight:600;display:flex;align-items:center;gap:4px;opacity:0}
@@ -106,7 +151,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 .fd-file.merged{animation:fdMerge .4s 2s ease forwards}
 @keyframes fdFileIn{0%{opacity:0;transform:translateX(20px)}100%{opacity:1;transform:translateX(0)}}
 @keyframes fdMerge{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.5) translateY(10px)}}
-/* AI demo */
 .fd-ai-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
 .fd-ai-brain{width:36px;height:36px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;position:relative}
 .fd-ai-brain svg{width:18px;height:18px;color:var(--accent);stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
@@ -116,7 +160,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 @keyframes fdAiPulse{0%,100%{opacity:0;transform:scale(.8)}50%{opacity:.6;transform:scale(1.1)}}
 @keyframes fdBlink{0%,100%{opacity:.6}50%{opacity:1}}
 @keyframes fdQPop{0%{opacity:0;transform:translateX(-50%) translateY(6px)}100%{opacity:1;transform:translateX(-50%) translateY(0)}}
-/* Chart demo */
 .fd-chart{display:flex;align-items:flex-end;gap:4px;height:70px;padding:0 12px;width:70%}
 .fd-bar{flex:1;background:var(--accent);border-radius:3px 3px 0 0;min-height:2px;animation:fdBarGrow .6s ease forwards}
 .fd-bar:nth-child(1){height:0;animation-delay:.2s}
@@ -127,11 +170,13 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 @keyframes fdBarGrow{0%{height:0}100%{height:var(--h)}}
 .fd-chart-label{position:absolute;top:8px;right:12px;font-size:8px;color:var(--accent);font-weight:700;opacity:0;animation:fdFadeIn .3s 1.2s ease forwards}
 @keyframes fdFadeIn{0%{opacity:0}100%{opacity:1}}
-.quote-section{padding:80px 0;max-width:1120px;margin:0 auto;padding:80px 24px}
+
+.quote-section{padding:80px 24px;max-width:1120px;margin:0 auto}
 .quote-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:48px;max-width:720px;margin:0 auto;text-align:center}
 .quote-card blockquote{font-family:var(--font-display);font-size:clamp(1.125rem,2.5vw,1.5rem);font-weight:500;line-height:1.5;margin-bottom:24px}
 .quote-card cite{font-style:normal;color:var(--muted);font-size:.875rem}
-.how-section{padding:80px 0;max-width:1120px;margin:0 auto;padding:80px 24px}
+
+.how-section{padding:80px 24px;max-width:1120px;margin:0 auto}
 .how-header{max-width:560px;margin-bottom:48px}
 .how-header .eyebrow{font-family:var(--font-display);font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
 .how-header h2{font-family:var(--font-display);font-size:clamp(1.5rem,3.5vw,2.25rem);font-weight:600;line-height:1.15}
@@ -139,278 +184,930 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
 .step-number{font-family:var(--font-display);font-size:3rem;font-weight:700;color:var(--border);line-height:1;margin-bottom:16px}
 .step-card h3{font-size:1.125rem;font-weight:600;margin-bottom:8px}
 .step-card p{color:var(--muted);font-size:.9375rem;line-height:1.6}
-.cta-section{padding:80px 0;text-align:center;max-width:1120px;margin:0 auto;padding:80px 24px}
+
+.cta-section{padding:80px 24px;text-align:center;max-width:1120px;margin:0 auto}
 .cta-section .lead{color:var(--muted);margin-top:12px;margin-bottom:32px;font-size:1.0625rem}
-.landing-footer{border-top:1px solid var(--border);padding:32px 0;max-width:1120px;margin:0 auto;padding:32px 24px}
+
+.landing-footer{border-top:1px solid var(--border);padding:32px 24px;max-width:1120px;margin:0 auto}
 .footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
 .footer-left{color:var(--muted);font-size:.8125rem}
 .footer-right{color:var(--muted);font-size:.8125rem}
 .footer-right span{color:var(--fg)}
 
+/* Upload zone */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius-lg);padding:48px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s}
+.upload-zone:hover{border-color:var(--accent)}
+.upload-zone svg{width:40px;height:40px;color:var(--muted)}
+.file-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--border);border-radius:var(--radius);min-height:44px}
+.file-item .file-info{flex:1}
+.file-item .file-name{font-size:13px;font-weight:500}
+.file-item .file-meta{font-size:11px;color:var(--muted)}
+.file-item .progress-bar{width:100%;height:4px;background:var(--border);border-radius:99px;margin-top:6px;overflow:hidden}
+.file-item .progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .3s}
+.file-item .progress-fill.complete{background:var(--accent)}
+.file-item .progress-fill.error{background:#ef4444}
+
+/* Material select for wizard */
+.material-select{border:2px solid var(--border);border-radius:var(--radius-lg);padding:16px;cursor:pointer;transition:all .15s}
+.material-select:hover{border-color:var(--muted)}
+.material-select.selected{border-color:var(--accent);background:var(--accent-soft)}
+.material-select .mat-icon{font-size:24px;margin-bottom:8px}
+.material-select .mat-title{font-size:14px;font-weight:600}
+.material-select .mat-sub{font-size:12px;color:var(--muted)}
+
+/* Wizard */
+.wizard-steps{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.wizard-step{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.wizard-step .step-num{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.wizard-step.active .step-num{background:var(--accent);color:#000;border-color:var(--accent)}
+.wizard-step.done .step-num{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.wizard-divider{width:32px;height:1px;background:var(--border)}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;min-height:44px}
+.toggle{position:relative;width:44px;height:24px;background:var(--border);border-radius:99px;cursor:pointer;transition:background .2s}
+.toggle.on{background:var(--accent)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:var(--fg);border-radius:50%;transition:transform .2s}
+.toggle.on::after{transform:translateX(20px)}
+
+/* Tabs */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border)}
+.tab{padding:12px 20px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;min-height:44px;display:flex;align-items:center}
+.tab.active{color:var(--fg);border-bottom-color:var(--accent)}
+
+/* Bar chart */
+.bar-chart{display:flex;align-items:flex-end;gap:12px;height:180px;padding:0 8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bar-col .bar{width:100%;background:var(--accent);border-radius:4px 4px 0 0;transition:height .5s ease;min-height:4px}
+.bar-col .bar-label{font-size:11px;color:var(--muted)}
+.bar-col .bar-value{font-size:12px;font-weight:600}
+.progress-bar{width:100%;height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .5s ease}
+
+/* Filter chips */
+.filter-chips{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Modal overlay */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;max-width:420px;width:90%;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.modal h2{font-size:20px;font-weight:700}
+.modal p{font-size:14px;color:var(--muted)}
+
+/* Create Test Modal */
+.create-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;display:none;align-items:center;justify-content:center}
+.create-modal.open{display:flex}
+.create-modal-inner{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);width:90%;max-width:680px;max-height:85vh;overflow-y:auto;padding:32px;display:flex;flex-direction:column;gap:24px}
+.create-modal-header{display:flex;align-items:center;justify-content:space-between}
+.create-modal-header h2{font-size:18px;font-weight:700}
+.create-modal-close{width:32px;height:32px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s}
+.create-modal-close:hover{color:var(--fg);background:var(--fg-soft)}
+
+/* Share section */
+.share-link-box{display:flex;gap:8px;align-items:center}
+.share-link-box input{flex:1;font-family:var(--font-mono);font-size:12px}
+.share-options{display:flex;gap:8px;flex-wrap:wrap}
+.share-option{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;min-width:80px;transition:all .15s}
+.share-option:hover{border-color:var(--muted)}
+.share-option .share-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px}
+
 @media(max-width:920px){
   .hero-grid{grid-template-columns:1fr}
   .hero-img{order:-1}
   .landing-nav{display:none}
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:flex}
+  .main{margin-left:0}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr}
 }
 @media(max-width:600px){
+  .grid-4{grid-template-columns:1fr}
+  .topbar{flex-direction:column;align-items:stretch}
 }
 </style>
 </head>
 <body>
 
-<!-- Landing Header -->
-<div class="landing-header" data-od-id="screen-landing">
-  <div class="landing-header-inner">
-    <div class="landing-logo">EVALIA</div>
-    <nav>
-      <ul class="landing-nav">
-        <li><a href="#features">Módulos</a></li>
-        <li><a href="#features">Beneficios</a></li>
-        <li><a href="#how-it-works">Cómo funciona</a></li>
-      </ul>
-    </nav>
-    <a href="dashboard.html" class="btn btn-primary">Comenzar gratis</a>
+<!-- Sidebar Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- Sidebar (hidden on landing) -->
+<aside class="sidebar" id="sidebar" style="display:none">
+  <div class="sidebar-logo" onclick="navigate('')">EVALIA</div>
+  <nav class="sidebar-nav">
+    <a href="#/dashboard" data-route="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Panel
+    </a>
+    <a href="#/materials" data-route="materials">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Materiales
+    </a>
+    <a href="#/tests" data-route="tests">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Pruebas
+    </a>
+    <a href="#/results" data-route="results">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Resultados
+    </a>
+  </nav>
+  <div class="sidebar-create-btn" onclick="openCreateModal()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Crear prueba
+  </div>
+  <div class="sidebar-user">
+    <div class="avatar">PG</div>
+    <span>Prof. García</span>
+  </div>
+</aside>
+
+<!-- Mobile hamburger -->
+<button class="hamburger" id="hamburger" style="display:none" onclick="openSidebar()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<!-- ==================== LANDING PAGE ==================== -->
+<div id="page-landing">
+  <div class="landing-header">
+    <div class="landing-header-inner">
+      <div class="landing-logo">EVALIA</div>
+      <nav>
+        <ul class="landing-nav">
+          <li><a href="#features">Módulos</a></li>
+          <li><a href="#how-it-works">Cómo funciona</a></li>
+        </ul>
+      </nav>
+      <a href="#/dashboard" class="btn btn-primary" onclick="event.preventDefault();navigate('dashboard')">Comenzar gratis</a>
+    </div>
+  </div>
+
+  <section class="hero-section">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <p class="eyebrow">EDUCACIÓN + IA</p>
+        <h1>Genera exámenes alineados a tus materiales en segundos</h1>
+        <p class="lead">Carga tus notas de clase, capítulos o presentaciones. La IA genera pruebas personalizadas con preguntas de múltiples tipos y claves de respuesta automáticas.</p>
+        <div class="hero-actions">
+          <a href="#/dashboard" class="btn btn-primary" onclick="event.preventDefault();navigate('dashboard')">Crear mi primera prueba</a>
+        </div>
+      </div>
+      <div class="hero-img">
+        <div class="hero-phase active" id="hp-upload">
+          <div class="hero-upload-zone" id="hpZone">
+            <div class="hero-upload-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <span class="hero-upload-label">Arrastra tus materiales aqui</span>
+          </div>
+          <div class="hero-file f1" id="hf1"><span class="fd" style="background:#ef4444"></span>Biologia 101.pdf</div>
+          <div class="hero-file f2" id="hf2"><span class="fd" style="background:#3b82f6"></span>Algebra II.docx</div>
+          <div class="hero-file f3" id="hf3"><span class="fd" style="background:#f59e0b"></span>Historia.pptx</div>
+        </div>
+        <div class="hero-phase" id="hp-analyze">
+          <div class="hero-ai-wrap">
+            <div class="hero-ai-brain">
+              <div class="hero-ai-glow" id="aiGlow"></div>
+              <div class="hero-scan" id="aiScan"></div>
+              <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 5.5 4 7.5L12 20l3-3.5c2-2 4-4.5 4-7.5a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            </div>
+            <span class="hero-ai-text" id="aiText">Analizando contenido...</span>
+          </div>
+        </div>
+        <div class="hero-phase" id="hp-generate">
+          <div class="hero-test-card" id="testCard">
+            <span class="hero-q-badge">Pregunta 1 de 5</span>
+            <span class="hero-q-text">Cual es la funcion principal de la mitocondria en la celula?</span>
+            <div class="hero-opts">
+              <div class="hero-opt" id="ho1"><span class="od"></span>Sintesis de proteinas</div>
+              <div class="hero-opt" id="ho2"><span class="od"></span>Produccion de energia (ATP)</div>
+              <div class="hero-opt" id="ho3"><span class="od"></span>Almacenamiento de lipidos</div>
+              <div class="hero-opt" id="ho4"><span class="od"></span>Transporte de iones</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-phase" id="hp-respond">
+          <div class="hero-test-card" style="opacity:1;transform:none">
+            <span class="hero-q-badge">Pregunta 1 de 5</span>
+            <span class="hero-q-text">Cual es la funcion principal de la mitocondria en la celula?</span>
+            <div class="hero-opts">
+              <div class="hero-opt on" id="hr1"><span class="od"></span>Sintesis de proteinas</div>
+              <div class="hero-opt on" id="hr2"><span class="od"></span>Produccion de energia (ATP)</div>
+              <div class="hero-opt on" id="hr3"><span class="od"></span>Almacenamiento de lipidos</div>
+              <div class="hero-opt on" id="hr4"><span class="od"></span>Transporte de iones</div>
+            </div>
+          </div>
+          <div class="hero-cursor" id="hCursor"></div>
+          <div class="hero-mic" id="hMic">
+            <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+          <div class="hero-check" id="hCheck">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-section" id="features">
+    <div class="features-header">
+      <p class="eyebrow">TRES MÓDULOS</p>
+      <h2>Todo lo que necesitas para evaluar, en una plataforma.</h2>
+    </div>
+    <div class="grid-3">
+      <div class="feature-card">
+        <div class="feature-demo">
+          <div class="fd-upload-zone">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="fd-file f1"><span class="fd" style="background:#ef4444"></span>Biologia.pdf</div>
+          <div class="fd-file f2"><span class="fd" style="background:#3b82f6"></span>Algebra.docx</div>
+          <div class="fd-file f3"><span class="fd" style="background:#f59e0b"></span>Historia.pptx</div>
+        </div>
+        <h3>Carga de materiales</h3>
+        <p>Sube PDFs, presentaciones o documentos de tus cursos. La IA analiza el contenido y extrae los puntos clave de conocimiento automaticamente.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-demo">
+          <div class="fd-ai-wrap">
+            <div class="fd-ai-brain">
+              <div class="fd-ai-glow"></div>
+              <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 5.5 4 7.5L12 20l3-3.5c2-2 4-4.5 4-7.5a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            </div>
+            <span class="fd-ai-text">Analizando...</span>
+          </div>
+          <div class="fd-ai-q">Pregunta 1: Cual es la funcion de la mitocondria?</div>
+        </div>
+        <h3>Generacion inteligente de pruebas</h3>
+        <p>Usa tu material didactico para generar tests interactivos como tareas o examenes en linea donde los estudiantes responden pregunta por pregunta.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-demo">
+          <div class="fd-chart">
+            <div class="fd-bar" style="--h:40%"></div>
+            <div class="fd-bar" style="--h:65%"></div>
+            <div class="fd-bar" style="--h:85%"></div>
+            <div class="fd-bar" style="--h:55%"></div>
+            <div class="fd-bar" style="--h:92%"></div>
+          </div>
+          <span class="fd-chart-label">+23%</span>
+        </div>
+        <h3>Analisis de rendimiento</h3>
+        <p>Mide que tan bien usan los estudiantes el material y la IA para responder. Obtienes estadisticas por tema y analisis de comportamiento.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="quote-section">
+    <div class="quote-card">
+      <blockquote>"Antes me tomaba horas crear un examen alineado con mis clases. Ahora lo hago en menos de un minuto y la calidad es mejor."</blockquote>
+      <cite>— Docente de K12, usuario beta</cite>
+    </div>
+  </section>
+
+  <section class="how-section" id="how-it-works">
+    <div class="how-header">
+      <p class="eyebrow">CÓMO FUNCIONA</p>
+      <h2>De tus materiales a un examen listo para entregar.</h2>
+    </div>
+    <div class="grid-3">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <h3>Carga tus materiales</h3>
+        <p>Sube PDFs, presentaciones o documentos. La IA analiza y extrae el contenido automáticamente.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <h3>Configura la prueba</h3>
+        <p>Selecciona tipos de preguntas, distribución de dificultad y temas a evaluar.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <h3>Genera y comparte</h3>
+        <p>Exporta como PDF o Word, o comparte un enlace en línea para que tus estudiantes rindan.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Empieza a crear exámenes en menos de un minuto</h2>
+    <p class="lead">Gratis para uso individual. Sin tarjeta de crédito.</p>
+    <a href="#/dashboard" class="btn btn-primary" onclick="event.preventDefault();navigate('dashboard')">Crear mi primera prueba</a>
+  </section>
+
+  <footer class="landing-footer">
+    <div class="footer-inner">
+      <div class="footer-left">&copy; 2026 EVALIA</div>
+      <div class="footer-right">Generación de pruebas con IA &middot; <span>contacto@evalia.app</span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ==================== APP PAGES ==================== -->
+
+<!-- Dashboard -->
+<div class="page" id="page-dashboard" data-od-id="screen-dashboard">
+  <div class="topbar">
+    <h1>Panel</h1>
+  </div>
+  <div class="grid-4">
+    <div class="card stat-card"><div class="stat-value">24</div><div class="stat-label">Materiales</div></div>
+    <div class="card stat-card"><div class="stat-value">12</div><div class="stat-label">Pruebas</div></div>
+    <div class="card stat-card"><div class="stat-value">156</div><div class="stat-label">Estudiantes</div></div>
+    <div class="card stat-card"><div class="stat-value">8.4</div><div class="stat-label">Promedio</div></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h2 style="font-size:16px;font-weight:600">Materiales recientes</h2>
+    <a href="#/materials" class="btn btn-ghost" style="font-size:13px">Ver todos</a>
+  </div>
+  <div class="grid-3">
+    <a href="#/materials" class="card" style="cursor:pointer">
+      <div style="font-size:28px">&#x1F9EC;</div>
+      <div style="font-size:14px;font-weight:600">Biología</div>
+      <div style="font-size:12px;color:var(--muted)">Genética y herencia</div>
+      <div style="display:flex;gap:8px;margin-top:4px"><span class="badge badge-success">32 págs</span><span class="badge badge-neutral">PDF</span></div>
+    </a>
+    <a href="#/materials" class="card" style="cursor:pointer">
+      <div style="font-size:28px">&#x1F4D0;</div>
+      <div style="font-size:14px;font-weight:600">Matemáticas</div>
+      <div style="font-size:12px;color:var(--muted)">Álgebra lineal</div>
+      <div style="display:flex;gap:8px;margin-top:4px"><span class="badge badge-success">48 págs</span><span class="badge badge-neutral">PDF</span></div>
+    </a>
+    <a href="#/materials" class="card" style="cursor:pointer">
+      <div style="font-size:28px">&#x1F3DB;</div>
+      <div style="font-size:14px;font-weight:600">Historia</div>
+      <div style="font-size:12px;color:var(--muted)">Revolución Francesa</div>
+      <div style="display:flex;gap:8px;margin-top:4px"><span class="badge badge-success">24 págs</span><span class="badge badge-neutral">DOCX</span></div>
+    </a>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h2 style="font-size:16px;font-weight:600">Pruebas recientes</h2>
+    <a href="#/tests" class="btn btn-ghost" style="font-size:13px">Ver todos</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Prueba</th><th>Materia</th><th>Estado</th><th>Promedio</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Examen Parcial — Genética</td><td>Biología</td><td><span class="badge badge-success">Activa</span></td><td>8.2</td></tr>
+        <tr><td style="font-weight:500">Quiz — Ecuaciones cuadráticas</td><td>Matemáticas</td><td><span class="badge badge-success">Activa</span></td><td>7.9</td></tr>
+        <tr><td style="font-weight:500">Práctica 3 — Revolución Francesa</td><td>Historia</td><td><span class="badge badge-warning">Borrador</span></td><td>—</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
-<!-- Hero -->
-<section class="hero-section">
-  <div class="hero-grid">
-    <div class="hero-text">
-      <p class="eyebrow">EDUCACIÓN + IA</p>
-      <h1>Genera exámenes alineados a tus materiales en segundos</h1>
-      <p class="lead">Carga tus notas de clase, capítulos o presentaciones. La IA genera pruebas personalizadas con preguntas de múltiples tipos y claves de respuesta automáticas.</p>
-      <div class="hero-actions">
-        <a href="dashboard.html" class="btn btn-primary">Crear mi primera prueba</a>
-        <a href="student-test.html" class="btn btn-ghost">Ver demo
-          <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        </a>
-      </div>
-    </div>
-    <div class="hero-img">
-      <!-- Phase 1: Upload -->
-      <div class="hero-phase active" id="hp-upload">
-        <div class="hero-upload-zone" id="hpZone">
-          <div class="hero-upload-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          </div>
-          <span class="hero-upload-label">Arrastra tus materiales aqui</span>
-        </div>
-        <div class="hero-file f1" id="hf1"><span class="fd" style="background:#ef4444"></span>Biologia 101.pdf</div>
-        <div class="hero-file f2" id="hf2"><span class="fd" style="background:#3b82f6"></span>Algebra II.docx</div>
-        <div class="hero-file f3" id="hf3"><span class="fd" style="background:#f59e0b"></span>Historia.pptx</div>
-      </div>
-      <!-- Phase 2: Analyze -->
-      <div class="hero-phase" id="hp-analyze">
-        <div class="hero-ai-wrap">
-          <div class="hero-ai-brain">
-            <div class="hero-ai-glow" id="aiGlow"></div>
-            <div class="hero-scan" id="aiScan"></div>
-            <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 5.5 4 7.5L12 20l3-3.5c2-2 4-4.5 4-7.5a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          </div>
-          <span class="hero-ai-text" id="aiText">Analizando contenido...</span>
-        </div>
-      </div>
-      <!-- Phase 3: Generate -->
-      <div class="hero-phase" id="hp-generate">
-        <div class="hero-test-card" id="testCard">
-          <span class="hero-q-badge">Pregunta 1 de 5</span>
-          <span class="hero-q-text">Cual es la funcion principal de la mitocondria en la celula?</span>
-          <div class="hero-opts">
-            <div class="hero-opt" id="ho1"><span class="od"></span>Sintesis de proteinas</div>
-            <div class="hero-opt" id="ho2"><span class="od"></span>Produccion de energia (ATP)</div>
-            <div class="hero-opt" id="ho3"><span class="od"></span>Almacenamiento de lipidos</div>
-            <div class="hero-opt" id="ho4"><span class="od"></span>Transporte de iones</div>
-          </div>
-        </div>
-      </div>
-      <!-- Phase 4: Respond -->
-      <div class="hero-phase" id="hp-respond">
-        <div class="hero-test-card" style="opacity:1;transform:none">
-          <span class="hero-q-badge">Pregunta 1 de 5</span>
-          <span class="hero-q-text">Cual es la funcion principal de la mitocondria en la celula?</span>
-          <div class="hero-opts">
-            <div class="hero-opt on" id="hr1"><span class="od"></span>Sintesis de proteinas</div>
-            <div class="hero-opt on" id="hr2"><span class="od"></span>Produccion de energia (ATP)</div>
-            <div class="hero-opt on" id="hr3"><span class="od"></span>Almacenamiento de lipidos</div>
-            <div class="hero-opt on" id="hr4"><span class="od"></span>Transporte de iones</div>
-          </div>
-        </div>
-        <div class="hero-cursor" id="hCursor"></div>
-        <div class="hero-mic" id="hMic">
-          <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </div>
-        <div class="hero-check" id="hCheck">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-      </div>
-    </div>
+<!-- Materials -->
+<div class="page" id="page-materials" data-od-id="screen-materials">
+  <div class="topbar">
+    <h1>Materiales</h1>
+    <a href="#/upload" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Subir material
+    </a>
   </div>
-</section>
+  <div class="filter-chips">
+    <span class="chip active" onclick="filterMaterials(this,'all')">Todos</span>
+    <span class="chip" onclick="filterMaterials(this,'bio')">Biología</span>
+    <span class="chip" onclick="filterMaterials(this,'math')">Matemáticas</span>
+    <span class="chip" onclick="filterMaterials(this,'hist')">Historia</span>
+    <span class="chip" onclick="filterMaterials(this,'chem')">Química</span>
+    <span class="chip" onclick="filterMaterials(this,'phys')">Física</span>
+  </div>
+  <div class="grid-3" id="materialsGrid">
+    <div class="card" data-cat="bio"><div style="font-size:28px">&#x1F9EC;</div><div style="font-size:14px;font-weight:600">Genética y herencia</div><div style="font-size:12px;color:var(--muted)">Biología · 32 páginas</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-success">PDF</span><span class="badge badge-neutral">24 mayo 2026</span></div></div>
+    <div class="card" data-cat="math"><div style="font-size:28px">&#x1F4D0;</div><div style="font-size:14px;font-weight:600">Álgebra lineal</div><div style="font-size:12px;color:var(--muted)">Matemáticas · 48 páginas</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-success">PDF</span><span class="badge badge-neutral">22 mayo 2026</span></div></div>
+    <div class="card" data-cat="hist"><div style="font-size:28px">&#x1F3DB;</div><div style="font-size:14px;font-weight:600">Revolución Francesa</div><div style="font-size:12px;color:var(--muted)">Historia · 24 páginas</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-success">DOCX</span><span class="badge badge-neutral">20 mayo 2026</span></div></div>
+    <div class="card" data-cat="chem"><div style="font-size:28px">&#x2697;</div><div style="font-size:14px;font-weight:600">Tabla periódica</div><div style="font-size:12px;color:var(--muted)">Química · 18 páginas</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-success">PDF</span><span class="badge badge-neutral">18 mayo 2026</span></div></div>
+    <div class="card" data-cat="phys"><div style="font-size:28px">&#x26A1;</div><div style="font-size:14px;font-weight:600">Leyes de Newton</div><div style="font-size:12px;color:var(--muted)">Física · 28 páginas</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-success">PDF</span><span class="badge badge-neutral">15 mayo 2026</span></div></div>
+    <div class="card" data-cat="bio"><div style="font-size:28px">&#x1F9A0;</div><div style="font-size:14px;font-weight:600">Sistema inmunológico</div><div style="font-size:12px;color:var(--muted)">Biología · 20 páginas</div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge badge-success">PDF</span><span class="badge badge-neutral">12 mayo 2026</span></div></div>
+  </div>
+</div>
 
-<!-- Features -->
-<section class="features-section" id="features">
-  <div class="features-header">
-    <p class="eyebrow">TRES MÓDULOS</p>
-    <h2>Todo lo que necesitas para evaluar, en una plataforma.</h2>
+<!-- Tests list -->
+<div class="page" id="page-tests" data-od-id="screen-tests">
+  <div class="topbar">
+    <h1>Pruebas</h1>
+    <button class="btn btn-primary" onclick="openCreateModal()">+ Crear prueba</button>
   </div>
-  <div class="grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-    <div class="feature-card">
-      <div class="feature-demo">
-        <div class="fd-upload-zone">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </div>
-        <div class="fd-file f1"><span class="fd" style="background:#ef4444"></span>Biologia.pdf</div>
-        <div class="fd-file f2"><span class="fd" style="background:#3b82f6"></span>Algebra.docx</div>
-        <div class="fd-file f3"><span class="fd" style="background:#f59e0b"></span>Historia.pptx</div>
-      </div>
-      <h3>Carga de materiales</h3>
-      <p>Sube PDFs, presentaciones o documentos de tus cursos. La IA analiza el contenido y extrae los puntos clave de conocimiento automaticamente.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Prueba</th><th>Materia</th><th>Estado</th><th>Estudiantes</th><th>Promedio</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:500">Examen Parcial — Genética</td>
+          <td>Biología</td>
+          <td><span class="badge badge-success">Activa</span></td>
+          <td>23</td>
+          <td>8.2</td>
+          <td><a href="#/test-detail" class="btn btn-ghost" style="font-size:12px;min-height:32px">Ver</a></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Quiz — Ecuaciones cuadráticas</td>
+          <td>Matemáticas</td>
+          <td><span class="badge badge-success">Activa</span></td>
+          <td>18</td>
+          <td>7.9</td>
+          <td><a href="#/test-detail" class="btn btn-ghost" style="font-size:12px;min-height:32px">Ver</a></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Práctica 3 — Revolución Francesa</td>
+          <td>Historia</td>
+          <td><span class="badge badge-warning">Borrador</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td><a href="#/test-detail" class="btn btn-ghost" style="font-size:12px;min-height:32px">Ver</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Test Detail -->
+<div class="page" id="page-test-detail" data-od-id="screen-test-detail">
+  <div class="topbar">
+    <a href="#/tests" class="btn btn-ghost" style="margin-right:8px">Volver</a>
+    <h1 style="flex:1">Examen Parcial — Genética</h1>
+    <span class="badge badge-success">Activa</span>
+  </div>
+  <div class="card" style="gap:12px">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span class="badge badge-neutral">Biología</span>
+      <span class="badge badge-neutral">Genética y herencia</span>
+      <span style="font-size:12px;color:var(--muted)">Creada el 20 mayo 2026</span>
     </div>
-    <div class="feature-card">
-      <div class="feature-demo">
-        <div class="fd-ai-wrap">
-          <div class="fd-ai-brain">
-            <div class="fd-ai-glow"></div>
-            <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 5.5 4 7.5L12 20l3-3.5c2-2 4-4.5 4-7.5a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+    <div style="font-size:13px;color:var(--muted)">5 preguntas · Tiempo límite: 45 minutos · Dificultad media</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-secondary" onclick="shareTest()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Compartir
+      </button>
+      <button class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar
+      </button>
+      <a href="share.html" class="btn btn-primary" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Ver como estudiante
+      </a>
+    </div>
+  </div>
+  <div id="shareSection" style="display:none">
+    <div class="card" style="flex-direction:row;align-items:center;gap:12px">
+      <input type="text" value="https://evalia.app/test/gen-2026-p1" readonly style="flex:1;font-family:var(--font-mono);font-size:12px">
+      <button class="btn btn-primary" onclick="copyLink()">Copiar</button>
+    </div>
+  </div>
+  <div class="tabs" id="testTabs">
+    <div class="tab active" data-tab="questions" onclick="switchTab('questions')">Preguntas</div>
+    <div class="tab" data-tab="answers" onclick="switchTab('answers')">Respuestas</div>
+    <div class="tab" data-tab="rubric" onclick="switchTab('rubric')">Rúbrica</div>
+  </div>
+  <div id="tab-questions">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:start"><div><span class="badge badge-success" style="margin-bottom:6px">Opción única</span><div style="font-size:14px;font-weight:500">¿Cuál es la unidad fundamental de la herencia genética?</div></div><span style="font-size:12px;color:var(--muted)">1 punto</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)"><div>A) Célula</div><div>B) Gen</div><div style="color:var(--accent);font-weight:600">C) Cromosoma &#10003;</div><div>D) Proteína</div></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:start"><div><span class="badge badge-success" style="margin-bottom:6px">Opción múltiple</span><div style="font-size:14px;font-weight:500">Selecciona todos los ácidos nucleicos:</div></div><span style="font-size:12px;color:var(--muted)">2 puntos</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)"><div style="color:var(--accent);font-weight:600">A) ADN &#10003;</div><div>B) ARN mensajero</div><div style="color:var(--accent);font-weight:600">B) ARN &#10003;</div><div>C) Lipidios</div></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:start"><div><span class="badge badge-warning" style="margin-bottom:6px">V/F</span><div style="font-size:14px;font-weight:500">El código genético es universal para todos los seres vivos.</div></div><span style="font-size:12px;color:var(--muted)">1 punto</span></div>
+        <div style="font-size:13px;color:var(--accent);font-weight:600">Verdadero &#10003;</div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:start"><div><span class="badge badge-neutral" style="margin-bottom:6px">Completar</span><div style="font-size:14px;font-weight:500">El proceso de síntesis de proteínas a partir del ARN se llama ______.</div></div><span style="font-size:12px;color:var(--muted)">1 punto</span></div>
+        <div style="font-size:13px;color:var(--accent);font-weight:600">Traducción &#10003;</div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:start"><div><span class="badge badge-neutral" style="margin-bottom:6px">Respuesta corta</span><div style="font-size:14px;font-weight:500">Explica la diferencia entre genotipo y fenotipo.</div></div><span style="font-size:12px;color:var(--muted)">3 puntos</span></div>
+        <div style="font-size:12px;color:var(--muted);font-style:italic">Requiere evaluación manual del profesor</div>
+      </div>
+    </div>
+  </div>
+  <div id="tab-answers" style="display:none">
+    <div class="card" style="align-items:center;justify-content:center;padding:48px;color:var(--muted)"><div style="font-size:14px">23 respuestas recibidas</div></div>
+  </div>
+  <div id="tab-rubric" style="display:none">
+    <div class="card" style="gap:12px">
+      <div style="font-size:14px;font-weight:600">Rúbrica de evaluación</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6">
+        <p><strong>Opción única / múltiple / V/F:</strong> Evaluación automática. 100% si la respuesta es correcta, 0% si es incorrecta.</p>
+        <p style="margin-top:8px"><strong>Completar:</strong> Evaluación automática con coincidencia exacta de texto.</p>
+        <p style="margin-top:8px"><strong>Respuesta corta:</strong> El profesor evalúa manualmente según los criterios establecidos.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Results -->
+<div class="page" id="page-results" data-od-id="screen-results">
+  <div class="topbar"><h1>Resultados</h1></div>
+  <div class="grid-4">
+    <div class="card stat-card"><div class="stat-value">8.4</div><div class="stat-label">Promedio general</div></div>
+    <div class="card stat-card"><div class="stat-value">10</div><div class="stat-label">Nota más alta</div></div>
+    <div class="card stat-card"><div class="stat-value">4.2</div><div class="stat-label">Nota más baja</div></div>
+    <div class="card stat-card"><div class="stat-value">23</div><div class="stat-label">Pruebas rendidas</div></div>
+  </div>
+  <div class="card" style="gap:16px">
+    <div style="font-size:14px;font-weight:600">Distribución de calificaciones</div>
+    <div class="bar-chart">
+      <div class="bar-col"><div class="bar-value">1</div><div class="bar" style="height:14px"></div><div class="bar-label">0–4</div></div>
+      <div class="bar-col"><div class="bar-value">4</div><div class="bar" style="height:56px"></div><div class="bar-label">4–6</div></div>
+      <div class="bar-col"><div class="bar-value">9</div><div class="bar" style="height:126px"></div><div class="bar-label">6–8</div></div>
+      <div class="bar-col"><div class="bar-value">7</div><div class="bar" style="height:98px"></div><div class="bar-label">8–10</div></div>
+    </div>
+  </div>
+  <div class="card" style="gap:16px">
+    <div style="font-size:14px;font-weight:600">Análisis por punto de conocimiento</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Herencia genética</span><span style="color:var(--muted)">92%</span></div><div class="progress-bar"><div class="progress-fill" style="width:92%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Ácidos nucleicos</span><span style="color:var(--muted)">85%</span></div><div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>División celular</span><span style="color:var(--muted)">78%</span></div><div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Expresión génica</span><span style="color:var(--muted)">71%</span></div><div class="progress-bar"><div class="progress-fill" style="width:71%"></div></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Biología molecular</span><span style="color:var(--muted)">65%</span></div><div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div></div>
+    </div>
+  </div>
+  <div style="font-size:14px;font-weight:600">Resultados por estudiante</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Estudiante</th><th>Email</th><th>Nota</th><th>Estado</th><th>Fecha</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Ana Martínez</td><td>ana.m@colegio.edu</td><td>9.8</td><td><span class="badge badge-success">Aprobado</span></td><td>22 mayo 2026</td></tr>
+        <tr><td style="font-weight:500">Carlos López</td><td>carlos.l@colegio.edu</td><td>9.2</td><td><span class="badge badge-success">Aprobado</span></td><td>22 mayo 2026</td></tr>
+        <tr><td style="font-weight:500">María Rodríguez</td><td>maria.r@colegio.edu</td><td>8.6</td><td><span class="badge badge-success">Aprobado</span></td><td>22 mayo 2026</td></tr>
+        <tr><td style="font-weight:500">Diego Sánchez</td><td>diego.s@colegio.edu</td><td>8.1</td><td><span class="badge badge-success">Aprobado</span></td><td>22 mayo 2026</td></tr>
+        <tr><td style="font-weight:500">Laura Fernández</td><td>laura.f@colegio.edu</td><td>7.9</td><td><span class="badge badge-success">Aprobado</span></td><td>22 mayo 2026</td></tr>
+        <tr><td style="font-weight:500">Pedro Gómez</td><td>pedro.g@colegio.edu</td><td>7.4</td><td><span class="badge badge-success">Aprobado</span></td><td>22 mayo 2026</td></tr>
+        <tr><td style="font-weight:500">Lucía Díaz</td><td>lucia.d@colegio.edu</td><td>6.3</td><td><span class="badge badge-success">Aprobado</span></td><td>22 mayo 2026</td></tr>
+        <tr><td style="font-weight:500">Miguel Torres</td><td>miguel.t@colegio.edu</td><td>4.2</td><td><span class="badge badge-error">Reprobado</span></td><td>22 mayo 2026</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Upload -->
+<div class="page" id="page-upload" data-od-id="screen-upload">
+  <div class="topbar">
+    <a href="#/materials" class="btn btn-ghost" style="margin-right:8px">Volver</a>
+    <h1>Subir material</h1>
+  </div>
+  <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    <div style="font-size:15px;font-weight:600">Arrastra archivos aqui o haz clic para seleccionar</div>
+    <div style="font-size:12px;color:var(--muted)">PDF, DOCX, PPTX — Maximo 50 MB</div>
+    <input type="file" id="fileInput" multiple accept=".pdf,.docx,.pptx" style="display:none">
+  </div>
+  <h3 style="font-size:14px;font-weight:600;margin-top:8px">Archivos en cola</h3>
+  <div class="file-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20" style="color:var(--accent);flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <div class="file-info"><div class="file-name">Ecuaciones_diferenciales.pdf</div><div class="file-meta">12.4 MB · Subiendo... 65%</div><div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div></div>
+  </div>
+  <div class="file-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20" style="color:var(--accent);flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <div class="file-info"><div class="file-name">Termodinamica_cap5.pdf</div><div class="file-meta">8.1 MB · Completado</div><div class="progress-bar"><div class="progress-fill complete" style="width:100%"></div></div></div>
+  </div>
+  <div class="file-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20" style="color:#ef4444;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+    <div class="file-info"><div class="file-name">Biologia_molecular.pptx</div><div class="file-meta" style="color:#ef4444">Error — Formato no soportado</div><div class="progress-bar"><div class="progress-fill error" style="width:30%"></div></div></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button class="btn btn-primary">Continuar subiendo</button>
+    <a href="#/materials" class="btn btn-secondary">Cancelar</a>
+  </div>
+</div>
+
+<!-- ==================== CREATE TEST MODAL ==================== -->
+<div class="create-modal" id="createModal">
+  <div class="create-modal-inner">
+    <div class="create-modal-header">
+      <h2>Crear prueba</h2>
+      <button class="create-modal-close" onclick="closeCreateModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="wizard-steps" id="wizardSteps">
+      <div class="wizard-step active" data-step="1"><div class="step-num">1</div><span>Materiales</span></div>
+      <div class="wizard-divider"></div>
+      <div class="wizard-step" data-step="2"><div class="step-num">2</div><span>Configuración</span></div>
+      <div class="wizard-divider"></div>
+      <div class="wizard-step" data-step="3"><div class="step-num">3</div><span>Compartir</span></div>
+    </div>
+
+    <!-- Step 1: Materials -->
+    <div class="wizard-panel" id="wizardPanel1">
+      <h3 style="font-size:15px;font-weight:600">Selecciona los materiales para la prueba</h3>
+      <div class="grid-3">
+        <div class="material-select selected" onclick="this.classList.toggle('selected')"><div class="mat-icon">&#x1F9EC;</div><div class="mat-title">Genética y herencia</div><div class="mat-sub">Biología · 32 págs</div></div>
+        <div class="material-select selected" onclick="this.classList.toggle('selected')"><div class="mat-icon">&#x1F4D0;</div><div class="mat-title">Álgebra lineal</div><div class="mat-sub">Matemáticas · 48 págs</div></div>
+        <div class="material-select" onclick="this.classList.toggle('selected')"><div class="mat-icon">&#x1F3DB;</div><div class="mat-title">Revolución Francesa</div><div class="mat-sub">Historia · 24 págs</div></div>
+        <div class="material-select" onclick="this.classList.toggle('selected')"><div class="mat-icon">&#x26A1;</div><div class="mat-title">Leyes de Newton</div><div class="mat-sub">Física · 28 págs</div></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="btn btn-primary" onclick="wizardNext(2)">Siguiente</button></div>
+    </div>
+
+    <!-- Step 2: Config -->
+    <div class="wizard-panel" id="wizardPanel2" style="display:none">
+      <h3 style="font-size:15px;font-weight:600">Configuración de la prueba</h3>
+      <div class="card" style="gap:16px">
+        <div><label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">Nombre de la prueba</label><input type="text" value="Examen Parcial — Biología y Matemáticas" style="width:100%"></div>
+        <div style="border-top:1px solid var(--border);padding-top:16px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:12px">Tipos de pregunta</div>
+          <div class="toggle-row"><span style="font-size:13px">Opción única</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><span style="font-size:13px">Opción múltiple</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><span style="font-size:13px">Verdadero / Falso</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><span style="font-size:13px">Completar espacios</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><span style="font-size:13px">Respuesta corta</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:16px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:12px">Dificultad</div>
+          <div style="display:flex;gap:8px"><span class="chip" onclick="selectDiff(this)">Fácil</span><span class="chip active" onclick="selectDiff(this)">Media</span><span class="chip" onclick="selectDiff(this)">Difícil</span></div>
+        </div>
+        <div><label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">Número de preguntas</label><input type="number" value="15" min="1" max="50" style="width:100px"></div>
+        <div><label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">Tiempo límite (minutos)</label><input type="number" value="45" min="5" max="180" style="width:100px"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px"><button class="btn btn-secondary" onclick="wizardPrev(1)">Anterior</button><button class="btn btn-primary" onclick="wizardNext(3)">Siguiente</button></div>
+    </div>
+
+    <!-- Step 3: Share -->
+    <div class="wizard-panel" id="wizardPanel3" style="display:none">
+      <h3 style="font-size:15px;font-weight:600">Compartir prueba</h3>
+      <div class="card" style="gap:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div><div style="font-size:16px;font-weight:700">Examen Parcial — Biología y Matemáticas</div><div style="font-size:12px;color:var(--muted);margin-top:4px">15 preguntas · 45 min · Dificultad media</div></div>
+          <span class="badge badge-success">Lista</span>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:16px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px">Enlace de la prueba</div>
+          <div class="share-link-box">
+            <input type="text" value="https://evalia.app/test/bio-math-2026-p1" readonly style="flex:1;font-family:var(--font-mono);font-size:12px">
+            <button class="btn btn-primary" onclick="copyShareLink()">Copiar</button>
           </div>
-          <span class="fd-ai-text">Analizando...</span>
         </div>
-        <div class="fd-ai-q">Pregunta 1: Cual es la funcion de la mitocondria?</div>
-      </div>
-      <h3>Generacion inteligente de pruebas</h3>
-      <p>Usa tu material didactico para generar tests interactivos como tareas o examenes en linea donde los estudiantes responden pregunta por pregunta.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-demo">
-        <div class="fd-chart">
-          <div class="fd-bar" style="--h:40%"></div>
-          <div class="fd-bar" style="--h:65%"></div>
-          <div class="fd-bar" style="--h:85%"></div>
-          <div class="fd-bar" style="--h:55%"></div>
-          <div class="fd-bar" style="--h:92%"></div>
+        <div style="border-top:1px solid var(--border);padding-top:16px">
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px">Compartir por</div>
+          <div class="share-options">
+            <div class="share-option" onclick="copyShareLink()">
+              <div class="share-icon" style="background:var(--fg-soft)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              </div>
+              <span style="font-size:11px;color:var(--muted)">Copiar</span>
+            </div>
+            <div class="share-option">
+              <div class="share-icon" style="background:color-mix(in oklch,#25D366 14%,transparent)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              </div>
+              <span style="font-size:11px;color:var(--muted)">WhatsApp</span>
+            </div>
+            <div class="share-option">
+              <div class="share-icon" style="background:color-mix(in oklch,#4285F4 14%,transparent)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <span style="font-size:11px;color:var(--muted)">Email</span>
+            </div>
+            <div class="share-option">
+              <div class="share-icon" style="background:var(--fg-soft)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+              </div>
+              <span style="font-size:11px;color:var(--muted)">QR</span>
+            </div>
+          </div>
         </div>
-        <span class="fd-chart-label">+23%</span>
       </div>
-      <h3>Analisis de rendimiento</h3>
-      <p>Mide que tan bien usan los estudiantes el material y la IA para responder. Obtienes estadisticas por tema y analisis de comportamiento.</p>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <button class="btn btn-primary" onclick="closeCreateModal()">Listo</button>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- Quote -->
-<section class="quote-section">
-  <div class="quote-card">
-    <blockquote>"Antes me tomaba horas crear un examen alineado con mis clases. Ahora lo hago en menos de un minuto y la calidad es mejor."</blockquote>
-    <cite>— Docente de K12, usuario beta</cite>
-  </div>
-</section>
-
-<!-- How It Works -->
-<section class="how-section" id="how-it-works">
-  <div class="how-header">
-    <p class="eyebrow">CÓMO FUNCIONA</p>
-    <h2>De tus materiales a un examen listo para entregar.</h2>
-  </div>
-  <div class="grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-    <div class="step-card">
-      <div class="step-number">01</div>
-      <h3>Carga tus materiales</h3>
-      <p>Sube PDFs, presentaciones o documentos. La IA analiza y extrae el contenido automáticamente.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-number">02</div>
-      <h3>Configura la prueba</h3>
-      <p>Selecciona tipos de preguntas, distribución de dificultad y temas a evaluar.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-number">03</div>
-      <h3>Genera y comparte</h3>
-      <p>Exporta como PDF o Word, o comparte un enlace en línea para que tus estudiantes rindan.</p>
+<!-- Submit confirmation modal -->
+<div class="modal-overlay" id="submitModal">
+  <div class="modal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" width="48" height="48"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <h2>Prueba generada</h2>
+    <p>Tu prueba esta lista para compartir con tus estudiantes.</p>
+    <div style="display:flex;gap:8px;width:100%">
+      <button class="btn btn-secondary" style="flex:1" onclick="document.getElementById('submitModal').classList.remove('open')">Cerrar</button>
+      <button class="btn btn-primary" style="flex:1" onclick="document.getElementById('submitModal').classList.remove('open');navigate('test-detail')">Ver prueba</button>
     </div>
   </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-  <h2>Empieza a crear exámenes en menos de un minuto</h2>
-  <p class="lead">Gratis para uso individual. Sin tarjeta de crédito.</p>
-  <a href="dashboard.html" class="btn btn-primary">Crear mi primera prueba</a>
-</section>
-
-<!-- Footer -->
-<footer class="landing-footer">
-  <div class="footer-inner">
-    <div class="footer-left">© 2026 EVALIA</div>
-    <div class="footer-right">Generación de pruebas con IA · <span>contacto@evalia.app</span></div>
-  </div>
-</footer>
+</div>
 
 <script>
-// Hero Animation
-(function(){
-  const phases=['hp-upload','hp-analyze','hp-generate','hp-respond'];
-  let cur=0, running=true;
-  function el(id){return document.getElementById(id)}
-  function showPhase(i){
-    phases.forEach((id,j)=>{
-      const e=el(id); if(!e) return;
-      e.classList.toggle('active',j===i);
-    });
+// ==================== ROUTER ====================
+var currentRoute = '';
+var heroRunning = false;
+
+function navigate(route) {
+  currentRoute = route;
+  window.location.hash = route ? '/' + route : '';
+}
+
+function handleRoute() {
+  var hash = window.location.hash.replace('#/', '') || '';
+  var isLanding = !hash;
+
+  // Toggle sidebar
+  var sidebar = document.getElementById('sidebar');
+  var hamburger = document.getElementById('hamburger');
+  sidebar.style.display = isLanding ? 'none' : 'flex';
+  hamburger.style.display = isLanding ? 'none' : 'flex';
+
+  // Toggle pages
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('page-landing').style.display = isLanding ? '' : 'none';
+
+  if (!isLanding) {
+    var pageId = 'page-' + hash;
+    var page = document.getElementById(pageId);
+    if (page) {
+      page.classList.add('active');
+    } else {
+      document.getElementById('page-dashboard').classList.add('active');
+    }
   }
-  function resetAll(){
-    document.querySelectorAll('.hero-file').forEach(f=>{f.classList.remove('show','merged')});
-    var z=el('hpZone'); if(z) z.classList.remove('glow');
-    ['aiGlow','aiScan','aiText'].forEach(id=>{var e=el(id);if(e)e.classList.remove('on')});
-    var tc=el('testCard'); if(tc) tc.classList.remove('on');
-    ['ho1','ho2','ho3','ho4'].forEach(id=>{var e=el(id);if(e)e.classList.remove('on')});
-    var cur2=el('hCursor'); if(cur2) cur2.classList.remove('on');
-    ['hr1','hr2','hr3','hr4'].forEach(id=>{var e=el(id);if(e){e.classList.remove('sel','on');var od=e.querySelector('.od');if(od){od.style.background='';od.style.borderColor=''}}});
-    var mic=el('hMic'); if(mic) mic.classList.remove('on','pulsing');
-    var chk=el('hCheck'); if(chk) chk.classList.remove('on');
+
+  // Update active nav link
+  document.querySelectorAll('.sidebar-nav a').forEach(function(a) {
+    var route = a.getAttribute('data-route');
+    a.classList.toggle('active', route === hash || (!hash && route === 'dashboard'));
+  });
+
+  // Control hero animation
+  if (isLanding && !heroRunning) {
+    heroRunning = true;
+    setTimeout(runUpload, 500);
+  } else if (!isLanding && heroRunning) {
+    heroRunning = false;
   }
-  function runUpload(){
-    if(!running) return;
-    showPhase(0);resetAll();
-    setTimeout(()=>{var z=el('hpZone'); if(z) z.classList.add('glow')},200);
-    setTimeout(()=>{var f=el('hf1'); if(f) f.classList.add('show')},500);
-    setTimeout(()=>{var f=el('hf2'); if(f) f.classList.add('show')},900);
-    setTimeout(()=>{var f=el('hf3'); if(f) f.classList.add('show')},1300);
-    setTimeout(()=>{['hf1','hf2','hf3'].forEach(id=>{var e=el(id);if(e)e.classList.add('merged')})},2200);
-    setTimeout(runAnalyze,2700);
+
+  closeSidebar();
+}
+
+window.addEventListener('hashchange', handleRoute);
+
+// ==================== HERO ANIMATION ====================
+var phases = ['hp-upload', 'hp-analyze', 'hp-generate', 'hp-respond'];
+
+function heroEl(id) { return document.getElementById(id); }
+
+function showPhase(i) {
+  phases.forEach(function(id, j) {
+    var e = heroEl(id);
+    if (e) e.classList.toggle('active', j === i);
+  });
+}
+
+function resetHero() {
+  document.querySelectorAll('.hero-file').forEach(function(f) { f.classList.remove('show', 'merged'); });
+  var z = heroEl('hpZone'); if (z) z.classList.remove('glow');
+  ['aiGlow', 'aiScan', 'aiText'].forEach(function(id) { var e = heroEl(id); if (e) e.classList.remove('on'); });
+  var tc = heroEl('testCard'); if (tc) tc.classList.remove('on');
+  ['ho1', 'ho2', 'ho3', 'ho4'].forEach(function(id) { var e = heroEl(id); if (e) e.classList.remove('on'); });
+  var cur = heroEl('hCursor'); if (cur) cur.classList.remove('on');
+  ['hr1', 'hr2', 'hr3', 'hr4'].forEach(function(id) {
+    var e = heroEl(id);
+    if (e) {
+      e.classList.remove('sel', 'on');
+      var od = e.querySelector('.od');
+      if (od) { od.style.background = ''; od.style.borderColor = ''; }
+    }
+  });
+  var mic = heroEl('hMic'); if (mic) mic.classList.remove('on', 'pulsing');
+  var chk = heroEl('hCheck'); if (chk) chk.classList.remove('on');
+}
+
+function runUpload() {
+  if (!heroRunning) return;
+  showPhase(0); resetHero();
+  setTimeout(function() { var z = heroEl('hpZone'); if (z) z.classList.add('glow'); }, 200);
+  setTimeout(function() { var f = heroEl('hf1'); if (f) f.classList.add('show'); }, 500);
+  setTimeout(function() { var f = heroEl('hf2'); if (f) f.classList.add('show'); }, 900);
+  setTimeout(function() { var f = heroEl('hf3'); if (f) f.classList.add('show'); }, 1300);
+  setTimeout(function() { ['hf1', 'hf2', 'hf3'].forEach(function(id) { var e = heroEl(id); if (e) e.classList.add('merged'); }); }, 2200);
+  setTimeout(runAnalyze, 2700);
+}
+
+function runAnalyze() {
+  if (!heroRunning) return;
+  showPhase(1);
+  setTimeout(function() { ['aiGlow', 'aiScan', 'aiText'].forEach(function(id) { var e = heroEl(id); if (e) e.classList.add('on'); }); }, 200);
+  setTimeout(runGenerate, 2800);
+}
+
+function runGenerate() {
+  if (!heroRunning) return;
+  showPhase(2);
+  setTimeout(function() { var tc = heroEl('testCard'); if (tc) tc.classList.add('on'); }, 200);
+  setTimeout(function() { var o = heroEl('ho1'); if (o) o.classList.add('on'); }, 600);
+  setTimeout(function() { var o = heroEl('ho2'); if (o) o.classList.add('on'); }, 800);
+  setTimeout(function() { var o = heroEl('ho3'); if (o) o.classList.add('on'); }, 1000);
+  setTimeout(function() { var o = heroEl('ho4'); if (o) o.classList.add('on'); }, 1200);
+  setTimeout(runRespond, 2200);
+}
+
+function runRespond() {
+  if (!heroRunning) return;
+  showPhase(3);
+  var cursor = heroEl('hCursor'), target = heroEl('hr2'), heroImg = document.querySelector('.hero-img');
+  if (!cursor || !target || !heroImg) return;
+  setTimeout(function() { cursor.classList.add('on'); cursor.style.top = '42%'; cursor.style.left = '20%'; }, 100);
+  setTimeout(function() {
+    var rect = target.getBoundingClientRect();
+    var imgRect = heroImg.getBoundingClientRect();
+    cursor.style.top = String(rect.top - imgRect.top + 6) + 'px';
+    cursor.style.left = '25%';
+  }, 200);
+  setTimeout(function() {
+    target.classList.add('sel');
+    var od = target.querySelector('.od');
+    if (od) { od.style.background = 'var(--accent)'; od.style.borderColor = 'var(--accent)'; }
+  }, 900);
+  setTimeout(function() { var m = heroEl('hMic'); if (m) m.classList.add('on', 'pulsing'); }, 1100);
+  setTimeout(function() {
+    var m = heroEl('hMic'); if (m) m.classList.remove('pulsing');
+    var c = heroEl('hCheck'); if (c) c.classList.add('on');
+    cursor.classList.remove('on');
+  }, 2000);
+  setTimeout(runUpload, 3200);
+}
+
+// ==================== SIDEBAR ====================
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// ==================== CREATE TEST MODAL ====================
+function openCreateModal() {
+  document.getElementById('createModal').classList.add('open');
+  wizardNext(1);
+}
+function closeCreateModal() {
+  document.getElementById('createModal').classList.remove('open');
+}
+function wizardNext(step) {
+  for (var i = 1; i <= 3; i++) {
+    document.getElementById('wizardPanel' + i).style.display = i === step ? '' : 'none';
   }
-  function runAnalyze(){
-    if(!running) return;
-    showPhase(1);
-    setTimeout(()=>{['aiGlow','aiScan','aiText'].forEach(id=>{var e=el(id);if(e)e.classList.add('on')})},200);
-    setTimeout(runGenerate,2800);
-  }
-  function runGenerate(){
-    if(!running) return;
-    showPhase(2);
-    setTimeout(()=>{var tc=el('testCard'); if(tc) tc.classList.add('on')},200);
-    setTimeout(()=>{var o=el('ho1'); if(o) o.classList.add('on')},600);
-    setTimeout(()=>{var o=el('ho2'); if(o) o.classList.add('on')},800);
-    setTimeout(()=>{var o=el('ho3'); if(o) o.classList.add('on')},1000);
-    setTimeout(()=>{var o=el('ho4'); if(o) o.classList.add('on')},1200);
-    setTimeout(runRespond,2200);
-  }
-  function runRespond(){
-    if(!running) return;
-    showPhase(3);
-    var cursor=el('hCursor'), target=el('hr2'), heroImg=document.querySelector('.hero-img');
-    if(!cursor||!target||!heroImg) return;
-    setTimeout(()=>{cursor.classList.add('on');cursor.style.top='42%';cursor.style.left='20%'},100);
-    setTimeout(()=>{cursor.style.top=String(target.getBoundingClientRect().top-heroImg.getBoundingClientRect().top+6)+'px';cursor.style.left='25%'},200);
-    setTimeout(()=>{target.classList.add('sel');var od=target.querySelector('.od');if(od){od.style.background='var(--accent)';od.style.borderColor='var(--accent)'}},900);
-    setTimeout(()=>{var m=el('hMic'); if(m) m.classList.add('on','pulsing')},1100);
-    setTimeout(()=>{var m=el('hMic'); if(m) m.classList.remove('pulsing');var c=el('hCheck'); if(c) c.classList.add('on');cursor.classList.remove('on')},2000);
-    setTimeout(runUpload,3200);
-  }
-  window.stopHeroAnimation=function(){running=false};
-  window.startHeroAnimation=function(){running=true;runUpload()};
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(runUpload,500));
-})();
+  document.querySelectorAll('#wizardSteps .wizard-step').forEach(function(s) {
+    var n = parseInt(s.getAttribute('data-step'));
+    s.classList.toggle('active', n === step);
+    s.classList.toggle('done', n < step);
+  });
+}
+function wizardPrev(step) { wizardNext(step); }
+function selectDiff(el) {
+  el.parentElement.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+// ==================== MATERIALS FILTER ====================
+function filterMaterials(el, cat) {
+  document.querySelectorAll('.filter-chips .chip').forEach(function(c) { c.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('#materialsGrid .card').forEach(function(card) {
+    if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// ==================== TEST DETAIL TABS ====================
+function switchTab(tab) {
+  document.querySelectorAll('#testTabs .tab').forEach(function(t) {
+    t.classList.toggle('active', t.getAttribute('data-tab') === tab);
+  });
+  document.getElementById('tab-questions').style.display = tab === 'questions' ? '' : 'none';
+  document.getElementById('tab-answers').style.display = tab === 'answers' ? '' : 'none';
+  document.getElementById('tab-rubric').style.display = tab === 'rubric' ? '' : 'none';
+}
+function shareTest() {
+  var s = document.getElementById('shareSection');
+  s.style.display = s.style.display === 'none' ? '' : 'none';
+}
+function copyLink() {
+  var input = document.querySelector('#shareSection input');
+  if (input) navigator.clipboard.writeText(input.value).catch(function() {});
+}
+function copyShareLink() {
+  var input = document.querySelector('#wizardPanel3 input');
+  if (input) navigator.clipboard.writeText(input.value).catch(function() {});
+}
+
+// ==================== INIT ====================
+handleRoute();
 </script>
 </body>
 </html>
