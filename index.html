@@ -1289,9 +1289,9 @@ function navigate(screen) {
   }
   // Reset student test screens when navigating away
   if (screen !== 'student-test') {
-    document.getElementById('testStartScreen').style.display = 'flex';
-    document.getElementById('testInterface').style.display = 'none';
-    document.getElementById('testResults').style.display = 'none';
+    var tss=document.getElementById('testStartScreen'); if(tss) tss.style.display='flex';
+    var ti=document.getElementById('testInterface'); if(ti) ti.style.display='none';
+    var tr=document.getElementById('testResults'); if(tr) tr.style.display='none';
     resetTest();
   }
 }
@@ -1495,12 +1495,12 @@ function resetTest() {
   currentQuestion = 0;
   timeLeft = 45 * 60;
   answered.clear();
-  document.getElementById('timer').textContent = '45:00';
+  var t=document.getElementById('timer'); if(t) t.textContent='45:00';
   document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
   document.querySelectorAll('.q-dot').forEach(d => { d.classList.remove('active','answered'); });
-  document.getElementById('studentName').value = '';
-  document.getElementById('studentClass').value = '';
-  document.getElementById('submitModal').classList.remove('open');
+  var sn=document.getElementById('studentName'); if(sn) sn.value='';
+  var sc=document.getElementById('studentClass'); if(sc) sc.value='';
+  var sm=document.getElementById('submitModal'); if(sm) sm.classList.remove('open');
 }
 </script>
 </body>
