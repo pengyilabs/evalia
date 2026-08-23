@@ -325,7 +325,7 @@ tr:last-child td{border-bottom:none}
 </aside>
 
 <!-- Mobile hamburger -->
-<button class="hamburger" id="hamburger" style="display:none" onclick="openSidebar()">
+<button class="hamburger" id="hamburger" onclick="openSidebar()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
 </button>
 
@@ -912,11 +912,14 @@ function handleRoute() {
   var hash = window.location.hash.replace('#/', '') || '';
   var isLanding = !hash;
 
-  // Toggle sidebar
+  // Toggle sidebar — desktop always shows via CSS, mobile uses transform
   var sidebar = document.getElementById('sidebar');
-  var hamburger = document.getElementById('hamburger');
-  sidebar.style.display = isLanding ? 'none' : 'flex';
-  hamburger.style.display = isLanding ? 'none' : 'flex';
+  if (isLanding) {
+    sidebar.style.display = 'none';
+  } else {
+    sidebar.style.display = '';
+    sidebar.classList.remove('open');
+  }
 
   // Toggle pages
   document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
