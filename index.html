@@ -1110,6 +1110,22 @@ function copyShareLink() {
 }
 
 // ==================== INIT ====================
+// Intercept all anchor clicks to stay client-side
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a');
+  if (!a) return;
+  var href = a.getAttribute('href');
+  if (!href || href.charAt(0) !== '#' || a.target === '_blank') return;
+  e.preventDefault();
+  var route = href.replace('#/', '').replace('#', '');
+  if (route) {
+    navigate(route);
+  } else {
+    window.location.hash = '';
+    handleRoute();
+  }
+});
+
 handleRoute();
 </script>
 </body>
