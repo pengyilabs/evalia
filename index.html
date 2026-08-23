@@ -252,6 +252,39 @@ tr:last-child td{border-bottom:none}
 .feature-icon svg{width:24px;height:24px;stroke:var(--fg);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .feature-card h3{font-size:1.125rem;font-weight:600;margin-bottom:8px}
 .feature-card p{color:var(--muted);font-size:.9375rem;line-height:1.6}
+.feature-demo{height:120px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+/* Upload demo */
+.fd-upload-zone{width:60%;height:60%;border:1.5px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;position:relative}
+.fd-upload-zone svg{width:20px;height:20px;color:var(--muted);stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.fd-file{position:absolute;padding:4px 8px;background:var(--surface);border:1px solid var(--border);border-radius:4px;font-size:8px;font-weight:600;display:flex;align-items:center;gap:4px;opacity:0}
+.fd-file .fd{width:6px;height:6px;border-radius:2px;flex-shrink:0}
+.fd-file.f1{top:10%;left:5%;animation:fdFileIn .5s .3s ease forwards}
+.fd-file.f2{top:40%;left:5%;animation:fdFileIn .5s .7s ease forwards}
+.fd-file.f3{top:70%;left:5%;animation:fdFileIn .5s 1.1s ease forwards}
+.fd-file.merged{animation:fdMerge .4s 2s ease forwards}
+@keyframes fdFileIn{0%{opacity:0;transform:translateX(20px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes fdMerge{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.5) translateY(10px)}}
+/* AI demo */
+.fd-ai-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.fd-ai-brain{width:36px;height:36px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;position:relative}
+.fd-ai-brain svg{width:18px;height:18px;color:var(--accent);stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.fd-ai-glow{position:absolute;inset:-8px;border-radius:50%;border:1.5px solid var(--accent);animation:fdAiPulse 1.2s ease-in-out infinite}
+.fd-ai-text{font-size:8px;color:var(--accent);font-weight:600;letter-spacing:.3px;animation:fdBlink 2s ease-in-out infinite}
+.fd-ai-q{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);padding:4px 8px;background:var(--surface);border:1px solid var(--border);border-radius:4px;font-size:8px;color:var(--fg);opacity:0;animation:fdQPop .4s 1.5s ease forwards;white-space:nowrap}
+@keyframes fdAiPulse{0%,100%{opacity:0;transform:scale(.8)}50%{opacity:.6;transform:scale(1.1)}}
+@keyframes fdBlink{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes fdQPop{0%{opacity:0;transform:translateX(-50%) translateY(6px)}100%{opacity:1;transform:translateX(-50%) translateY(0)}}
+/* Chart demo */
+.fd-chart{display:flex;align-items:flex-end;gap:4px;height:70px;padding:0 12px;width:70%}
+.fd-bar{flex:1;background:var(--accent);border-radius:3px 3px 0 0;min-height:2px;animation:fdBarGrow .6s ease forwards}
+.fd-bar:nth-child(1){height:0;animation-delay:.2s}
+.fd-bar:nth-child(2){height:0;animation-delay:.4s}
+.fd-bar:nth-child(3){height:0;animation-delay:.6s}
+.fd-bar:nth-child(4){height:0;animation-delay:.8s}
+.fd-bar:nth-child(5){height:0;animation-delay:1s}
+@keyframes fdBarGrow{0%{height:0}100%{height:var(--h)}}
+.fd-chart-label{position:absolute;top:8px;right:12px;font-size:8px;color:var(--accent);font-weight:700;opacity:0;animation:fdFadeIn .3s 1.2s ease forwards}
+@keyframes fdFadeIn{0%{opacity:0}100%{opacity:1}}
 .quote-section{padding:80px 0;max-width:1120px;margin:0 auto;padding:80px 24px}
 .quote-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:48px;max-width:720px;margin:0 auto;text-align:center}
 .quote-card blockquote{font-family:var(--font-display);font-size:clamp(1.125rem,2.5vw,1.5rem);font-weight:500;line-height:1.5;margin-bottom:24px}
@@ -437,25 +470,44 @@ tr:last-child td{border-bottom:none}
     </div>
     <div class="grid-3">
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <div class="feature-demo">
+          <div class="fd-upload-zone">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="fd-file f1"><span class="fd" style="background:#ef4444"></span>Biologia.pdf</div>
+          <div class="fd-file f2"><span class="fd" style="background:#3b82f6"></span>Algebra.docx</div>
+          <div class="fd-file f3"><span class="fd" style="background:#f59e0b"></span>Historia.pptx</div>
         </div>
-        <h3>Carga y gestión de materiales</h3>
-        <p>Sube PDF, Word, PowerPoint o imágenes. La IA analiza el contenido y extrae los puntos clave de conocimiento automáticamente.</p>
+        <h3>Carga de materiales</h3>
+        <p>Sube PDFs, presentaciones o documentos de tus cursos. La IA analiza el contenido y extrae los puntos clave de conocimiento automaticamente.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="feature-demo">
+          <div class="fd-ai-wrap">
+            <div class="fd-ai-brain">
+              <div class="fd-ai-glow"></div>
+              <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 5.5 4 7.5L12 20l3-3.5c2-2 4-4.5 4-7.5a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            </div>
+            <span class="fd-ai-text">Analizando...</span>
+          </div>
+          <div class="fd-ai-q">Pregunta 1: Cual es la funcion de la mitocondria?</div>
         </div>
-        <h3>Generación inteligente de pruebas</h3>
-        <p>Configura tipos de preguntas, dificultad y pesos por tema. La IA genera exámenes con respuestas estándar y rúbricas de calificación.</p>
+        <h3>Generacion inteligente de pruebas</h3>
+        <p>Usa tu material didactico para generar tests interactivos como tareas o examenes en linea donde los estudiantes responden pregunta por pregunta.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <div class="feature-demo">
+          <div class="fd-chart">
+            <div class="fd-bar" style="--h:40%"></div>
+            <div class="fd-bar" style="--h:65%"></div>
+            <div class="fd-bar" style="--h:85%"></div>
+            <div class="fd-bar" style="--h:55%"></div>
+            <div class="fd-bar" style="--h:92%"></div>
+          </div>
+          <span class="fd-chart-label">+23%</span>
         </div>
-        <h3>Análisis de rendimiento</h3>
-        <p>Los estudiantes rinden sin registro. Obtienes estadísticas de calificaciones, análisis por tema y exportación completa en CSV.</p>
+        <h3>Analisis de rendimiento</h3>
+        <p>Mide que tan bien usan los estudiantes el material y la IA para responder. Obtienes estadisticas por tema y analisis de comportamiento.</p>
       </div>
     </div>
   </section>
