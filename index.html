@@ -548,41 +548,54 @@ tr:last-child td{border-bottom:none}
     <div class="card stat-card"><div class="stat-value">156</div><div class="stat-label">Estudiantes</div></div>
     <div class="card stat-card"><div class="stat-value">8.4</div><div class="stat-label">Promedio</div></div>
   </div>
-  <div style="display:flex;align-items:center;justify-content:space-between">
-    <h2 style="font-size:16px;font-weight:600">Materiales recientes</h2>
-    <a href="#/materials" class="btn btn-ghost" style="font-size:13px">Ver todos</a>
-  </div>
-  <div class="grid-3">
-    <a href="#/materials" class="card" style="cursor:pointer">
-      <div style="font-size:28px">&#x1F9EC;</div>
-      <div style="font-size:14px;font-weight:600">Biología</div>
-      <div style="font-size:12px;color:var(--muted)">Genética y herencia</div>
-      <div style="display:flex;gap:8px;margin-top:4px"><span class="badge badge-success">32 págs</span><span class="badge badge-neutral">PDF</span></div>
-    </a>
-    <a href="#/materials" class="card" style="cursor:pointer">
-      <div style="font-size:28px">&#x1F4D0;</div>
-      <div style="font-size:14px;font-weight:600">Matemáticas</div>
-      <div style="font-size:12px;color:var(--muted)">Álgebra lineal</div>
-      <div style="display:flex;gap:8px;margin-top:4px"><span class="badge badge-success">48 págs</span><span class="badge badge-neutral">PDF</span></div>
-    </a>
-    <a href="#/materials" class="card" style="cursor:pointer">
-      <div style="font-size:28px">&#x1F3DB;</div>
-      <div style="font-size:14px;font-weight:600">Historia</div>
-      <div style="font-size:12px;color:var(--muted)">Revolución Francesa</div>
-      <div style="display:flex;gap:8px;margin-top:4px"><span class="badge badge-success">24 págs</span><span class="badge badge-neutral">DOCX</span></div>
-    </a>
-  </div>
-  <div style="display:flex;align-items:center;justify-content:space-between">
-    <h2 style="font-size:16px;font-weight:600">Pruebas recientes</h2>
-    <a href="#/tests" class="btn btn-ghost" style="font-size:13px">Ver todos</a>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:24px">
+    <h2 style="font-size:16px;font-weight:600">Últimas entregas</h2>
+    <a href="#/tests" class="btn btn-ghost" style="font-size:13px">Ver todas</a>
   </div>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Prueba</th><th>Materia</th><th>Estado</th><th>Promedio</th></tr></thead>
+      <thead><tr><th>Prueba</th><th>Materia</th><th>Estudiantes</th><th>Promedio</th><th>Fecha</th><th>Estado</th></tr></thead>
       <tbody>
-        <tr><td style="font-weight:500">Examen Parcial — Genética</td><td>Biología</td><td><span class="badge badge-success">Activa</span></td><td>8.2</td></tr>
-        <tr><td style="font-weight:500">Quiz — Ecuaciones cuadráticas</td><td>Matemáticas</td><td><span class="badge badge-success">Activa</span></td><td>7.9</td></tr>
-        <tr><td style="font-weight:500">Práctica 3 — Revolución Francesa</td><td>Historia</td><td><span class="badge badge-warning">Borrador</span></td><td>—</td></tr>
+        <tr>
+          <td style="font-weight:500">Examen Parcial — Genética</td>
+          <td>Biología</td>
+          <td>42/45</td>
+          <td>8.2</td>
+          <td>22 ago 2026</td>
+          <td><span class="badge badge-success">Activa</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Quiz — Ecuaciones cuadráticas</td>
+          <td>Matemáticas</td>
+          <td>38/40</td>
+          <td>7.9</td>
+          <td>21 ago 2026</td>
+          <td><span class="badge badge-success">Activa</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Práctica 3 — Revolución Francesa</td>
+          <td>Historia</td>
+          <td>—/35</td>
+          <td>—</td>
+          <td>20 ago 2026</td>
+          <td><span class="badge badge-warning">Borrador</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Quiz — Álgebra lineal</td>
+          <td>Matemáticas</td>
+          <td>36/40</td>
+          <td>7.5</td>
+          <td>19 ago 2026</td>
+          <td><span class="badge badge-success">Activa</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Examen Final — Programación</td>
+          <td>Informática</td>
+          <td>28/30</td>
+          <td>8.7</td>
+          <td>18 ago 2026</td>
+          <td><span class="badge badge-success">Activa</span></td>
+        </tr>
       </tbody>
     </table>
   </div>
