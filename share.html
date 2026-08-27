@@ -10,7 +10,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#ffffff;--surface:#f8f9fc;--surface-warm:#f0f1f5;--fg:#111111;--fg-2:#333333;--muted:#8E8C9A;--border:#E8E9ED;--border-soft:rgba(17,17,17,.06);--purple:#5CE63F;--purple-light:#A1F06C;--purple-soft:rgba(92,230,63,.12);--purple-dark:#111111;--accent:#A1F06C;--accent-soft:rgba(161,240,108,.15);--accent-on:#111111;--teal:#5CE63F;--teal-soft:rgba(92,230,63,.12);--coral:#f87171;--coral-soft:rgba(248,113,113,.12);--yellow:#fbbf24;--yellow-soft:rgba(251,191,36,.12);--danger:#ef4444;--danger-soft:rgba(239,68,68,.12);--info:#6366f1;--info-soft:rgba(99,102,241,.12);--warn:#f59e0b;--warn-soft:rgba(245,158,11,.12);--success:#5CE63F;--success-soft:rgba(92,230,63,.15);--meta:var(--muted);--meta-soft:var(--purple-soft);--radius:12px;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-xl:20px;--radius-pill:9999px;--font-display:'Inter',system-ui,sans-serif;--font-body:'Inter',system-ui,sans-serif;--font-mono:'SF Mono',ui-monospace,monospace;--tracking-tight:-0.01em;--tracking-body:0.01em;--tracking-display:-0.02em;--tracking-wide:0.12em;--tracking-wider:0.18em;--ease-standard:cubic-bezier(.4,0,.2,1);--ease-out:cubic-bezier(0,0,.2,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);--motion-fast:150ms;--motion-base:250ms;--motion-slow:400ms;--elev-card:0 4px 20px rgba(17,17,17,.08);--elev-ring:0 2px 8px rgba(17,17,17,.06);--elev-raised:0 8px 30px rgba(17,17,17,.1);--elev-modal:0 24px 80px rgba(17,17,17,.18);--sidebar-w:220px}
-html{font-family:var(--font-body);background:#3ACC1C;color:var(--fg);scroll-behavior:smooth}
+html{font-family:var(--font-body);background:#89FF5C;color:var(--fg);scroll-behavior:smooth}
 body{min-height:100vh;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
@@ -135,7 +135,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
     <div class="q-nav" style="padding:0 24px 24px">
       <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()" disabled>← Anterior</button>
       <div class="q-dots" id="qDots"></div>
-      <button class="btn btn-primary" style="background:#3ACC1C;color:#fff" id="nextBtn" onclick="nextQuestion()">Siguiente →</button>
+      <button class="btn btn-primary" style="background:#111;color:#fff" id="nextBtn" onclick="nextQuestion()">Siguiente →</button>
     </div>
   </div>
 </div>
@@ -144,7 +144,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 <div id="testResults" style="display:none">
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:24px;padding:24px">
     <div style="background:#fff;border-radius:var(--radius-xl);padding:40px;max-width:420px;width:100%;display:flex;flex-direction:column;align-items:center;gap:20px;box-shadow:var(--elev-card);text-align:center">
-      <div style="width:100px;height:100px;border-radius:50%;border:4px solid #3ACC1C;display:flex;align-items:center;justify-content:center;flex-direction:column">
+      <div style="width:100px;height:100px;border-radius:50%;border:4px solid #89FF5C;display:flex;align-items:center;justify-content:center;flex-direction:column">
         <div style="font-size:32px;font-weight:700">8.6</div>
         <div style="font-size:11px;color:var(--muted)">de 10</div>
       </div>
