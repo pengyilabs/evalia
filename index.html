@@ -400,17 +400,15 @@ tr:hover td{background:var(--surface)}
 .source-excerpt{margin-top:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border-soft);border-radius:var(--radius);font-size:12px;line-height:1.6;color:var(--fg-2);font-style:italic;border-left:3px solid var(--purple)}
 
 /* Inline source citations */
-.source-cite-block{margin-top:8px}
-.source-cite-text{padding:8px 12px;background:var(--fg-soft);border:1px solid var(--border-soft);border-radius:var(--radius);font-size:13px;line-height:1.6;color:var(--fg-2);font-style:italic;border-left:3px solid var(--purple);cursor:pointer;transition:all .15s;position:relative}
-.source-cite-text:hover{border-color:var(--purple);background:var(--purple-soft)}
-.source-cite-text::before{content:'\201C';position:absolute;top:2px;left:8px;font-size:20px;color:var(--purple);opacity:.25;font-style:normal;line-height:1}
-.source-cite-text-answer{border-left-color:var(--accent)}
-.source-cite-text-answer::before{color:var(--accent)}
-.source-cite-text-answer:hover{border-color:var(--accent);background:rgba(16,185,129,.06)}
-.source-cite-ref{display:inline-block;margin-top:4px;font-size:11px;font-weight:500;color:var(--purple);cursor:pointer;transition:color .15s}
-.source-cite-ref:hover{color:var(--purple);text-decoration:underline}
+.source-cite-block{margin-top:8px;padding:10px 12px;background:var(--fg-soft);border:1px solid var(--border-soft);border-radius:var(--radius);border-left:3px solid var(--purple);cursor:pointer;transition:all .15s;position:relative}
+.source-cite-block:hover{border-color:var(--purple);background:var(--purple-soft)}
+.source-cite-block::before{content:'\201C';position:absolute;top:2px;left:8px;font-size:20px;color:var(--purple);opacity:.25;font-style:normal;line-height:1}
+.source-cite-block-answer{border-left-color:var(--accent)}
+.source-cite-block-answer::before{color:var(--accent)}
+.source-cite-block-answer:hover{border-color:var(--accent);background:rgba(16,185,129,.06)}
+.source-cite-text{font-size:13px;line-height:1.6;color:var(--fg-2);font-style:italic}
+.source-cite-ref{display:block;margin-top:6px;font-size:11px;font-weight:500;font-style:normal;color:var(--purple);letter-spacing:.02em}
 .source-cite-ref-answer{color:var(--accent)}
-.source-cite-ref-answer:hover{color:var(--accent)}
 
 /* Source modal */
 .source-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
@@ -1708,20 +1706,9 @@ function showReviewQuestion(idx) {
   document.getElementById('reviewQType').className = 'badge ' + q.typeBadge;
   document.getElementById('reviewQPoints').textContent = q.points + ' punto' + (q.points !== 1 ? 's' : '');
 
-  // Question text + inline citation
+  // Question text
   var qTextEl = document.getElementById('reviewQText');
-  var qHtml = '<span>' + q.text + '</span>';
-  if (q.questionSource) {
-    var esc = function(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
-    var qm = q.questionSource.material.replace(/'/g, "\\'");
-    var qp = q.questionSource.page.replace(/'/g, "\\'");
-    var qe = q.questionSource.excerpt.replace(/'/g, "\\'");
-    qHtml += '<div class="source-cite-block">' +
-      '<div class="source-cite-text" onclick="openSourceModal(\'' + qm + '\',\'' + qp + '\',\'' + qe + '\')">' + esc(q.questionSource.excerpt) + '</div>' +
-      '<span class="source-cite-ref" onclick="openSourceModal(\'' + qm + '\',\'' + qp + '\',\'' + qe + '\')">' + esc(q.questionSource.material) + ', ' + esc(q.questionSource.page) + '</span>' +
-      '</div>';
-  }
-  qTextEl.innerHTML = qHtml;
+  qTextEl.innerHTML = '<span>' + q.text + '</span>';
 
   var optWrap = document.getElementById('reviewQOptions');
   var ansWrap = document.getElementById('reviewQAnswer');
@@ -1739,6 +1726,20 @@ function showReviewQuestion(idx) {
     });
   }
 
+  // Question source citation (after options)
+  if (q.questionSource) {
+    var esc = function(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')};
+    var qm = q.questionSource.material.replace(/'/g, "\\'");
+    var qp = q.questionSource.page.replace(/'/g, "\\'");
+    var qe = q.questionSource.excerpt.replace(/'/g, "\\'");
+    var citeDiv = document.createElement('div');
+    citeDiv.className = 'source-cite-block';
+    citeDiv.setAttribute('onclick', "openSourceModal('" + qm + "','" + qp + "','" + qe + "')");
+    citeDiv.innerHTML = '<div class="source-cite-text">' + esc(q.questionSource.excerpt) + '</div>' +
+      '<span class="source-cite-ref">' + esc(q.questionSource.material) + ', ' + esc(q.questionSource.page) + '</span>';
+    optWrap.appendChild(citeDiv);
+  }
+
   // Answer + inline citation
   var ansHtml = '';
   if (q.correct !== null && typeof q.correct === 'string') {
@@ -1748,9 +1749,9 @@ function showReviewQuestion(idx) {
       var am = q.answerSource.material.replace(/'/g, "\\'");
       var ap = q.answerSource.page.replace(/'/g, "\\'");
       var ae = q.answerSource.excerpt.replace(/'/g, "\\'");
-      ansHtml += '<div class="source-cite-block">' +
-        '<div class="source-cite-text source-cite-text-answer" onclick="openSourceModal(\'' + am + '\',\'' + ap + '\',\'' + ae + '\')">' + escA(q.answerSource.excerpt) + '</div>' +
-        '<span class="source-cite-ref source-cite-ref-answer" onclick="openSourceModal(\'' + am + '\',\'' + ap + '\',\'' + ae + '\')">' + escA(q.answerSource.material) + ', ' + escA(q.answerSource.page) + '</span>' +
+      ansHtml += '<div class="source-cite-block source-cite-block-answer" onclick="openSourceModal(\'' + am + '\',\'' + ap + '\',\'' + ae + '\')">' +
+        '<div class="source-cite-text">' + escA(q.answerSource.excerpt) + '</div>' +
+        '<span class="source-cite-ref source-cite-ref-answer">' + escA(q.answerSource.material) + ', ' + escA(q.answerSource.page) + '</span>' +
         '</div>';
     }
     ansWrap.innerHTML = ansHtml;
@@ -1761,9 +1762,9 @@ function showReviewQuestion(idx) {
       var am2 = q.answerSource.material.replace(/'/g, "\\'");
       var ap2 = q.answerSource.page.replace(/'/g, "\\'");
       var ae2 = q.answerSource.excerpt.replace(/'/g, "\\'");
-      ansHtml += '<div class="source-cite-block">' +
-        '<div class="source-cite-text source-cite-text-answer" onclick="openSourceModal(\'' + am2 + '\',\'' + ap2 + '\',\'' + ae2 + '\')">' + escA2(q.answerSource.excerpt) + '</div>' +
-        '<span class="source-cite-ref source-cite-ref-answer" onclick="openSourceModal(\'' + am2 + '\',\'' + ap2 + '\',\'' + ae2 + '\')">' + escA2(q.answerSource.material) + ', ' + escA2(q.answerSource.page) + '</span>' +
+      ansHtml += '<div class="source-cite-block source-cite-block-answer" onclick="openSourceModal(\'' + am2 + '\',\'' + ap2 + '\',\'' + ae2 + '\')">' +
+        '<div class="source-cite-text">' + escA2(q.answerSource.excerpt) + '</div>' +
+        '<span class="source-cite-ref source-cite-ref-answer">' + escA2(q.answerSource.material) + ', ' + escA2(q.answerSource.page) + '</span>' +
         '</div>';
     }
     ansWrap.innerHTML = ansHtml;
