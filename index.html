@@ -303,6 +303,22 @@ tr:hover td{background:var(--surface)}
 .progress-bar{width:100%;height:10px;background:var(--surface);border-radius:var(--radius-pill);overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--accent));border-radius:var(--radius-pill);transition:width .5s ease}
 
+/* Dashboard difficult questions */
+.dq-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .15s}
+.dq-item:hover{border-color:var(--purple);background:var(--purple-soft)}
+.dq-rank{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff}
+.dq-rank-1{background:#ef4444}
+.dq-rank-2{background:#f59e0b}
+.dq-rank-3{background:#f59e0b}
+.dq-rank-n{background:var(--muted)}
+.dq-info{flex:1;min-width:0}
+.dq-text{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dq-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.dq-bar-wrap{width:100px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.dq-bar{width:100%;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.dq-bar-fill{height:100%;border-radius:3px;transition:width .3s}
+.dq-pct{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+
 .filter-chips{display:flex;gap:8px;flex-wrap:wrap}
 
 .view-toggle{display:flex;border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden}
@@ -368,11 +384,15 @@ tr:hover td{background:var(--surface)}
 .review-q-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius);cursor:pointer;transition:all .15s;font-size:12px;border:1px solid transparent}
 .review-q-item:hover{background:var(--fg-soft)}
 .review-q-item.active{background:var(--purple-soft);border-color:var(--purple);color:var(--purple);font-weight:600}
-.review-q-item.hidden-q{opacity:.45}
+.review-q-item.draft-q{opacity:.55}
 .review-q-item .rq-num{width:22px;height:22px;border-radius:50%;background:var(--fg-soft);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
 .review-q-item.active .rq-num{background:var(--purple);color:#fff}
-.review-q-item .rq-type{font-size:10px;color:var(--muted);margin-left:auto;flex-shrink:0}
-.review-q-item.hidden-q .rq-type{text-decoration:line-through}
+.rq-toggle{position:relative;width:32px;height:18px;flex-shrink:0;cursor:pointer;z-index:1}
+.rq-toggle input{opacity:0;width:0;height:0;position:absolute}
+.rq-toggle .rq-toggle-track{position:absolute;inset:0;border-radius:9px;background:var(--border);transition:background .2s}
+.rq-toggle input:checked + .rq-toggle-track{background:var(--accent)}
+.rq-toggle .rq-toggle-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
+.rq-toggle input:checked + .rq-toggle-track .rq-toggle-thumb{transform:translateX(14px)}
 .review-main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:16px 20px}
 .review-q-display{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:16px}
 .review-q-header{display:flex;align-items:center;gap:10px}
@@ -421,6 +441,16 @@ tr:hover td{background:var(--surface)}
 .q-analytics-pct-good{color:var(--accent)}
 .q-analytics-pct-warn{color:#f59e0b}
 .q-analytics-pct-bad{color:#ef4444}
+
+/* Approval status */
+.q-status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.02em}
+.q-status-approved{background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.2)}
+.q-status-draft{background:rgba(107,114,128,.1);color:var(--muted);border:1px solid rgba(107,114,128,.2)}
+.q-approve-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid}
+.q-approve-btn-approve{background:rgba(16,185,129,.08);color:#059669;border-color:rgba(16,185,129,.25)}
+.q-approve-btn-approve:hover{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.4)}
+.q-approve-btn-revoke{background:rgba(107,114,128,.08);color:var(--muted);border-color:var(--border)}
+.q-approve-btn-revoke:hover{background:rgba(107,114,128,.15);border-color:var(--muted)}
 
 /* Source modal */
 .source-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
@@ -713,23 +743,11 @@ tr:hover td{background:var(--surface)}
     <div class="card stat-card"><div class="stat-value">23</div><div class="stat-label">Pruebas rendidas</div></div>
   </div>
   <div class="card" style="gap:16px">
-    <div style="font-size:14px;font-weight:600">Distribución de calificaciones</div>
-    <div class="bar-chart">
-      <div class="bar-col"><div class="bar-value">1</div><div class="bar" style="height:14px"></div><div class="bar-label">0–4</div></div>
-      <div class="bar-col"><div class="bar-value">4</div><div class="bar" style="height:56px"></div><div class="bar-label">4–6</div></div>
-      <div class="bar-col"><div class="bar-value">9</div><div class="bar" style="height:126px"></div><div class="bar-label">6–8</div></div>
-      <div class="bar-col"><div class="bar-value">7</div><div class="bar" style="height:98px"></div><div class="bar-label">8–10</div></div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:14px;font-weight:600">Preguntas con más dificultad</div>
+      <span style="font-size:11px;color:var(--muted)">Ordenadas por menor tasa de acierto</span>
     </div>
-  </div>
-  <div class="card" style="gap:16px">
-    <div style="font-size:14px;font-weight:600">Análisis por punto de conocimiento</div>
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Herencia genética</span><span style="color:var(--muted)">92%</span></div><div class="progress-bar"><div class="progress-fill" style="width:92%"></div></div></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Ácidos nucleicos</span><span style="color:var(--muted)">85%</span></div><div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>División celular</span><span style="color:var(--muted)">78%</span></div><div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Expresión génica</span><span style="color:var(--muted)">71%</span></div><div class="progress-bar"><div class="progress-fill" style="width:71%"></div></div></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Biología molecular</span><span style="color:var(--muted)">65%</span></div><div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div></div>
-    </div>
+    <div id="dashboardDifficultQuestions" style="display:flex;flex-direction:column;gap:10px"></div>
   </div>
   <div style="font-size:14px;font-weight:600">Resultados por estudiante</div>
   <div class="table-wrap">
@@ -1092,6 +1110,7 @@ tr:hover td{background:var(--surface)}
         <div class="review-q-header">
           <span class="badge badge-success" id="reviewQType">Opcion unica</span>
           <span style="font-size:12px;color:var(--muted)" id="reviewQPoints">1 punto</span>
+          <span class="q-status-badge q-status-approved" id="reviewQStatus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="10" height="10"><polyline points="20 6 9 17 4 12"/></svg> Aprobada</span>
           <div class="q-analytics" id="reviewQAnalytics"></div>
         </div>
         <div class="review-q-text" id="reviewQText"></div>
@@ -1152,7 +1171,7 @@ tr:hover td{background:var(--surface)}
       <div class="review-q-actions">
         <button class="btn btn-ghost" id="reviewPrevBtn" onclick="reviewNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><polyline points="15 18 9 12 15 6"/></svg> Anterior</button>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-secondary" id="reviewHideBtn" onclick="toggleReviewHide()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Ocultar</button>
+          <button class="q-approve-btn q-approve-btn-approve" id="reviewHideBtn" onclick="toggleReviewHide()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg> <span id="reviewHideLabel">Aprobada</span></button>
           <button class="btn btn-secondary" onclick="moveReviewQ(-1)" style="min-height:36px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polyline points="18 15 12 9 6 15"/></svg></button>
           <button class="btn btn-secondary" onclick="moveReviewQ(1)" style="min-height:36px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg></button>
         </div>
@@ -1362,6 +1381,45 @@ var heroRunning = false;
 function navigate(route) {
   currentRoute = route;
   window.location.hash = route ? '/' + route : '';
+}
+
+var testLabels = {'sw-eng':'Parcial — Ingeniería de Software','oop-quiz':'Quiz — Programación orientada a objetos'};
+
+function buildDifficultQuestions() {
+  var all = [];
+  Object.keys(testQuestions).forEach(function(tid) {
+    testQuestions[tid].forEach(function(q) {
+      var seed = q.id * 7 + (q.text.length % 13);
+      var rate = 0.3 + (seed % 55) / 100;
+      if (q.type === 'Respuesta corta' || q.type === 'Completar') rate += 0.1;
+      rate = Math.min(0.85, Math.max(0.18, rate));
+      all.push({text:q.text, test:tid, testLabel:testLabels[tid]||tid, type:q.type, rate:rate, id:q.id});
+    });
+  });
+  all.sort(function(a,b){return a.rate - b.rate});
+  var top = all.slice(0, 8);
+  var el = document.getElementById('dashboardDifficultQuestions');
+  if (!el) return;
+  el.innerHTML = '';
+  top.forEach(function(q, i) {
+    var pct = Math.round(q.rate * 100);
+    var rankCls = i < 3 ? 'dq-rank-' + (i+1) : 'dq-rank-n';
+    var barColor = pct < 35 ? '#ef4444' : pct < 55 ? '#f59e0b' : 'var(--accent)';
+    var item = document.createElement('div');
+    item.className = 'dq-item';
+    item.onclick = function() { loadTest(q.test); };
+    item.innerHTML =
+      '<div class="dq-rank ' + rankCls + '">' + (i+1) + '</div>' +
+      '<div class="dq-info">' +
+        '<div class="dq-text">' + q.text + '</div>' +
+        '<div class="dq-meta">' + q.testLabel + ' · ' + q.type + '</div>' +
+      '</div>' +
+      '<div class="dq-bar-wrap">' +
+        '<div class="dq-bar"><div class="dq-bar-fill" style="width:' + pct + '%;background:' + barColor + '"></div></div>' +
+        '<div class="dq-pct" style="color:' + barColor + '">' + pct + '%</div>' +
+      '</div>';
+    el.appendChild(item);
+  });
 }
 
 function handleRoute() {
@@ -1699,14 +1757,21 @@ function buildReviewList() {
   list.innerHTML = '';
   reviewQuestions.forEach(function(q, i) {
     var item = document.createElement('div');
-    item.className = 'review-q-item' + (q.hidden ? ' hidden-q' : '') + (i === reviewIdx ? ' active' : '');
+    item.className = 'review-q-item' + (q.hidden ? ' draft-q' : '') + (i === reviewIdx ? ' active' : '');
     item.setAttribute('data-ri', i);
-    item.innerHTML = '<span class="rq-num">' + (i+1) + '</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + q.text.substring(0,32) + '...</span><span class="rq-type">' + q.type + '</span>';
+    var checked = q.hidden ? '' : 'checked';
+    item.innerHTML = '<span class="rq-num">' + (i+1) + '</span>' +
+      '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + q.text.substring(0,30) + '...</span>' +
+      '<label class="rq-toggle" onclick="event.stopPropagation()">' +
+        '<input type="checkbox" ' + checked + ' onchange="toggleQuestionApproval(' + i + ', this.checked)">' +
+        '<span class="rq-toggle-track"><span class="rq-toggle-thumb"></span></span>' +
+      '</label>';
     item.onclick = function() { showReviewQuestion(i); };
     list.appendChild(item);
   });
-  var visible = reviewQuestions.filter(function(q){return !q.hidden}).length;
-  document.getElementById('reviewCount').textContent = '(' + visible + '/' + reviewQuestions.length + ')';
+  var approved = reviewQuestions.filter(function(q){return !q.hidden}).length;
+  document.getElementById('reviewPageBadge').textContent = approved + ' aprobadas / ' + reviewQuestions.length;
+  document.getElementById('reviewCount').textContent = '(' + approved + '/' + reviewQuestions.length + ')';
 }
 
 function showReviewQuestion(idx) {
@@ -1801,12 +1866,20 @@ function showReviewQuestion(idx) {
   srcWrap.style.display = 'none';
 
   var hideBtn = document.getElementById('reviewHideBtn');
+  var hideLabel = document.getElementById('reviewHideLabel');
+  var statusBadge = document.getElementById('reviewQStatus');
   if (q.hidden) {
-    hideBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Mostrar';
-    hideBtn.style.color = 'var(--accent)';
+    hideBtn.className = 'q-approve-btn q-approve-btn-revoke';
+    hideBtn.querySelector('svg').outerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>';
+    hideLabel.textContent = 'Marcar aprobada';
+    statusBadge.className = 'q-status-badge q-status-draft';
+    statusBadge.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="10" height="10"><circle cx="12" cy="12" r="10"/></svg> Borrador';
   } else {
-    hideBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Ocultar';
-    hideBtn.style.color = '';
+    hideBtn.className = 'q-approve-btn q-approve-btn-approve';
+    hideBtn.querySelector('svg').outerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>';
+    hideLabel.textContent = 'Aprobada';
+    statusBadge.className = 'q-status-badge q-status-approved';
+    statusBadge.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="10" height="10"><polyline points="20 6 9 17 4 12"/></svg> Aprobada';
   }
 
   document.getElementById('reviewPrevBtn').disabled = idx === 0;
@@ -1833,6 +1906,12 @@ function toggleReviewHide() {
   showReviewQuestion(reviewIdx);
 }
 
+function toggleQuestionApproval(idx, approved) {
+  reviewQuestions[idx].hidden = !approved;
+  buildReviewList();
+  if (idx === reviewIdx) showReviewQuestion(reviewIdx);
+}
+
 function moveReviewQ(dir) {
   var next = reviewIdx + dir;
   if (next < 0 || next >= reviewQuestions.length) return;
@@ -1841,18 +1920,6 @@ function moveReviewQ(dir) {
   reviewQuestions[next] = temp;
   buildReviewList();
   showReviewQuestion(next);
-}
-
-function expandAllQuestions() {
-  document.querySelectorAll('.review-q-item').forEach(function(el) { el.classList.remove('hidden-q'); });
-}
-
-function collapseAllQuestions() {
-  reviewQuestions.forEach(function(q, i) {
-    if (i !== reviewIdx) q.hidden = true;
-  });
-  buildReviewList();
-  showReviewQuestion(reviewIdx);
 }
 
 function finishReview() {
@@ -1930,6 +1997,7 @@ document.addEventListener('click', function(e) {
 });
 
 handleRoute();
+buildDifficultQuestions();
 </script>
 </body>
 </html>
