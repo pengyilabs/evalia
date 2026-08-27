@@ -387,8 +387,8 @@ tr:hover td{background:var(--surface)}
 .review-q-item.draft-q{opacity:.55}
 .review-q-item.dragging{opacity:.4;background:#ede9fe}
 .review-q-item.drag-over{border-top:2px solid var(--purple)}
-.review-q-drag{display:flex;align-items:center;padding:4px;cursor:grab;color:#c4b5fd;opacity:0;transition:opacity .15s;flex-shrink:0}
-.review-q-item:hover .review-q-drag{opacity:1}
+.review-q-drag{display:flex;align-items:center;padding:4px;cursor:grab;color:#8b5cf6;opacity:0;width:0;overflow:hidden;transition:opacity .2s ease, width .2s ease;flex-shrink:0}
+.review-q-item:hover .review-q-drag{opacity:1;width:22px}
 .review-q-drag:active{cursor:grabbing}
 .review-q-info{flex:1;min-width:0;overflow:hidden}
 .review-q-info .rq-type{font-size:9px;color:#94a3b8;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
@@ -1905,6 +1905,7 @@ function showReviewQuestion(idx) {
     }
     ansWrap.innerHTML = ansHtml;
   }
+  ansWrap.style.display = ansWrap.innerHTML.trim() ? '' : 'none';
 
   var srcWrap = document.getElementById('reviewQSource');
   srcWrap.innerHTML = '';
