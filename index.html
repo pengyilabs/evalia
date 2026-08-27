@@ -384,6 +384,7 @@ tr:hover td{background:var(--surface)}
 .review-q-opt.correct .opt-marker{border-color:var(--accent);background:var(--accent);color:#fff}
 .review-q-answer{font-size:13px;color:var(--accent);font-weight:600;padding:10px 14px;background:rgba(16,185,129,.06);border-radius:var(--radius);border:1px solid rgba(16,185,129,.2)}
 .review-q-actions{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);margin-top:12px;gap:8px}
+.review-details-panel{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:16px}
 
 /* Test cards */
 .test-share-btn{width:36px;height:36px;border-radius:var(--radius);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:all .15s}
@@ -419,6 +420,7 @@ tr:hover td{background:var(--surface)}
   .review-sidebar{max-height:35vh}
   .review-q-actions{gap:6px}
   .review-q-actions .btn{font-size:11px;min-height:32px;padding:4px 8px}
+  .review-details-panel .card:first-child{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -811,19 +813,19 @@ tr:hover td{background:var(--surface)}
     <button class="btn btn-primary" onclick="openCreateModal()">+ Crear prueba</button>
   </div>
   <div style="display:flex;flex-direction:column;gap:16px">
-    <!-- Test 1 -->
-    <div class="card" style="cursor:pointer" onclick="navigate('test-detail')">
+    <!-- Test 1 — matches the wizard flow (Clean Code + Design Patterns + Apuntes Estructuras) -->
+    <div class="card" style="cursor:pointer" onclick="loadTest('sw-eng')">
       <div style="display:flex;align-items:start;justify-content:space-between;gap:16px;flex-wrap:wrap">
         <div style="flex:1;min-width:200px">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
             <span class="badge badge-success">Activa</span>
-            <span style="font-size:12px;color:var(--muted)">Creada el 20 mayo 2026</span>
+            <span style="font-size:12px;color:var(--muted)">Creada el 27 ago 2026</span>
           </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:4px">Examen Parcial — Genetica</div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px">Parcial — Ingenieria de Software</div>
           <div style="font-size:13px;color:var(--muted)">15 preguntas · 45 min · Dificultad media</div>
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0">
-          <div class="test-share-btn" onclick="event.stopPropagation();copyTestLink('gen-2026-p1')" title="Copiar enlace">
+          <div class="test-share-btn" onclick="event.stopPropagation();copyTestLink('sw-2026-p1')" title="Copiar enlace">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
           </div>
           <div class="test-share-btn" onclick="event.stopPropagation()" title="WhatsApp">
@@ -843,58 +845,23 @@ tr:hover td{background:var(--surface)}
         </div>
       </div>
       <div style="display:flex;gap:16px;padding-top:12px;margin-top:12px;border-top:1px solid var(--border)">
-        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">23</span> estudiantes</div>
-        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">8.2</span> promedio</div>
+        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">24</span> estudiantes</div>
+        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">8.4</span> promedio</div>
       </div>
     </div>
     <!-- Test 2 -->
-    <div class="card" style="cursor:pointer" onclick="navigate('test-detail')">
-      <div style="display:flex;align-items:start;justify-content:space-between;gap:16px;flex-wrap:wrap">
-        <div style="flex:1;min-width:200px">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-            <span class="badge badge-success">Activa</span>
-            <span style="font-size:12px;color:var(--muted)">Creada el 18 mayo 2026</span>
-          </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:4px">Quiz — Ecuaciones cuadraticas</div>
-          <div style="font-size:13px;color:var(--muted)">10 preguntas · 30 min · Dificultad facil</div>
-        </div>
-        <div style="display:flex;gap:8px;flex-shrink:0">
-          <div class="test-share-btn" onclick="event.stopPropagation();copyTestLink('math-2026-q1')" title="Copiar enlace">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-          </div>
-          <div class="test-share-btn" onclick="event.stopPropagation()" title="WhatsApp">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          </div>
-          <div class="test-share-btn" onclick="event.stopPropagation()" title="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </div>
-        </div>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;font-weight:600">Materiales utilizados</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--purple-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Apuntes_Estructuras_de_Datos.pdf</span>
-          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--purple-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Pragmatic_Programmer_Hunt.pdf</span>
-        </div>
-      </div>
-      <div style="display:flex;gap:16px;padding-top:12px;margin-top:12px;border-top:1px solid var(--border)">
-        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">18</span> estudiantes</div>
-        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">7.9</span> promedio</div>
-      </div>
-    </div>
-    <!-- Test 3 (Draft) -->
-    <div class="card" style="cursor:pointer;opacity:.7" onclick="navigate('test-detail')">
+    <div class="card" style="cursor:pointer" onclick="loadTest('oop-quiz')">
       <div style="display:flex;align-items:start;justify-content:space-between;gap:16px;flex-wrap:wrap">
         <div style="flex:1;min-width:200px">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
             <span class="badge badge-warning">Borrador</span>
-            <span style="font-size:12px;color:var(--muted)">Creada el 22 mayo 2026</span>
+            <span style="font-size:12px;color:var(--muted)">Creada el 25 ago 2026</span>
           </div>
-          <div style="font-size:16px;font-weight:700;margin-bottom:4px">Practica 3 — Revolucion Francesa</div>
-          <div style="font-size:13px;color:var(--muted)">8 preguntas · 20 min · Dificultad media</div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px">Quiz — Programacion orientada a objetos</div>
+          <div style="font-size:13px;color:var(--muted)">10 preguntas · 30 min · Dificultad facil</div>
         </div>
         <div style="display:flex;gap:8px;flex-shrink:0">
-          <div class="test-share-btn" onclick="event.stopPropagation();copyTestLink('hist-2026-p3')" title="Copiar enlace">
+          <div class="test-share-btn" onclick="event.stopPropagation();copyTestLink('oop-2026-q1')" title="Copiar enlace">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
           </div>
           <div class="test-share-btn" onclick="event.stopPropagation()" title="WhatsApp">
@@ -908,7 +875,9 @@ tr:hover td{background:var(--surface)}
       <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
         <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;font-weight:600">Materiales utilizados</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--teal-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Apuntes_Bases_de_Datos_SQL.pdf</span>
+          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--purple-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="12" height="12"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>Python_Intro_Clases_1-8.pptx</span>
+          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--purple-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Guia_Estilo_Java_Sun.pdf</span>
+          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--teal-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" width="12" height="12"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Parcial_2_Algoritmos.docx</span>
         </div>
       </div>
     </div>
@@ -1054,6 +1023,10 @@ tr:hover td{background:var(--surface)}
   <div class="topbar">
     <a href="#/tests" class="btn btn-ghost" style="margin-right:8px">Volver</a>
     <h1 style="flex:1">Revisar preguntas</h1>
+    <button class="btn btn-ghost" id="reviewDetailsBtn" onclick="toggleReviewDetails()" style="font-size:12px;min-height:32px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      Detalles
+    </button>
     <span class="badge badge-success" id="reviewPageBadge">15 visibles</span>
   </div>
   <div class="review-layout">
@@ -1072,6 +1045,7 @@ tr:hover td{background:var(--surface)}
       </div>
     </div>
     <div class="review-main">
+      <!-- Question display -->
       <div class="review-q-display" id="reviewQDisplay">
         <div class="review-q-header">
           <span class="badge badge-success" id="reviewQType">Opcion unica</span>
@@ -1080,6 +1054,57 @@ tr:hover td{background:var(--surface)}
         <div class="review-q-text" id="reviewQText"></div>
         <div class="review-q-options" id="reviewQOptions"></div>
         <div class="review-q-answer" id="reviewQAnswer"></div>
+      </div>
+      <!-- Details panel (hidden by default) -->
+      <div class="review-details-panel" id="reviewDetailsPanel" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card" style="gap:12px">
+            <div style="font-size:14px;font-weight:600">Informacion de la prueba</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Nombre</span><span style="font-weight:600">Parcial — Ingenieria de Software</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Estado</span><span class="badge badge-success">Activa</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Preguntas</span><span style="font-weight:600">15</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Tiempo limite</span><span style="font-weight:600">45 min</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Dificultad</span><span style="font-weight:600">Media</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Creada</span><span style="font-weight:600">27 ago 2026</span></div>
+            </div>
+          </div>
+          <div class="card" style="gap:12px">
+            <div style="font-size:14px;font-weight:600">Materiales utilizados</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius)">
+                <div style="width:28px;height:28px;border-radius:6px;background:var(--purple-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="14" height="14"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Clean_Code_2nd_Edition.pdf</div><div style="font-size:11px;color:var(--muted)">4.2 MB · 464 paginas</div></div>
+                <span class="badge badge-success" style="font-size:10px">PDF</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius)">
+                <div style="width:28px;height:28px;border-radius:6px;background:var(--purple-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="14" height="14"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Design_Patterns_Gang_of_Four.pdf</div><div style="font-size:11px;color:var(--muted)">3.8 MB · 395 paginas</div></div>
+                <span class="badge badge-success" style="font-size:10px">PDF</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius)">
+                <div style="width:28px;height:28px;border-radius:6px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Apuntes_Estructuras_de_Datos.pdf</div><div style="font-size:11px;color:var(--muted)">1.5 MB · 38 paginas</div></div>
+                <span class="badge badge-success" style="font-size:10px">PDF</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap">
+          <div style="font-size:13px;font-weight:600;margin-right:8px">Compartir con estudiantes</div>
+          <div style="display:flex;gap:8px;flex:1;min-width:0">
+            <input type="text" value="https://evalia.app/test/gen-2026-p1" readonly style="flex:1;font-family:var(--font-mono);font-size:12px;min-width:0">
+            <button class="btn btn-primary" onclick="copyLink()">Copiar enlace</button>
+          </div>
+          <div style="display:flex;gap:6px">
+            <div class="test-share-btn" title="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+            <div class="test-share-btn" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          </div>
+          <a href="share.html" class="btn btn-secondary" target="_blank" style="margin-left:8px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Ver como estudiante
+          </a>
+        </div>
       </div>
       <div class="review-q-actions">
         <button class="btn btn-ghost" id="reviewPrevBtn" onclick="reviewNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><polyline points="15 18 9 12 15 6"/></svg> Anterior</button>
@@ -1265,7 +1290,7 @@ tr:hover td{background:var(--surface)}
     <p>Tu prueba esta lista para compartir con tus estudiantes.</p>
     <div style="display:flex;gap:8px;width:100%">
       <button class="btn btn-secondary" style="flex:1" onclick="document.getElementById('submitModal').classList.remove('open')">Cerrar</button>
-      <button class="btn btn-primary" style="flex:1" onclick="document.getElementById('submitModal').classList.remove('open');navigate('test-detail')">Ver prueba</button>
+      <button class="btn btn-primary" style="flex:1" onclick="document.getElementById('submitModal').classList.remove('open');navigate('review')">Ver prueba</button>
     </div>
   </div>
 </div>
@@ -1505,33 +1530,84 @@ function startGeneration() {
     steps[steps.length-1].classList.add('done');
   }, delay);
   setTimeout(function() {
+    reviewQuestions = testQuestions['sw-eng'].map(function(q) { return Object.assign({}, q); });
+    reviewIdx = 0;
     showReviewView();
   }, delay + 800);
 }
 
 // ==================== REVIEW VIEW ====================
-var reviewQuestions = [
-  {id:1, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es la unidad fundamental de la herencia genetica?', options:['Celula','Gen','Cromosoma','Proteina'], correct:1, points:1, hidden:false},
-  {id:2, type:'Opcion multiple', typeBadge:'badge-success', text:'Selecciona todos los componentes del dogma central de la biologia molecular:', options:['ADN a ARN','ARN a Proteina','Proteina a ADN','ADN a Proteina'], correct:[0,1,3], points:2, hidden:false},
-  {id:3, type:'Verdadero / Falso', typeBadge:'badge-warning', text:'El codigo genetico es universal para todos los seres vivos.', options:['Verdadero','Falso'], correct:0, points:1, hidden:false},
-  {id:4, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es la funcion principal de la mitocondria en la celula?', options:['Sintesis de proteinas','Produccion de energia (ATP)','Almacenamiento de lipidos','Transporte de iones'], correct:1, points:1, hidden:false},
-  {id:5, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es la formula para resolver ecuaciones cuadraticas?', options:['x = -b +/- sqrt(b2 - 4ac) / 2a','x = b +/- sqrt(b2 + 4ac) / 2a','x = -b +/- sqrt(b2 - 4ac) / a','x = -b +/- sqrt(b2 - 2ac) / 2a'], correct:0, points:1, hidden:false},
-  {id:6, type:'Completar', typeBadge:'badge-neutral', text:'El proceso de sintesis de proteinas a partir del ARN se llama ______.', options:[], correct:'Traduccion', points:1, hidden:false},
-  {id:7, type:'Respuesta corta', typeBadge:'badge-neutral', text:'Explica la diferencia entre genotipo y fenotipo.', options:[], correct:null, points:3, hidden:false},
-  {id:8, type:'Opcion unica', typeBadge:'badge-success', text:'Que estructura celular es responsable de la sintesis de proteinas?', options:['Mitocondria','Ribosoma','Lisosoma','Centriolo'], correct:1, points:1, hidden:false},
-  {id:9, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es el monomero del ADN?', options:['Aminoacido','Nucleotido','Glucosa','Acidos grasos'], correct:1, points:1, hidden:false},
-  {id:10, type:'Verdadero / Falso', typeBadge:'badge-warning', text:'Los virus son considerados seres vivos segun la biologia moderna.', options:['Verdadero','Falso'], correct:1, points:1, hidden:false},
-  {id:11, type:'Opcion multiple', typeBadge:'badge-success', text:'Cuales son los tres pasos del dogma central?', options:['Replicacion','Transcripcion','Traduccion','Fotosintesis'], correct:[0,1,2], points:2, hidden:false},
-  {id:12, type:'Opcion unica', typeBadge:'badge-success', text:'Que tipo de enlace une los nucleotidos en una cadena de ADN?', options:['Enlace peptidico','Enlace fosfodiester','Enlace de hidrogeno','Enlace ionico'], correct:1, points:1, hidden:false},
-  {id:13, type:'Completar', typeBadge:'badge-neutral', text:'La region del ADN que codifica para una proteina se llama ______.', options:[], correct:'Gen', points:1, hidden:false},
-  {id:14, type:'Opcion unica', typeBadge:'badge-success', text:'En que organelo ocurre la traduccion del ARN mensajero?', options:['Nucleo','Ribosoma','Reticulo endoplasmatico','Aparato de Golgi'], correct:1, points:1, hidden:false},
-  {id:15, type:'Respuesta corta', typeBadge:'badge-neutral', text:'Describe el proceso de replicacion del ADN y su importancia biologica.', options:[], correct:null, points:3, hidden:false}
-];
+var testQuestions = {
+  'sw-eng': [
+    {id:1, type:'Opcion unica', typeBadge:'badge-success', text:'Cual de los siguientes es un principio SOLID?', options:['Single Responsibility','Keep It Simple','Do Not Repeat','YAGNI'], correct:0, points:1, hidden:false},
+    {id:2, type:'Opcion multiple', typeBadge:'badge-success', text:'Selecciona los patrones de diseño creacionales:', options:['Singleton','Factory Method','Observer','Builder','Strategy'], correct:[0,1,3], points:2, hidden:false},
+    {id:3, type:'Verdadero / Falso', typeBadge:'badge-warning', text:'El patron MVC separa la logica de negocio de la presentacion.', options:['Verdadero','Falso'], correct:0, points:1, hidden:false},
+    {id:4, type:'Opcion unica', typeBadge:'badge-success', text:'Que principio SOLID establece que una clase solo debe tener una razon para cambiar?', options:['Open/Closed','Liskov Substitution','Single Responsibility','Interface Segregation'], correct:2, points:1, hidden:false},
+    {id:5, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es el proposito del patron Repository?', options:['Crear objetos','Acceder a datos de forma abstracta','Manejar eventos','Comunicar componentes'], correct:1, points:1, hidden:false},
+    {id:6, type:'Completar', typeBadge:'badge-neutral', text:'El principio que dice "programar a interfaz, no a implementacion" se llama ______.', options:[], correct:'Inversion de dependencias', points:1, hidden:false},
+    {id:7, type:'Respuesta corta', typeBadge:'badge-neutral', text:'Explica la diferencia entre acoplamiento y cohesion.', options:[], correct:null, points:3, hidden:false},
+    {id:8, type:'Opcion unica', typeBadge:'badge-success', text:'Que patrones son examples de patrones estructurales?', options:['Adapter','Decorator','Factory','Mediator'], correct:[0,1], points:1, hidden:false},
+    {id:9, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es la ventaja principal de usar interfaces?', options:['Mayor rendimiento','Mayor acoplamiento','Mayor flexibilidad y desacoplamiento','Menos codigo'], correct:2, points:1, hidden:false},
+    {id:10, type:'Verdadero / Falso', typeBadge:'badge-warning', text:'El patron Singleton garantiza que una clase tenga una sola instancia.', options:['Verdadero','Falso'], correct:0, points:1, hidden:false},
+    {id:11, type:'Opcion multiple', typeBadge:'badge-success', text:'Cuales son principios de Clean Code?', options:['Nombres descriptivos','Funciones pequenas','Comentarios obligatorios','Codigo autoexplicativo'], correct:[0,1,3], points:2, hidden:false},
+    {id:12, type:'Opcion unica', typeBadge:'badge-success', text:'Que patrones son examples de patrones de comportamiento?', options:['Observer','Strategy','Composite','Chain of Responsibility'], correct:[0,1,3], points:1, hidden:false},
+    {id:13, type:'Completar', typeBadge:'badge-neutral', text:'El patron que notifica a multiples objetos cuando un objeto cambia de estado se llama ______.', options:[], correct:'Observer', points:1, hidden:false},
+    {id:14, type:'Opcion unica', typeBadge:'badge-success', text:'En que se diferencia un framework de una libreria?', options:['El framework controla el flujo, la libreria la llamamos nosotros','No hay diferencia','La libreria es mas grande','El framework es siempre mejor'], correct:0, points:1, hidden:false},
+    {id:15, type:'Respuesta corta', typeBadge:'badge-neutral', text:'Describe cuando usarías el patron Strategy vs el patron Template Method.', options:[], correct:null, points:3, hidden:false}
+  ],
+  'oop-quiz': [
+    {id:1, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es el pilar fundamental de la encapsulacion?', options:['Heredar propiedades','Ocultar estado interno y exponer interfaz','Crear multiples instancias','Reutilizar codigo'], correct:1, points:1, hidden:false},
+    {id:2, type:'Opcion multiple', typeBadge:'badge-success', text:'Selecciona los pilares de la POO:', options:['Encapsulacion','Herencia','Polimorfismo','Modularidad','Abstraccion'], correct:[0,1,2,4], points:2, hidden:false},
+    {id:3, type:'Verdadero / Falso', typeBadge:'badge-warning', text:'En Python, todos los atributos son publicos por defecto.', options:['Verdadero','Falso'], correct:0, points:1, hidden:false},
+    {id:4, type:'Opcion unica', typeBadge:'badge-success', text:'Que tipo de metodo se define en una clase padre y se sobreescribe en una clase hija?', options:['Metodo estatico','Metodo abstracto','Metodo virtual','Metodo privado'], correct:2, points:1, hidden:false},
+    {id:5, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es la diferencia entre sobrecarga y sobreescritura de metodos?', options:['Sobrecarga cambia la firma, sobreescritura no','Sobrecarga es en tiempo de ejecucion, sobreescritura en compilacion','No hay diferencia','Sobrecarga es para funciones, sobreescritura para clases'], correct:0, points:1, hidden:false},
+    {id:6, type:'Completar', typeBadge:'badge-neutral', text:'La capacidad de un objeto de tomar multiples formas se llama ______.', options:[], correct:'Polimorfismo', points:1, hidden:false},
+    {id:7, type:'Respuesta corta', typeBadge:'badge-neutral', text:'Explica la diferencia entre una clase abstracta y una interfaz.', options:[], correct:null, points:3, hidden:false},
+    {id:8, type:'Opcion unica', typeBadge:'badge-success', text:'Que metodo especial se ejecuta al crear una instancia de una clase?', options:['__init__','__new__','__str__','__del__'], correct:0, points:1, hidden:false},
+    {id:9, type:'Opcion unica', typeBadge:'badge-success', text:'Que tipo de relacion existe cuando una clase "tiene un" objeto de otra clase?', options:['Herencia','Composicion','Agregacion','Dependencia'], correct:1, points:1, hidden:false},
+    {id:10, type:'Verdadero / Falso', typeBadge:'badge-warning', text:'Una clase puede heredar de multiples clases en Java.', options:['Verdadero','Falso'], correct:1, points:1, hidden:false}
+  ]
+};
+var reviewQuestions = [];
 var reviewIdx = 0;
+
+function loadTest(testId) {
+  reviewQuestions = testQuestions[testId].map(function(q) { return Object.assign({}, q); });
+  reviewIdx = 0;
+  showReviewView();
+}
+
+function toggleReviewDetails() {
+  var panel = document.getElementById('reviewDetailsPanel');
+  var display = document.getElementById('reviewQDisplay');
+  var btn = document.getElementById('reviewDetailsBtn');
+  var isActive = panel.style.display !== 'none';
+  if (isActive) {
+    panel.style.display = 'none';
+    display.style.display = '';
+    btn.classList.remove('active');
+    btn.style.background = '';
+    btn.style.color = '';
+  } else {
+    panel.style.display = '';
+    display.style.display = 'none';
+    btn.classList.add('active');
+    btn.style.background = 'var(--purple-soft)';
+    btn.style.color = 'var(--purple)';
+  }
+}
 
 function showReviewView() {
   closeCreateModal();
   navigate('review');
+  var panel = document.getElementById('reviewDetailsPanel');
+  var display = document.getElementById('reviewQDisplay');
+  var btn = document.getElementById('reviewDetailsBtn');
+  panel.style.display = 'none';
+  display.style.display = '';
+  btn.classList.remove('active');
+  btn.style.background = '';
+  btn.style.color = '';
   buildReviewList();
   showReviewQuestion(0);
 }
@@ -1644,7 +1720,7 @@ function collapseAllQuestions() {
 function finishReview() {
   var visible = reviewQuestions.filter(function(q){return !q.hidden}).length;
   document.getElementById('reviewPageBadge').textContent = visible + ' visibles';
-  navigate('test-detail');
+  navigate('review');
 }
 function selectDiff(el) {
   el.parentElement.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
