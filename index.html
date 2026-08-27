@@ -1932,6 +1932,7 @@ function showReviewQuestion(idx) {
 
   document.querySelectorAll('.review-q-item').forEach(function(el, i) {
     el.classList.toggle('active', i === idx);
+    if (i === idx) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   });
 
   var display = document.getElementById('reviewQDisplay');
