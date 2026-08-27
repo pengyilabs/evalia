@@ -381,12 +381,22 @@ tr:hover td{background:var(--surface)}
 .review-layout{display:flex;gap:0;flex:1;min-height:0;overflow:hidden}
 .review-sidebar{width:280px;flex-shrink:0;border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;overflow:hidden}
 .review-q-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
-.review-q-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius);cursor:pointer;transition:all .15s;font-size:12px;border:1px solid transparent}
+.review-q-item{display:flex;gap:8px;align-items:stretch;border-radius:var(--radius);cursor:pointer;transition:all .15s;font-size:12px;border:1px solid transparent}
 .review-q-item:hover{background:var(--fg-soft)}
 .review-q-item.active{background:var(--purple-soft);border-color:var(--purple);color:var(--purple);font-weight:600}
 .review-q-item.draft-q{opacity:.55}
+.review-q-item.dragging{opacity:.4;background:#ede9fe}
+.review-q-item.drag-over{border-top:2px solid var(--purple)}
+.review-q-drag{display:flex;align-items:center;padding:4px 6px;cursor:grab;color:#c4b5fd;opacity:0;transition:opacity .15s;flex-shrink:0}
+.review-q-item:hover .review-q-drag{opacity:1}
+.review-q-drag:active{cursor:grabbing}
 .review-q-item .rq-num{width:22px;height:22px;border-radius:50%;background:var(--fg-soft);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
 .review-q-item.active .rq-num{background:var(--purple);color:#fff}
+.review-q-info{flex:1;padding:10px 8px 10px 0;min-width:0}
+.review-q-info .rq-type{font-size:9px;color:#94a3b8;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px;display:flex;align-items:center;gap:4px}
+.review-q-info .rq-type .type-tag{background:#f1f5f9;padding:1px 5px;border-radius:6px;font-weight:500}
+.review-q-info .rq-text{font-size:12px;line-height:1.4;color:#475569;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.review-q-info .rq-points{font-size:10px;color:#94a3b8;margin-top:3px}
 .rq-toggle{position:relative;width:32px;height:18px;flex-shrink:0;cursor:pointer;z-index:1}
 .rq-toggle input{opacity:0;width:0;height:0;position:absolute}
 .rq-toggle .rq-toggle-track{position:absolute;inset:0;border-radius:9px;background:var(--border);transition:background .2s}
@@ -1172,8 +1182,6 @@ tr:hover td{background:var(--surface)}
         <button class="btn btn-ghost" id="reviewPrevBtn" onclick="reviewNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><polyline points="15 18 9 12 15 6"/></svg> Anterior</button>
         <div style="display:flex;gap:8px">
           <button class="q-approve-btn q-approve-btn-approve" id="reviewHideBtn" onclick="toggleReviewHide()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg> <span id="reviewHideLabel">Aprobada</span></button>
-          <button class="btn btn-secondary" onclick="moveReviewQ(-1)" style="min-height:36px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polyline points="18 15 12 9 6 15"/></svg></button>
-          <button class="btn btn-secondary" onclick="moveReviewQ(1)" style="min-height:36px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg></button>
         </div>
         <button class="btn btn-ghost" id="reviewNextBtn" onclick="reviewNav(1)">Siguiente <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
@@ -1759,14 +1767,54 @@ function buildReviewList() {
     var item = document.createElement('div');
     item.className = 'review-q-item' + (q.hidden ? ' draft-q' : '') + (i === reviewIdx ? ' active' : '');
     item.setAttribute('data-ri', i);
+    item.setAttribute('draggable', 'true');
     var checked = q.hidden ? '' : 'checked';
-    item.innerHTML = '<span class="rq-num">' + (i+1) + '</span>' +
-      '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + q.text.substring(0,30) + '...</span>' +
+    var shortText = q.text.length > 60 ? q.text.substring(0, 60) + '...' : q.text;
+    item.innerHTML =
+      '<span class="review-q-drag" title="Arrastrar para reordenar"><svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg></span>' +
+      '<span class="rq-num">' + (i+1) + '</span>' +
+      '<span class="review-q-info">' +
+        '<span class="rq-type"><span class="type-tag">' + q.type + '</span></span>' +
+        '<span class="rq-text">' + shortText + '</span>' +
+        '<span class="rq-points">' + q.points + ' punto' + (q.points !== 1 ? 's' : '') + '</span>' +
+      '</span>' +
       '<label class="rq-toggle" onclick="event.stopPropagation()">' +
         '<input type="checkbox" ' + checked + ' onchange="toggleQuestionApproval(' + i + ', this.checked)">' +
         '<span class="rq-toggle-track"><span class="rq-toggle-thumb"></span></span>' +
       '</label>';
     item.onclick = function() { showReviewQuestion(i); };
+    // Drag-and-drop handlers
+    item.addEventListener('dragstart', function(e) {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', i.toString());
+      item.classList.add('dragging');
+    });
+    item.addEventListener('dragend', function() {
+      item.classList.remove('dragging');
+      list.querySelectorAll('.drag-over').forEach(function(el) { el.classList.remove('drag-over'); });
+    });
+    item.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      item.classList.add('drag-over');
+    });
+    item.addEventListener('dragleave', function() {
+      item.classList.remove('drag-over');
+    });
+    item.addEventListener('drop', function(e) {
+      e.preventDefault();
+      item.classList.remove('drag-over');
+      var fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+      var toIdx = i;
+      if (fromIdx === toIdx) return;
+      var moved = reviewQuestions.splice(fromIdx, 1)[0];
+      reviewQuestions.splice(toIdx, 0, moved);
+      if (reviewIdx === fromIdx) reviewIdx = toIdx;
+      else if (fromIdx < reviewIdx && toIdx >= reviewIdx) reviewIdx--;
+      else if (fromIdx > reviewIdx && toIdx <= reviewIdx) reviewIdx++;
+      buildReviewList();
+      showReviewQuestion(reviewIdx);
+    });
     list.appendChild(item);
   });
   var approved = reviewQuestions.filter(function(q){return !q.hidden}).length;
@@ -1912,15 +1960,7 @@ function toggleQuestionApproval(idx, approved) {
   if (idx === reviewIdx) showReviewQuestion(reviewIdx);
 }
 
-function moveReviewQ(dir) {
-  var next = reviewIdx + dir;
-  if (next < 0 || next >= reviewQuestions.length) return;
-  var temp = reviewQuestions[reviewIdx];
-  reviewQuestions[reviewIdx] = reviewQuestions[next];
-  reviewQuestions[next] = temp;
-  buildReviewList();
-  showReviewQuestion(next);
-}
+function moveReviewQ() {} // Replaced by drag-and-drop in buildReviewList
 
 function finishReview() {
   var visible = reviewQuestions.filter(function(q){return !q.hidden}).length;
