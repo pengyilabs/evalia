@@ -81,6 +81,7 @@ tr:hover td{background:var(--surface)}
 .hamburger svg{width:20px;height:20px;color:var(--purple)}
 
 .main{margin-left:var(--sidebar-w);width:calc(100% - var(--sidebar-w));min-height:100vh;display:flex;flex-direction:column;background:var(--surface)}
+.main.full-width{margin-left:0;width:100%}
 .topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:20px 28px}
 .topbar h1{font-size:24px;font-weight:800;font-family:var(--font-display);flex:1;letter-spacing:var(--tracking-display);color:var(--fg)}
 
@@ -1178,13 +1179,15 @@ function handleRoute() {
   // Toggle sidebar — desktop always shows via CSS, mobile uses transform
   var sidebar = document.getElementById('sidebar');
   var mainEl = document.querySelector('.main');
+  var noSidebar = hash === 'review';
   if (isLanding) {
     sidebar.style.display = 'none';
     mainEl.style.display = 'none';
   } else {
-    sidebar.style.display = '';
+    sidebar.style.display = noSidebar ? 'none' : '';
     mainEl.style.display = '';
-    sidebar.classList.remove('open');
+    mainEl.classList.toggle('full-width', noSidebar);
+    if (!noSidebar) sidebar.classList.remove('open');
   }
 
   // Toggle pages
