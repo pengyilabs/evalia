@@ -410,6 +410,18 @@ tr:hover td{background:var(--surface)}
 .source-cite-ref{display:block;margin-top:6px;font-size:11px;font-weight:500;font-style:normal;color:var(--purple);letter-spacing:.02em}
 .source-cite-ref-answer{color:var(--accent)}
 
+/* Question analytics */
+.q-analytics{display:inline-flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;color:var(--muted)}
+.q-analytics-bar{width:80px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;position:relative}
+.q-analytics-fill{height:100%;border-radius:3px;transition:width .3s}
+.q-analytics-fill-good{background:var(--accent)}
+.q-analytics-fill-warn{background:#f59e0b}
+.q-analytics-fill-bad{background:#ef4444}
+.q-analytics-pct{font-weight:600;font-variant-numeric:tabular-nums}
+.q-analytics-pct-good{color:var(--accent)}
+.q-analytics-pct-warn{color:#f59e0b}
+.q-analytics-pct-bad{color:#ef4444}
+
 /* Source modal */
 .source-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .source-modal-inner{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);width:min(90vw,720px);max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 48px rgba(0,0,0,.2)}
@@ -1073,9 +1085,6 @@ tr:hover td{background:var(--surface)}
         <div style="font-size:13px;font-weight:600">Preguntas <span id="reviewCount" style="color:var(--muted);font-weight:400">(15)</span></div>
       </div>
       <div class="review-q-list" id="reviewQList"></div>
-      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
-        <button class="btn btn-secondary" style="width:100%;font-size:12px;min-height:36px" onclick="showAllHidden()">Mostrar todas</button>
-      </div>
     </div>
     <div class="review-main">
       <!-- Question display -->
@@ -1083,6 +1092,7 @@ tr:hover td{background:var(--surface)}
         <div class="review-q-header">
           <span class="badge badge-success" id="reviewQType">Opcion unica</span>
           <span style="font-size:12px;color:var(--muted)" id="reviewQPoints">1 punto</span>
+          <div class="q-analytics" id="reviewQAnalytics"></div>
         </div>
         <div class="review-q-text" id="reviewQText"></div>
         <div class="review-q-options" id="reviewQOptions"></div>
@@ -1706,6 +1716,22 @@ function showReviewQuestion(idx) {
   document.getElementById('reviewQType').className = 'badge ' + q.typeBadge;
   document.getElementById('reviewQPoints').textContent = q.points + ' punto' + (q.points !== 1 ? 's' : '');
 
+  // Per-question analytics (mock data based on question id)
+  var totalStudents = 32;
+  var seed = q.id * 7 + (q.text.length % 13);
+  var correctRate = 0.4 + (seed % 60) / 100;
+  if (q.type === 'Respuesta corta' || q.type === 'Completar') correctRate = 0.55 + (seed % 30) / 100;
+  correctRate = Math.min(0.98, Math.max(0.25, correctRate));
+  var correctCount = Math.round(totalStudents * correctRate);
+  var wrongCount = totalStudents - correctCount;
+  var pct = Math.round(correctRate * 100);
+  var cls = pct >= 70 ? 'good' : pct >= 45 ? 'warn' : 'bad';
+  var analyticsEl = document.getElementById('reviewQAnalytics');
+  analyticsEl.innerHTML =
+    '<div class="q-analytics-bar"><div class="q-analytics-fill q-analytics-fill-' + cls + '" style="width:' + pct + '%"></div></div>' +
+    '<span class="q-analytics-pct q-analytics-pct-' + cls + '">' + pct + '%</span>' +
+    '<span>' + correctCount + '/' + totalStudents + ' correctas</span>';
+
   // Question text
   var qTextEl = document.getElementById('reviewQText');
   qTextEl.innerHTML = '<span>' + q.text + '</span>';
@@ -1815,12 +1841,6 @@ function moveReviewQ(dir) {
   reviewQuestions[next] = temp;
   buildReviewList();
   showReviewQuestion(next);
-}
-
-function showAllHidden() {
-  reviewQuestions.forEach(function(q) { q.hidden = false; });
-  buildReviewList();
-  showReviewQuestion(reviewIdx);
 }
 
 function expandAllQuestions() {
