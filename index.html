@@ -384,6 +384,7 @@ tr:hover td{background:var(--surface)}
 .review-q-opt.correct .opt-marker{border-color:var(--accent);background:var(--accent);color:#fff}
 .review-q-answer{font-size:13px;color:var(--accent);font-weight:600;padding:10px 14px;background:rgba(16,185,129,.06);border-radius:var(--radius);border:1px solid rgba(16,185,129,.2)}
 .review-q-actions{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);margin-top:12px;gap:8px}
+.review-topbar{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border)}
 .review-details-panel{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:16px}
 
 /* Test cards */
@@ -1020,7 +1021,7 @@ tr:hover td{background:var(--surface)}
 
 <!-- Review Questions Page -->
 <div class="page" id="page-review" data-od-id="screen-review">
-  <div class="topbar">
+  <div class="topbar review-topbar">
     <a href="#/tests" class="btn btn-ghost" style="margin-right:8px">Volver</a>
     <h1 style="flex:1">Revisar preguntas</h1>
     <button class="btn btn-ghost" id="reviewDetailsBtn" onclick="toggleReviewDetails()" style="font-size:12px;min-height:32px">
@@ -1028,20 +1029,19 @@ tr:hover td{background:var(--surface)}
       Detalles
     </button>
     <span class="badge badge-success" id="reviewPageBadge">15 visibles</span>
+    <button class="btn btn-primary" onclick="finishReview()" style="margin-left:8px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+      Publicar prueba
+    </button>
   </div>
   <div class="review-layout">
     <div class="review-sidebar">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div style="font-size:13px;font-weight:600">Preguntas <span id="reviewCount" style="color:var(--muted);font-weight:400">(15)</span></div>
-        <div style="display:flex;gap:4px">
-          <button class="btn btn-ghost" style="font-size:11px;min-height:28px;padding:4px 8px" onclick="expandAllQuestions()">Expandir</button>
-          <button class="btn btn-ghost" style="font-size:11px;min-height:28px;padding:4px 8px" onclick="collapseAllQuestions()">Colapsar</button>
-        </div>
       </div>
       <div class="review-q-list" id="reviewQList"></div>
-      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px;display:flex;gap:8px">
-        <button class="btn btn-secondary" style="flex:1;font-size:12px;min-height:36px" onclick="showAllHidden()">Mostrar todas</button>
-        <button class="btn btn-primary" style="flex:1;font-size:12px;min-height:36px" onclick="finishReview()">Publicar prueba</button>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
+        <button class="btn btn-secondary" style="width:100%;font-size:12px;min-height:36px" onclick="showAllHidden()">Mostrar todas</button>
       </div>
     </div>
     <div class="review-main">
