@@ -81,6 +81,9 @@ tr:hover td{background:var(--surface)}
 .hamburger svg{width:20px;height:20px;color:var(--purple)}
 
 .main{margin-left:var(--sidebar-w);width:calc(100% - var(--sidebar-w));min-height:100vh;display:flex;flex-direction:column;background:var(--surface)}
+.main.full-width{margin-left:0;width:100%}
+.main.full-width.height-locked{height:100vh;overflow:hidden}
+.main.full-width.height-locked .page.active{height:100vh;overflow:hidden}
 .topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:20px 28px}
 .topbar h1{font-size:24px;font-weight:800;font-family:var(--font-display);flex:1;letter-spacing:var(--tracking-display);color:var(--fg)}
 
@@ -251,6 +254,7 @@ tr:hover td{background:var(--surface)}
 .material-select{border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;position:relative;background:var(--bg)}
 .material-select:hover{border-color:var(--purple)}
 .material-select.selected{border-color:var(--purple);background:var(--purple-soft)}
+.mat-empty-state{padding:32px 16px;text-align:center;border:1.5px dashed var(--border);border-radius:var(--radius);margin-bottom:12px}
 .material-select .mat-check{width:20px;height:20px;border-radius:var(--radius-sm);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
 .material-select.selected .mat-check{border-color:var(--purple);background:var(--purple)}
 .material-select.selected .mat-check::after{content:'';display:block;width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
@@ -346,6 +350,47 @@ tr:hover td{background:var(--surface)}
 .create-modal-body{flex:1;overflow-y:auto;padding:0 24px}
 .create-modal-footer{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-top:1px solid var(--border)}
 
+/* Generating spinner */
+.gen-spinner{width:56px;height:56px;border-radius:50%;border:3px solid var(--border);border-top-color:var(--purple);animation:genSpin 1s linear infinite}
+@keyframes genSpin{to{transform:rotate(360deg)}}
+.gen-steps{display:flex;flex-direction:column;gap:10px;text-align:left;width:100%;max-width:280px}
+.gen-step{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);transition:color .3s}
+.gen-step.active{color:var(--purple);font-weight:600}
+.gen-step.done{color:var(--accent)}
+.gen-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background .3s}
+.gen-step.active .dot,.gen-step.active .gen-dot{background:var(--purple);box-shadow:0 0 0 3px var(--purple-soft)}
+.gen-step.done .gen-dot{background:var(--accent)}
+
+/* Review layout */
+.review-layout{display:flex;gap:0;flex:1;min-height:0;overflow:hidden}
+.review-sidebar{width:280px;flex-shrink:0;border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;overflow:hidden}
+.review-q-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.review-q-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--radius);cursor:pointer;transition:all .15s;font-size:12px;border:1px solid transparent}
+.review-q-item:hover{background:var(--fg-soft)}
+.review-q-item.active{background:var(--purple-soft);border-color:var(--purple);color:var(--purple);font-weight:600}
+.review-q-item.hidden-q{opacity:.45}
+.review-q-item .rq-num{width:22px;height:22px;border-radius:50%;background:var(--fg-soft);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.review-q-item.active .rq-num{background:var(--purple);color:#fff}
+.review-q-item .rq-type{font-size:10px;color:var(--muted);margin-left:auto;flex-shrink:0}
+.review-q-item.hidden-q .rq-type{text-decoration:line-through}
+.review-main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:16px 20px}
+.review-q-display{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:16px}
+.review-q-header{display:flex;align-items:center;gap:10px}
+.review-q-text{font-size:16px;font-weight:600;line-height:1.5}
+.review-q-options{display:flex;flex-direction:column;gap:8px}
+.review-q-opt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;transition:border-color .15s}
+.review-q-opt.correct{border-color:var(--accent);background:rgba(16,185,129,.06);color:var(--accent)}
+.review-q-opt .opt-marker{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700}
+.review-q-opt.correct .opt-marker{border-color:var(--accent);background:var(--accent);color:#fff}
+.review-q-answer{font-size:13px;color:var(--accent);font-weight:600;padding:10px 14px;background:rgba(16,185,129,.06);border-radius:var(--radius);border:1px solid rgba(16,185,129,.2)}
+.review-q-actions{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);margin-top:12px;gap:8px}
+
+/* Test cards */
+.test-share-btn{width:36px;height:36px;border-radius:var(--radius);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:all .15s}
+.test-share-btn:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-soft)}
+.mat-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:var(--radius-pill);font-size:11px;font-weight:500;background:var(--fg-soft);color:var(--fg-2);border:1px solid var(--border-soft)}
+.mat-chip-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
 .share-link-box{display:flex;gap:8px;align-items:center}
 .share-link-box input{flex:1;font-family:var(--font-mono);font-size:12px}
 .share-options{display:flex;gap:8px;flex-wrap:wrap}
@@ -363,11 +408,17 @@ tr:hover td{background:var(--surface)}
   .main{margin-left:0;width:100%}
   .grid-4{grid-template-columns:repeat(2,1fr)}
   .grid-3{grid-template-columns:1fr}
+  .review-layout{flex-direction:column}
+  .review-sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);max-height:40vh}
+  .review-q-actions{flex-wrap:wrap;justify-content:center}
 }
 @media(max-width:600px){
   .grid-4{grid-template-columns:1fr}
   .grid-3{grid-template-columns:1fr}
   .topbar{flex-direction:column;align-items:stretch}
+  .review-sidebar{max-height:35vh}
+  .review-q-actions{gap:6px}
+  .review-q-actions .btn{font-size:11px;min-height:32px;padding:4px 8px}
 }
 </style>
 </head>
@@ -759,36 +810,108 @@ tr:hover td{background:var(--surface)}
     <h1>Pruebas</h1>
     <button class="btn btn-primary" onclick="openCreateModal()">+ Crear prueba</button>
   </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Prueba</th><th>Materia</th><th>Estado</th><th>Estudiantes</th><th>Promedio</th><th></th></tr></thead>
-      <tbody>
-        <tr>
-          <td style="font-weight:500">Examen Parcial — Genética</td>
-          <td>Biología</td>
-          <td><span class="badge badge-success">Activa</span></td>
-          <td>23</td>
-          <td>8.2</td>
-          <td><a href="#/test-detail" class="btn btn-ghost" style="font-size:12px;min-height:32px">Ver</a></td>
-        </tr>
-        <tr>
-          <td style="font-weight:500">Quiz — Ecuaciones cuadráticas</td>
-          <td>Matemáticas</td>
-          <td><span class="badge badge-success">Activa</span></td>
-          <td>18</td>
-          <td>7.9</td>
-          <td><a href="#/test-detail" class="btn btn-ghost" style="font-size:12px;min-height:32px">Ver</a></td>
-        </tr>
-        <tr>
-          <td style="font-weight:500">Práctica 3 — Revolución Francesa</td>
-          <td>Historia</td>
-          <td><span class="badge badge-warning">Borrador</span></td>
-          <td>—</td>
-          <td>—</td>
-          <td><a href="#/test-detail" class="btn btn-ghost" style="font-size:12px;min-height:32px">Ver</a></td>
-        </tr>
-      </tbody>
-    </table>
+  <div style="display:flex;flex-direction:column;gap:16px">
+    <!-- Test 1 -->
+    <div class="card" style="cursor:pointer" onclick="navigate('test-detail')">
+      <div style="display:flex;align-items:start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span class="badge badge-success">Activa</span>
+            <span style="font-size:12px;color:var(--muted)">Creada el 20 mayo 2026</span>
+          </div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px">Examen Parcial — Genetica</div>
+          <div style="font-size:13px;color:var(--muted)">15 preguntas · 45 min · Dificultad media</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0">
+          <div class="test-share-btn" onclick="event.stopPropagation();copyTestLink('gen-2026-p1')" title="Copiar enlace">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <div class="test-share-btn" onclick="event.stopPropagation()" title="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </div>
+          <div class="test-share-btn" onclick="event.stopPropagation()" title="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;font-weight:600">Materiales utilizados</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--purple-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Clean_Code_2nd_Edition.pdf</span>
+          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--purple-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Design_Patterns_Gang_of_Four.pdf</span>
+          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--teal-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Apuntes_Estructuras_de_Datos.pdf</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;padding-top:12px;margin-top:12px;border-top:1px solid var(--border)">
+        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">23</span> estudiantes</div>
+        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">8.2</span> promedio</div>
+      </div>
+    </div>
+    <!-- Test 2 -->
+    <div class="card" style="cursor:pointer" onclick="navigate('test-detail')">
+      <div style="display:flex;align-items:start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span class="badge badge-success">Activa</span>
+            <span style="font-size:12px;color:var(--muted)">Creada el 18 mayo 2026</span>
+          </div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px">Quiz — Ecuaciones cuadraticas</div>
+          <div style="font-size:13px;color:var(--muted)">10 preguntas · 30 min · Dificultad facil</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0">
+          <div class="test-share-btn" onclick="event.stopPropagation();copyTestLink('math-2026-q1')" title="Copiar enlace">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <div class="test-share-btn" onclick="event.stopPropagation()" title="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </div>
+          <div class="test-share-btn" onclick="event.stopPropagation()" title="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;font-weight:600">Materiales utilizados</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--purple-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Apuntes_Estructuras_de_Datos.pdf</span>
+          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--purple-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="12" height="12"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Pragmatic_Programmer_Hunt.pdf</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;padding-top:12px;margin-top:12px;border-top:1px solid var(--border)">
+        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">18</span> estudiantes</div>
+        <div style="font-size:12px;color:var(--muted)"><span style="font-weight:700;color:var(--fg)">7.9</span> promedio</div>
+      </div>
+    </div>
+    <!-- Test 3 (Draft) -->
+    <div class="card" style="cursor:pointer;opacity:.7" onclick="navigate('test-detail')">
+      <div style="display:flex;align-items:start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span class="badge badge-warning">Borrador</span>
+            <span style="font-size:12px;color:var(--muted)">Creada el 22 mayo 2026</span>
+          </div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px">Practica 3 — Revolucion Francesa</div>
+          <div style="font-size:13px;color:var(--muted)">8 preguntas · 20 min · Dificultad media</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0">
+          <div class="test-share-btn" onclick="event.stopPropagation();copyTestLink('hist-2026-p3')" title="Copiar enlace">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <div class="test-share-btn" onclick="event.stopPropagation()" title="WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </div>
+          <div class="test-share-btn" onclick="event.stopPropagation()" title="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;font-weight:600">Materiales utilizados</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="mat-chip"><span class="mat-chip-icon" style="background:var(--teal-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>Apuntes_Bases_de_Datos_SQL.pdf</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -796,41 +919,63 @@ tr:hover td{background:var(--surface)}
 <div class="page" id="page-test-detail" data-od-id="screen-test-detail">
   <div class="topbar">
     <a href="#/tests" class="btn btn-ghost" style="margin-right:8px">Volver</a>
-    <h1 style="flex:1">Examen Parcial — Genética</h1>
+    <h1 style="flex:1">Examen Parcial — Genetica</h1>
     <span class="badge badge-success">Activa</span>
   </div>
-  <div class="card" style="gap:12px">
-    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      <span class="badge badge-neutral">Biología</span>
-      <span class="badge badge-neutral">Genética y herencia</span>
-      <span style="font-size:12px;color:var(--muted)">Creada el 20 mayo 2026</span>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <!-- Test info card -->
+    <div class="card" style="gap:12px">
+      <div style="font-size:14px;font-weight:600">Informacion de la prueba</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Estado</span><span class="badge badge-success">Activa</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Preguntas</span><span style="font-weight:600">15</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Tiempo limite</span><span style="font-weight:600">45 min</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Dificultad</span><span style="font-weight:600">Media</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Creada</span><span style="font-weight:600">20 mayo 2026</span></div>
+      </div>
     </div>
-    <div style="font-size:13px;color:var(--muted)">5 preguntas · Tiempo límite: 45 minutos · Dificultad media</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-secondary" onclick="shareTest()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Compartir
-      </button>
-      <button class="btn btn-secondary">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Exportar
-      </button>
-      <a href="share.html" class="btn btn-primary" target="_blank">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        Ver como estudiante
-      </a>
+    <!-- Materials card -->
+    <div class="card" style="gap:12px">
+      <div style="font-size:14px;font-weight:600">Materiales utilizados</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius)">
+          <div style="width:28px;height:28px;border-radius:6px;background:var(--purple-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="14" height="14"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Clean_Code_2nd_Edition.pdf</div><div style="font-size:11px;color:var(--muted)">4.2 MB · 464 paginas</div></div>
+          <span class="badge badge-success" style="font-size:10px">PDF</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius)">
+          <div style="width:28px;height:28px;border-radius:6px;background:var(--purple-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" width="14" height="14"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Design_Patterns_Gang_of_Four.pdf</div><div style="font-size:11px;color:var(--muted)">3.8 MB · 395 paginas</div></div>
+          <span class="badge badge-success" style="font-size:10px">PDF</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius)">
+          <div style="width:28px;height:28px;border-radius:6px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Apuntes_Estructuras_de_Datos.pdf</div><div style="font-size:11px;color:var(--muted)">1.5 MB · 38 paginas</div></div>
+          <span class="badge badge-success" style="font-size:10px">PDF</span>
+        </div>
+      </div>
     </div>
   </div>
-  <div id="shareSection" style="display:none">
-    <div class="card" style="flex-direction:row;align-items:center;gap:12px">
-      <input type="text" value="https://evalia.app/test/gen-2026-p1" readonly style="flex:1;font-family:var(--font-mono);font-size:12px">
-      <button class="btn btn-primary" onclick="copyLink()">Copiar</button>
+  <!-- Share row -->
+  <div class="card" style="flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="font-size:13px;font-weight:600;margin-right:8px">Compartir con estudiantes</div>
+    <div style="display:flex;gap:8px;flex:1;min-width:0">
+      <input type="text" value="https://evalia.app/test/gen-2026-p1" readonly style="flex:1;font-family:var(--font-mono);font-size:12px;min-width:0">
+      <button class="btn btn-primary" onclick="copyLink()">Copiar enlace</button>
     </div>
+    <div style="display:flex;gap:6px">
+      <div class="test-share-btn" title="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+      <div class="test-share-btn" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+    </div>
+    <a href="share.html" class="btn btn-secondary" target="_blank" style="margin-left:8px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Ver como estudiante
+    </a>
   </div>
   <div class="tabs" id="testTabs">
     <div class="tab active" data-tab="questions" onclick="switchTab('questions')">Preguntas</div>
     <div class="tab" data-tab="answers" onclick="switchTab('answers')">Respuestas</div>
-    <div class="tab" data-tab="rubric" onclick="switchTab('rubric')">Rúbrica</div>
+    <div class="tab" data-tab="rubric" onclick="switchTab('rubric')">Rubrica</div>
   </div>
   <div id="tab-questions">
     <div style="display:flex;flex-direction:column;gap:16px">
@@ -904,6 +1049,51 @@ tr:hover td{background:var(--surface)}
   </div>
 </div>
 
+<!-- Review Questions Page -->
+<div class="page" id="page-review" data-od-id="screen-review">
+  <div class="topbar">
+    <a href="#/tests" class="btn btn-ghost" style="margin-right:8px">Volver</a>
+    <h1 style="flex:1">Revisar preguntas</h1>
+    <span class="badge badge-success" id="reviewPageBadge">15 visibles</span>
+  </div>
+  <div class="review-layout">
+    <div class="review-sidebar">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:600">Preguntas <span id="reviewCount" style="color:var(--muted);font-weight:400">(15)</span></div>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-ghost" style="font-size:11px;min-height:28px;padding:4px 8px" onclick="expandAllQuestions()">Expandir</button>
+          <button class="btn btn-ghost" style="font-size:11px;min-height:28px;padding:4px 8px" onclick="collapseAllQuestions()">Colapsar</button>
+        </div>
+      </div>
+      <div class="review-q-list" id="reviewQList"></div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px;display:flex;gap:8px">
+        <button class="btn btn-secondary" style="flex:1;font-size:12px;min-height:36px" onclick="showAllHidden()">Mostrar todas</button>
+        <button class="btn btn-primary" style="flex:1;font-size:12px;min-height:36px" onclick="finishReview()">Publicar prueba</button>
+      </div>
+    </div>
+    <div class="review-main">
+      <div class="review-q-display" id="reviewQDisplay">
+        <div class="review-q-header">
+          <span class="badge badge-success" id="reviewQType">Opcion unica</span>
+          <span style="font-size:12px;color:var(--muted)" id="reviewQPoints">1 punto</span>
+        </div>
+        <div class="review-q-text" id="reviewQText"></div>
+        <div class="review-q-options" id="reviewQOptions"></div>
+        <div class="review-q-answer" id="reviewQAnswer"></div>
+      </div>
+      <div class="review-q-actions">
+        <button class="btn btn-ghost" id="reviewPrevBtn" onclick="reviewNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><polyline points="15 18 9 12 15 6"/></svg> Anterior</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-secondary" id="reviewHideBtn" onclick="toggleReviewHide()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Ocultar</button>
+          <button class="btn btn-secondary" onclick="moveReviewQ(-1)" style="min-height:36px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polyline points="18 15 12 9 6 15"/></svg></button>
+          <button class="btn btn-secondary" onclick="moveReviewQ(1)" style="min-height:36px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg></button>
+        </div>
+        <button class="btn btn-ghost" id="reviewNextBtn" onclick="reviewNav(1)">Siguiente <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div><!-- end .main -->
 
 <!-- ==================== CREATE TEST MODAL ==================== -->
@@ -923,25 +1113,30 @@ tr:hover td{background:var(--surface)}
           <div class="wizard-step" data-step="2"><div class="step-num">2</div><span>Preguntas</span></div>
           <div class="wizard-divider"></div>
           <div class="wizard-step" data-step="3"><div class="step-num">3</div><span>Config</span></div>
-          <div class="wizard-divider"></div>
-          <div class="wizard-step" data-step="4"><div class="step-num">4</div><span>Compartir</span></div>
         </div>
     </div>
 
     <div class="create-modal-body">
       <!-- Step 1: Materials -->
       <div class="wizard-panel" id="wizardPanel1">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="font-size:15px;font-weight:600;margin:0">Selecciona los materiales para la prueba</h3><span class="mat-count" style="font-size:12px;color:var(--muted)">3 seleccionados</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="font-size:15px;font-weight:600;margin:0">Selecciona los materiales para la prueba</h3><span class="mat-count" style="font-size:12px;color:var(--muted)">0 seleccionados</span></div>
+        <div class="mat-empty-state" id="matEmptyState">
+          <div style="width:48px;height:48px;border-radius:50%;background:var(--fg-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" width="24" height="24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+          </div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px">Sin materiales seleccionados</div>
+          <div style="font-size:12px;color:var(--muted)">Selecciona al menos un material para continuar.</div>
+        </div>
         <div style="display:flex;flex-direction:column;gap:6px">
-          <label class="material-select selected" onclick="this.classList.toggle('selected')"><input type="checkbox" hidden><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Clean_Code_2nd_Edition.pdf</div><div class="mat-sub">4.2 MB · 464 paginas</div></div><span class="badge badge-success">PDF</span></label>
-          <label class="material-select selected" onclick="this.classList.toggle('selected')"><input type="checkbox" hidden><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Design_Patterns_Gang_of_Four.pdf</div><div class="mat-sub">3.8 MB · 395 paginas</div></div><span class="badge badge-success">PDF</span></label>
-          <label class="material-select" onclick="this.classList.toggle('selected')"><input type="checkbox" hidden><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-slides"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Python_Intro_Clases_1-8.pptx</div><div class="mat-sub">2.1 MB · 120 diapositivas</div></div><span class="badge badge-success">PPTX</span></label>
-          <label class="material-select selected" onclick="this.classList.toggle('selected')"><input type="checkbox" hidden><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Apuntes_Estructuras_de_Datos.pdf</div><div class="mat-sub">1.5 MB · 38 paginas</div></div><span class="badge badge-success">PDF</span></label>
-          <label class="material-select" onclick="this.classList.toggle('selected')"><input type="checkbox" hidden><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Guia_Estilo_Java_Sun.pdf</div><div class="mat-sub">820 KB · 45 paginas</div></div><span class="badge badge-success">PDF</span></label>
-          <label class="material-select" onclick="this.classList.toggle('selected')"><input type="checkbox" hidden><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-exam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Parcial_2_Algoritmos.docx</div><div class="mat-sub">245 KB · 15 preguntas</div></div><span class="badge badge-success">DOCX</span></label>
-          <label class="material-select" onclick="this.classList.toggle('selected')"><input type="checkbox" hidden><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Pragmatic_Programmer_Hunt.pdf</div><div class="mat-sub">2.9 MB · 352 paginas</div></div><span class="badge badge-success">PDF</span></label>
-          <label class="material-select" onclick="this.classList.toggle('selected')"><input type="checkbox" hidden><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-slides"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Arquitectura_Software_Mods_1-4.pptx</div><div class="mat-sub">1.8 MB · 96 diapositivas</div></div><span class="badge badge-success">PPTX</span></label>
-          <label class="material-select" onclick="this.classList.toggle('selected')"><input type="checkbox" hidden><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Apuntes_Bases_de_Datos_SQL.pdf</div><div class="mat-sub">1.2 MB · 42 paginas</div></div><span class="badge badge-success">PDF</span></label>
+          <div class="material-select" onclick="this.classList.toggle('selected');updateMatCount()"><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Clean_Code_2nd_Edition.pdf</div><div class="mat-sub">4.2 MB · 464 paginas</div></div><span class="badge badge-success">PDF</span></div>
+          <div class="material-select" onclick="this.classList.toggle('selected');updateMatCount()"><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Design_Patterns_Gang_of_Four.pdf</div><div class="mat-sub">3.8 MB · 395 paginas</div></div><span class="badge badge-success">PDF</span></div>
+          <div class="material-select" onclick="this.classList.toggle('selected');updateMatCount()"><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-slides"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Python_Intro_Clases_1-8.pptx</div><div class="mat-sub">2.1 MB · 120 diapositivas</div></div><span class="badge badge-success">PPTX</span></div>
+          <div class="material-select" onclick="this.classList.toggle('selected');updateMatCount()"><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Apuntes_Estructuras_de_Datos.pdf</div><div class="mat-sub">1.5 MB · 38 paginas</div></div><span class="badge badge-success">PDF</span></div>
+          <div class="material-select" onclick="this.classList.toggle('selected');updateMatCount()"><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Guia_Estilo_Java_Sun.pdf</div><div class="mat-sub">820 KB · 45 paginas</div></div><span class="badge badge-success">PDF</span></div>
+          <div class="material-select" onclick="this.classList.toggle('selected');updateMatCount()"><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-exam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Parcial_2_Algoritmos.docx</div><div class="mat-sub">245 KB · 15 preguntas</div></div><span class="badge badge-success">DOCX</span></div>
+          <div class="material-select" onclick="this.classList.toggle('selected');updateMatCount()"><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-book"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Pragmatic_Programmer_Hunt.pdf</div><div class="mat-sub">2.9 MB · 352 paginas</div></div><span class="badge badge-success">PDF</span></div>
+          <div class="material-select" onclick="this.classList.toggle('selected');updateMatCount()"><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-slides"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Arquitectura_Software_Mods_1-4.pptx</div><div class="mat-sub">1.8 MB · 96 diapositivas</div></div><span class="badge badge-success">PPTX</span></div>
+          <div class="material-select" onclick="this.classList.toggle('selected');updateMatCount()"><div class="mat-check"></div><div class="mat-icon-wrap mat-icon-notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div style="flex:1;min-width:0"><div class="mat-title">Apuntes_Bases_de_Datos_SQL.pdf</div><div class="mat-sub">1.2 MB · 42 paginas</div></div><span class="badge badge-success">PDF</span></div>
         </div>
       </div>
 
@@ -1038,49 +1233,17 @@ tr:hover td{background:var(--surface)}
         </div>
       </div>
 
-      <!-- Step 4: Share -->
+      <!-- Loading: Generating test -->
       <div class="wizard-panel" id="wizardPanel4" style="display:none">
-        <h3 style="font-size:15px;font-weight:600;margin-bottom:12px">Compartir prueba</h3>
-        <div class="card" style="gap:16px">
-          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-            <div><div style="font-size:16px;font-weight:700">Examen Parcial — Biologia y Matematicas</div><div style="font-size:12px;color:var(--muted);margin-top:4px">15 preguntas · 45 min · Dificultad media</div></div>
-            <span class="badge badge-success">Lista</span>
-          </div>
-          <div style="border-top:1px solid var(--border);padding-top:16px">
-            <div style="font-size:13px;font-weight:600;margin-bottom:8px">Enlace de la prueba</div>
-            <div class="share-link-box">
-              <input type="text" value="https://evalia.app/test/bio-math-2026-p1" readonly style="flex:1;font-family:var(--font-mono);font-size:12px">
-              <button class="btn btn-primary" onclick="copyShareLink()">Copiar</button>
-            </div>
-          </div>
-          <div style="border-top:1px solid var(--border);padding-top:16px">
-            <div style="font-size:13px;font-weight:600;margin-bottom:8px">Compartir por</div>
-            <div class="share-options">
-              <div class="share-option" onclick="copyShareLink()">
-                <div class="share-icon" style="background:var(--fg-soft)">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                </div>
-                <span style="font-size:11px;color:var(--muted)">Copiar</span>
-              </div>
-              <div class="share-option">
-                <div class="share-icon" style="background:var(--accent-soft)">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                </div>
-                <span style="font-size:11px;color:var(--muted)">WhatsApp</span>
-              </div>
-              <div class="share-option">
-                <div class="share-icon" style="background:var(--info-soft)">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--info)" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                </div>
-                <span style="font-size:11px;color:var(--muted)">Email</span>
-              </div>
-              <div class="share-option">
-                <div class="share-icon" style="background:var(--purple-soft)">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
-                </div>
-                <span style="font-size:11px;color:var(--muted)">QR</span>
-              </div>
-            </div>
+        <div id="generatingView" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 24px;text-align:center;gap:20px">
+          <div class="gen-spinner"></div>
+          <div style="font-size:16px;font-weight:600">Creando tu prueba...</div>
+          <div style="font-size:13px;color:var(--muted);max-width:320px">La IA esta analizando tus materiales y generando preguntas personalizadas.</div>
+          <div class="gen-steps" id="genSteps">
+            <div class="gen-step" data-gs="1"><span class="gen-dot"></span>Analizando materiales</div>
+            <div class="gen-step" data-gs="2"><span class="gen-dot"></span>Generando preguntas</div>
+            <div class="gen-step" data-gs="3"><span class="gen-dot"></span>Calibrando dificultad</div>
+            <div class="gen-step" data-gs="4"><span class="gen-dot"></span>Preparando prueba</div>
           </div>
         </div>
       </div>
@@ -1124,13 +1287,16 @@ function handleRoute() {
   // Toggle sidebar — desktop always shows via CSS, mobile uses transform
   var sidebar = document.getElementById('sidebar');
   var mainEl = document.querySelector('.main');
+  var noSidebar = hash === 'review';
   if (isLanding) {
     sidebar.style.display = 'none';
     mainEl.style.display = 'none';
   } else {
-    sidebar.style.display = '';
+    sidebar.style.display = noSidebar ? 'none' : '';
     mainEl.style.display = '';
-    sidebar.classList.remove('open');
+    mainEl.classList.toggle('full-width', noSidebar);
+    mainEl.classList.toggle('height-locked', noSidebar);
+    if (!noSidebar) sidebar.classList.remove('open');
   }
 
   // Toggle pages
@@ -1269,15 +1435,18 @@ function updateMatCount() {
   var sel = 0;
   items.forEach(function(el) { if (el.classList.contains('selected')) sel++; });
   document.querySelector('.mat-count').textContent = sel + ' seleccionado' + (sel !== 1 ? 's' : '');
+  var empty = document.getElementById('matEmptyState');
+  if (empty) empty.style.display = sel === 0 ? '' : 'none';
+  var nextBtn = document.getElementById('wizardNextBtn');
+  if (nextBtn && currentWizardStep === 1) {
+    nextBtn.disabled = sel === 0;
+    nextBtn.style.opacity = sel === 0 ? '.4' : '';
+    nextBtn.style.pointerEvents = sel === 0 ? 'none' : '';
+  }
 }
 function openCreateModal() {
   document.getElementById('createModal').classList.add('open');
   wizardGoTo(1);
-  updateMatCount();
-  document.querySelectorAll('#wizardPanel1 .material-select').forEach(function(el) {
-    el.removeEventListener('click', updateMatCount);
-    el.addEventListener('click', updateMatCount);
-  });
 }
 function closeCreateModal() {
   document.getElementById('createModal').classList.remove('open');
@@ -1285,7 +1454,8 @@ function closeCreateModal() {
 function wizardGoTo(step) {
   currentWizardStep = step;
   for (var i = 1; i <= 4; i++) {
-    document.getElementById('wizardPanel' + i).style.display = i === step ? '' : 'none';
+    var panel = document.getElementById('wizardPanel' + i);
+    if (panel) panel.style.display = i === step ? '' : 'none';
   }
   document.querySelectorAll('#wizardSteps .wizard-step').forEach(function(s) {
     var n = parseInt(s.getAttribute('data-step'));
@@ -1294,17 +1464,188 @@ function wizardGoTo(step) {
   });
   var backBtn = document.getElementById('wizardBackBtn');
   var nextBtn = document.getElementById('wizardNextBtn');
-  backBtn.style.display = step > 1 ? '' : 'none';
-  if (step === 4) {
-    nextBtn.textContent = 'Listo';
-    nextBtn.onclick = function() { closeCreateModal(); };
+  nextBtn.style.display = '';
+  backBtn.style.display = step > 1 && step < 4 ? '' : 'none';
+  if (step === 3) {
+    nextBtn.textContent = 'Generar prueba';
+    nextBtn.disabled = false;
+    nextBtn.style.opacity = '';
+    nextBtn.style.pointerEvents = '';
+    nextBtn.onclick = function() { startGeneration(); };
+  } else if (step === 4) {
+    nextBtn.style.display = 'none';
   } else {
     nextBtn.textContent = 'Siguiente';
     nextBtn.onclick = function() { wizardGoTo(step + 1); };
+    if (step === 1) updateMatCount();
+    else { nextBtn.disabled = false; nextBtn.style.opacity = ''; nextBtn.style.pointerEvents = ''; }
   }
 }
 function wizardNext() { wizardGoTo(currentWizardStep + 1); }
 function wizardPrev() { wizardGoTo(currentWizardStep - 1); }
+
+// ==================== GENERATION ====================
+function startGeneration() {
+  document.getElementById('wizardBackBtn').style.display = 'none';
+  document.getElementById('wizardNextBtn').style.display = 'none';
+  document.querySelectorAll('#wizardSteps .wizard-step').forEach(function(s) { s.classList.remove('active'); });
+  wizardGoTo(4);
+  var steps = document.querySelectorAll('#genSteps .gen-step');
+  var delay = 0;
+  steps.forEach(function(s, i) {
+    setTimeout(function() {
+      if (i > 0) steps[i-1].classList.remove('active');
+      if (i > 0) steps[i-1].classList.add('done');
+      s.classList.add('active');
+    }, delay);
+    delay += 1000;
+  });
+  setTimeout(function() {
+    steps[steps.length-1].classList.remove('active');
+    steps[steps.length-1].classList.add('done');
+  }, delay);
+  setTimeout(function() {
+    showReviewView();
+  }, delay + 800);
+}
+
+// ==================== REVIEW VIEW ====================
+var reviewQuestions = [
+  {id:1, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es la unidad fundamental de la herencia genetica?', options:['Celula','Gen','Cromosoma','Proteina'], correct:1, points:1, hidden:false},
+  {id:2, type:'Opcion multiple', typeBadge:'badge-success', text:'Selecciona todos los componentes del dogma central de la biologia molecular:', options:['ADN a ARN','ARN a Proteina','Proteina a ADN','ADN a Proteina'], correct:[0,1,3], points:2, hidden:false},
+  {id:3, type:'Verdadero / Falso', typeBadge:'badge-warning', text:'El codigo genetico es universal para todos los seres vivos.', options:['Verdadero','Falso'], correct:0, points:1, hidden:false},
+  {id:4, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es la funcion principal de la mitocondria en la celula?', options:['Sintesis de proteinas','Produccion de energia (ATP)','Almacenamiento de lipidos','Transporte de iones'], correct:1, points:1, hidden:false},
+  {id:5, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es la formula para resolver ecuaciones cuadraticas?', options:['x = -b +/- sqrt(b2 - 4ac) / 2a','x = b +/- sqrt(b2 + 4ac) / 2a','x = -b +/- sqrt(b2 - 4ac) / a','x = -b +/- sqrt(b2 - 2ac) / 2a'], correct:0, points:1, hidden:false},
+  {id:6, type:'Completar', typeBadge:'badge-neutral', text:'El proceso de sintesis de proteinas a partir del ARN se llama ______.', options:[], correct:'Traduccion', points:1, hidden:false},
+  {id:7, type:'Respuesta corta', typeBadge:'badge-neutral', text:'Explica la diferencia entre genotipo y fenotipo.', options:[], correct:null, points:3, hidden:false},
+  {id:8, type:'Opcion unica', typeBadge:'badge-success', text:'Que estructura celular es responsable de la sintesis de proteinas?', options:['Mitocondria','Ribosoma','Lisosoma','Centriolo'], correct:1, points:1, hidden:false},
+  {id:9, type:'Opcion unica', typeBadge:'badge-success', text:'Cual es el monomero del ADN?', options:['Aminoacido','Nucleotido','Glucosa','Acidos grasos'], correct:1, points:1, hidden:false},
+  {id:10, type:'Verdadero / Falso', typeBadge:'badge-warning', text:'Los virus son considerados seres vivos segun la biologia moderna.', options:['Verdadero','Falso'], correct:1, points:1, hidden:false},
+  {id:11, type:'Opcion multiple', typeBadge:'badge-success', text:'Cuales son los tres pasos del dogma central?', options:['Replicacion','Transcripcion','Traduccion','Fotosintesis'], correct:[0,1,2], points:2, hidden:false},
+  {id:12, type:'Opcion unica', typeBadge:'badge-success', text:'Que tipo de enlace une los nucleotidos en una cadena de ADN?', options:['Enlace peptidico','Enlace fosfodiester','Enlace de hidrogeno','Enlace ionico'], correct:1, points:1, hidden:false},
+  {id:13, type:'Completar', typeBadge:'badge-neutral', text:'La region del ADN que codifica para una proteina se llama ______.', options:[], correct:'Gen', points:1, hidden:false},
+  {id:14, type:'Opcion unica', typeBadge:'badge-success', text:'En que organelo ocurre la traduccion del ARN mensajero?', options:['Nucleo','Ribosoma','Reticulo endoplasmatico','Aparato de Golgi'], correct:1, points:1, hidden:false},
+  {id:15, type:'Respuesta corta', typeBadge:'badge-neutral', text:'Describe el proceso de replicacion del ADN y su importancia biologica.', options:[], correct:null, points:3, hidden:false}
+];
+var reviewIdx = 0;
+
+function showReviewView() {
+  closeCreateModal();
+  navigate('review');
+  buildReviewList();
+  showReviewQuestion(0);
+}
+
+function buildReviewList() {
+  var list = document.getElementById('reviewQList');
+  list.innerHTML = '';
+  reviewQuestions.forEach(function(q, i) {
+    var item = document.createElement('div');
+    item.className = 'review-q-item' + (q.hidden ? ' hidden-q' : '') + (i === reviewIdx ? ' active' : '');
+    item.setAttribute('data-ri', i);
+    item.innerHTML = '<span class="rq-num">' + (i+1) + '</span><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + q.text.substring(0,32) + '...</span><span class="rq-type">' + q.type + '</span>';
+    item.onclick = function() { showReviewQuestion(i); };
+    list.appendChild(item);
+  });
+  var visible = reviewQuestions.filter(function(q){return !q.hidden}).length;
+  document.getElementById('reviewCount').textContent = '(' + visible + '/' + reviewQuestions.length + ')';
+}
+
+function showReviewQuestion(idx) {
+  reviewIdx = idx;
+  var q = reviewQuestions[idx];
+  document.getElementById('reviewQType').textContent = q.type;
+  document.getElementById('reviewQType').className = 'badge ' + q.typeBadge;
+  document.getElementById('reviewQPoints').textContent = q.points + ' punto' + (q.points !== 1 ? 's' : '');
+  document.getElementById('reviewQText').textContent = q.text;
+
+  var optWrap = document.getElementById('reviewQOptions');
+  var ansWrap = document.getElementById('reviewQAnswer');
+  optWrap.innerHTML = '';
+  ansWrap.innerHTML = '';
+
+  if (q.options.length > 0) {
+    var labels = 'ABCDEFGHIJ';
+    q.options.forEach(function(opt, oi) {
+      var isCorrect = Array.isArray(q.correct) ? q.correct.indexOf(oi) !== -1 : q.correct === oi;
+      var div = document.createElement('div');
+      div.className = 'review-q-opt' + (isCorrect ? ' correct' : '');
+      div.innerHTML = '<span class="opt-marker">' + labels[oi] + '</span>' + opt;
+      optWrap.appendChild(div);
+    });
+  }
+  if (q.correct !== null && typeof q.correct === 'string') {
+    ansWrap.innerHTML = 'Respuesta: ' + q.correct;
+  } else if (q.correct === null) {
+    ansWrap.innerHTML = '<span style="color:var(--muted);font-style:italic">Requiere evaluacion manual del profesor</span>';
+  }
+
+  var hideBtn = document.getElementById('reviewHideBtn');
+  if (q.hidden) {
+    hideBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Mostrar';
+    hideBtn.style.color = 'var(--accent)';
+  } else {
+    hideBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Ocultar';
+    hideBtn.style.color = '';
+  }
+
+  document.getElementById('reviewPrevBtn').disabled = idx === 0;
+  document.getElementById('reviewNextBtn').disabled = idx === reviewQuestions.length - 1;
+
+  document.querySelectorAll('.review-q-item').forEach(function(el, i) {
+    el.classList.toggle('active', i === idx);
+  });
+
+  var display = document.getElementById('reviewQDisplay');
+  display.style.opacity = '0';
+  display.style.transform = 'translateY(8px)';
+  setTimeout(function() { display.style.transition = 'all .25s ease'; display.style.opacity = '1'; display.style.transform = 'translateY(0)'; }, 10);
+}
+
+function reviewNav(dir) {
+  var next = reviewIdx + dir;
+  if (next >= 0 && next < reviewQuestions.length) showReviewQuestion(next);
+}
+
+function toggleReviewHide() {
+  reviewQuestions[reviewIdx].hidden = !reviewQuestions[reviewIdx].hidden;
+  buildReviewList();
+  showReviewQuestion(reviewIdx);
+}
+
+function moveReviewQ(dir) {
+  var next = reviewIdx + dir;
+  if (next < 0 || next >= reviewQuestions.length) return;
+  var temp = reviewQuestions[reviewIdx];
+  reviewQuestions[reviewIdx] = reviewQuestions[next];
+  reviewQuestions[next] = temp;
+  buildReviewList();
+  showReviewQuestion(next);
+}
+
+function showAllHidden() {
+  reviewQuestions.forEach(function(q) { q.hidden = false; });
+  buildReviewList();
+  showReviewQuestion(reviewIdx);
+}
+
+function expandAllQuestions() {
+  document.querySelectorAll('.review-q-item').forEach(function(el) { el.classList.remove('hidden-q'); });
+}
+
+function collapseAllQuestions() {
+  reviewQuestions.forEach(function(q, i) {
+    if (i !== reviewIdx) q.hidden = true;
+  });
+  buildReviewList();
+  showReviewQuestion(reviewIdx);
+}
+
+function finishReview() {
+  var visible = reviewQuestions.filter(function(q){return !q.hidden}).length;
+  document.getElementById('reviewPageBadge').textContent = visible + ' visibles';
+  navigate('test-detail');
+}
 function selectDiff(el) {
   el.parentElement.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
   el.classList.add('active');
