@@ -10,13 +10,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#ffffff;--surface:#f8f9fc;--surface-warm:#f0f1f5;--fg:#111111;--fg-2:#333333;--muted:#8E8C9A;--meta:var(--muted);--border:#E8E9ED;--border-soft:rgba(17,17,17,.06);--accent:#A1F06C;--accent-hover:#8FE05A;--accent-on:#111111;--accent-soft:rgba(161,240,108,.15);--accent-green:#5CE63F;--accent-green-soft:rgba(92,230,63,.15);--fg-soft:#f0f1f5;--success:#5CE63F;--success-soft:rgba(92,230,63,.15);--warn:#f59e0b;--danger:#ef4444;--info:#6366f1;--purple:#111111;--purple-dark:#030204;--purple-light:#8E8C9A;--purple-soft:rgba(17,17,17,.06);--coral:#f87171;--coral-soft:rgba(248,113,113,.12);--teal:#5CE63F;--teal-soft:rgba(92,230,63,.12);--yellow:#fbbf24;--yellow-soft:rgba(251,191,36,.12);--badge-green-bg:#E3FFB3;--badge-green-fg:#111111;--font-display:'Inter','Inter Fallback',system-ui,-apple-system,sans-serif;--font-body:'Inter','Inter Fallback',system-ui,-apple-system,sans-serif;--font-mono:'SF Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;--text-xs:12px;--text-sm:13px;--text-base:16px;--text-lg:20px;--text-xl:24px;--text-2xl:32px;--text-3xl:36px;--text-4xl:48px;--leading-body:1.5;--leading-tight:1.08;--tracking-display:-0.02em;--radius-sm:8px;--radius:12px;--radius-lg:20px;--radius-xl:28px;--radius-pill:9999px;--elev-flat:none;--elev-ring:0 2px 8px rgba(17,17,17,.06);--elev-raised:0 8px 30px rgba(17,17,17,.1);--elev-card:0 4px 20px rgba(17,17,17,.08);--focus-ring:0 0 0 3px rgba(92,230,63,.3);--sidebar-w:250px;--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-12:48px;--section-y-desktop:96px;--section-y-tablet:64px;--section-y-phone:48px;--container-max:1200px;--container-gutter-desktop:24px;--container-gutter-tablet:16px;--container-gutter-phone:12px;--motion-fast:180ms;--motion-base:280ms;--motion-slow:400ms;--ease-standard:cubic-bezier(.4,0,.2,1);--ease-spring:cubic-bezier(.22,1,.36,1)}
+:root{--bg:#ffffff;--surface:#f8f9fc;--surface-warm:#f0f1f5;--fg:#111111;--fg-2:#333333;--muted:#8E8C9A;--meta:var(--muted);--border:#E8E9ED;--border-soft:rgba(17,17,17,.06);--accent:#A1F06C;--accent-hover:#8FE05A;--accent-on:#111111;--accent-soft:rgba(161,240,108,.15);--accent-green:#5CE63F;--accent-green-soft:rgba(92,230,63,.15);--fg-soft:#f0f1f5;--success:#5CE63F;--success-soft:rgba(92,230,63,.15);--warn:#f59e0b;--danger:#ef4444;--info:#6366f1;--purple:#5CE63F;--purple-dark:#111111;--purple-light:#A1F06C;--purple-soft:rgba(92,230,63,.12);--coral:#f87171;--coral-soft:rgba(248,113,113,.12);--teal:#5CE63F;--teal-soft:rgba(92,230,63,.12);--yellow:#fbbf24;--yellow-soft:rgba(251,191,36,.12);--badge-green-bg:#E3FFB3;--badge-green-fg:#111111;--font-display:'Inter','Inter Fallback',system-ui,-apple-system,sans-serif;--font-body:'Inter','Inter Fallback',system-ui,-apple-system,sans-serif;--font-mono:'SF Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;--text-xs:12px;--text-sm:13px;--text-base:16px;--text-lg:20px;--text-xl:24px;--text-2xl:32px;--text-3xl:36px;--text-4xl:48px;--leading-body:1.5;--leading-tight:1.08;--tracking-display:-0.02em;--radius-sm:8px;--radius:12px;--radius-lg:20px;--radius-xl:28px;--radius-pill:9999px;--elev-flat:none;--elev-ring:0 2px 8px rgba(17,17,17,.06);--elev-raised:0 8px 30px rgba(17,17,17,.1);--elev-card:0 4px 20px rgba(17,17,17,.08);--focus-ring:0 0 0 3px rgba(92,230,63,.3);--sidebar-w:250px;--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-12:48px;--section-y-desktop:96px;--section-y-tablet:64px;--section-y-phone:48px;--container-max:1200px;--container-gutter-desktop:24px;--container-gutter-tablet:16px;--container-gutter-phone:12px;--motion-fast:180ms;--motion-base:280ms;--motion-slow:400ms;--ease-standard:cubic-bezier(.4,0,.2,1);--ease-spring:cubic-bezier(.22,1,.36,1)}
 html{font-family:var(--font-body);background:var(--bg);color:var(--fg);scroll-behavior:smooth;font-size:15px}
 body{min-height:100vh;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input,select,textarea{font-family:inherit;background:var(--bg);border:1px solid var(--border);color:var(--fg);border-radius:var(--radius-sm);padding:12px 20px;font-size:15px;min-height:44px}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--purple);box-shadow:var(--focus-ring)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:var(--focus-ring)}
 ::selection{background:rgba(92,230,63,.2)}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border-radius:var(--radius-pill);font-family:var(--font-display);font-size:14px;font-weight:600;min-height:46px;transition:all var(--motion-base) var(--ease-standard);letter-spacing:.01em;position:relative;overflow:hidden}
@@ -354,7 +354,7 @@ tr:hover td{background:var(--surface)}
 .review-q-item.draft-q{opacity:.55}
 .review-q-item.dragging{opacity:.4;background:#ede9fe}
 .review-q-item.drag-over{border-top:2px solid var(--purple)}
-.review-q-drag{display:flex;align-items:center;padding:4px;cursor:grab;color:#8b5cf6;opacity:0;width:0;overflow:hidden;transition:opacity .2s ease, width .2s ease;flex-shrink:0}
+.review-q-drag{display:flex;align-items:center;padding:4px;cursor:grab;color:var(--accent-green);opacity:0;width:0;overflow:hidden;transition:opacity .2s ease, width .2s ease;flex-shrink:0}
 .review-q-item:hover .review-q-drag{opacity:1;width:22px}
 .review-q-drag:active{cursor:grabbing}
 .review-q-info{flex:1;min-width:0;overflow:hidden}
@@ -1560,6 +1560,8 @@ function handleRoute() {
 }
 
 window.addEventListener('hashchange', handleRoute);
+window.addEventListener('DOMContentLoaded', handleRoute);
+handleRoute();
 
 // ==================== HERO ANIMATION ====================
 var phases = ['hp-upload', 'hp-analyze', 'hp-generate', 'hp-respond'];
