@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVALIA — Generación de Exámenes con IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f9fb;--surface:#fff;--dark:#111111;--green:#5CE63F;--green-light:#A1F06C;
+  --green-dark:#3ACC1C;--muted:#6b7280;--border:#e5e7eb;--text:#111111;--text-2:#374151;
+  --font:'Inter',system-ui,-apple-system,sans-serif;--radius:12px;--radius-sm:8px;
+  --radius-pill:9999px;--sidebar-w:240px;--topbar-h:64px;
+}
+html{font-family:var(--font);background:var(--bg);color:var(--text)}
+body{min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,textarea{font-family:inherit}
+
+/* LAYOUT */
+.app{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100}
+.sidebar-logo{padding:20px 24px;font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.sidebar-logo svg{width:28px;height:28px}
+.sidebar-nav{flex:1;padding:0 12px;display:flex;flex-direction:column;gap:2px}
+.sidebar-nav a{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;color:var(--muted);transition:all .15s}
+.sidebar-nav a:hover{background:var(--bg);color:var(--text)}
+.sidebar-nav a.active{background:#E3FFE0;color:var(--green-dark);font-weight:600}
+.sidebar-nav a svg{width:20px;height:20px;flex-shrink:0}
+.sidebar-plan{margin:12px;padding:16px;background:var(--dark);border-radius:var(--radius);color:#fff}
+.sidebar-plan .plan-label{font-size:11px;font-weight:700;color:var(--green);letter-spacing:.05em;margin-bottom:6px}
+.sidebar-plan p{font-size:12px;opacity:.8;line-height:1.5}
+
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column}
+.topbar{height:var(--topbar-h);display:flex;align-items:center;gap:12px;padding:0 32px;border-bottom:1px solid var(--border);background:var(--surface)}
+.topbar-title{font-size:14px;font-weight:500;color:var(--muted)}
+.topbar-credits{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text)}
+.topbar-credits svg{color:var(--green)}
+.topbar-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:background .15s}
+.topbar-icon:hover{background:var(--bg)}
+.topbar-icon svg{width:20px;height:20px}
+.topbar-avatar{width:36px;height:36px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text)}
+
+/* PAGES */
+.page{display:none;flex:1;padding:32px}
+.page.active{display:block}
+
+/* DASHBOARD */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.page-header h1{font-size:32px;font-weight:800;letter-spacing:-.02em}
+.page-subtitle{font-size:14px;color:var(--muted);margin-bottom:28px}
+.btn-create{display:inline-flex;align-items:center;gap:8px;background:var(--dark);color:#fff;padding:12px 24px;border-radius:var(--radius);font-size:14px;font-weight:600;transition:all .15s}
+.btn-create:hover{opacity:.85;transform:translateY(-1px)}
+.btn-create svg{width:18px;height:18px}
+
+/* START IDEA BANNER */
+.idea-banner{display:flex;align-items:center;gap:20px;background:linear-gradient(135deg,#E3FFE0,#f0fdf4);border:1px solid #d1fae5;border-radius:var(--radius);padding:24px 28px;margin-bottom:32px}
+.idea-icon{width:48px;height:48px;border-radius:var(--radius);background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.idea-icon svg{width:24px;height:24px;color:var(--dark)}
+.idea-text{flex:1}
+.idea-text h3{font-size:16px;font-weight:700;margin-bottom:2px}
+.idea-text p{font-size:13px;color:var(--muted)}
+.btn-ai{display:inline-flex;align-items:center;gap:8px;background:var(--dark);color:#fff;padding:12px 24px;border-radius:var(--radius);font-size:14px;font-weight:600;transition:all .15s;white-space:nowrap}
+.btn-ai:hover{opacity:.85}
+
+/* RECENT SECTION */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-header h2{font-size:18px;font-weight:700}
+.section-header a{font-size:13px;color:var(--muted);font-weight:500}
+.section-header a:hover{color:var(--text)}
+.eval-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.eval-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s}
+.eval-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px)}
+.eval-thumb{height:160px;display:flex;align-items:center;justify-content:center}
+.eval-thumb.green{background:linear-gradient(135deg,#d4fce0,#E3FFE0)}
+.eval-thumb.dark{background:var(--dark)}
+.eval-thumb.lavender{background:linear-gradient(135deg,#ede9fe,#f3e8ff)}
+.eval-info{padding:16px}
+.eval-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.eval-meta{font-size:13px;color:var(--muted)}
+
+/* CREATE EVALUATION PAGE */
+.create-page{background:linear-gradient(180deg,#E3FFE0 0%,#f8f9fb 30%);min-height:100vh}
+.create-header{text-align:center;padding:40px 20px 20px}
+.create-badge{display:inline-block;background:#E3FFE0;color:var(--green-dark);font-size:11px;font-weight:700;padding:6px 14px;border-radius:var(--radius-pill);letter-spacing:.05em;margin-bottom:16px}
+.create-header h1{font-size:clamp(28px,4vw,40px);font-weight:800;margin-bottom:8px;letter-spacing:-.02em}
+.create-header p{font-size:15px;color:var(--muted);max-width:500px;margin:0 auto}
+.create-options{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1000px;margin:0 auto;padding:32px 20px}
+.option-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:0;cursor:pointer;transition:all .2s;overflow:hidden}
+.option-card:hover{border-color:var(--text);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.option-card.selected{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.2)}
+.option-thumb{height:140px;display:flex;align-items:center;justify-content:center}
+.option-thumb.green{background:#E3FFE0}
+.option-thumb.dark{background:var(--dark)}
+.option-thumb.lavender{background:#ede9fe}
+.option-thumb.gray{background:#f3f4f6}
+.option-thumb svg{width:40px;height:40px}
+.option-thumb.green svg{color:var(--dark)}
+.option-thumb.dark svg{color:#fff}
+.option-thumb.lavender svg{color:var(--dark)}
+.option-thumb.gray svg{color:var(--dark)}
+.option-content{padding:20px}
+.option-content h3{font-size:16px;font-weight:700;margin-bottom:6px}
+.option-content p{font-size:13px;color:var(--muted);line-height:1.5}
+.create-hint{text-align:center;padding:20px;font-size:13px;color:var(--muted)}
+
+/* AI WIZARD */
+.wizard-header{display:flex;align-items:center;gap:12px;padding:0 32px;margin-bottom:32px}
+.back-btn{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--muted);transition:color .15s}
+.back-btn:hover{color:var(--text)}
+.back-btn svg{width:18px;height:18px}
+.wizard-title{font-size:18px;font-weight:700}
+.wizard-steps{display:flex;align-items:center;gap:8px;padding:0 32px;margin-bottom:32px}
+.w-step{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--muted)}
+.w-step .w-num{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;transition:all .2s}
+.w-step.active .w-num{background:var(--green);border-color:var(--green);color:var(--dark)}
+.w-step.active{color:var(--text)}
+.w-step.done .w-num{background:var(--green);border-color:var(--green);color:#fff}
+.w-divider{width:32px;height:2px;background:var(--border);border-radius:1px}
+.w-step.done+.w-divider{background:var(--green)}
+
+/* CONFIG STEP */
+.config-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;max-width:800px;margin:0 auto 24px}
+.config-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius-pill);border:1.5px solid var(--border);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;background:var(--surface)}
+.chip:hover{border-color:var(--text)}
+.chip svg{width:14px;height:14px;color:var(--muted)}
+.ai-prompt{display:flex;align-items:center;gap:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius);padding:16px 20px}
+.ai-prompt-text{flex:1;font-size:14px;color:var(--text)}
+.ai-prompt-edit{font-size:13px;font-weight:600;color:var(--text);cursor:pointer;padding:8px 16px;border-radius:var(--radius-sm);transition:background .15s}
+.ai-prompt-edit:hover{background:rgba(0,0,0,.05)}
+
+/* OUTLINE */
+.outline-section{max-width:800px;margin:0 auto}
+.outline-section h2{font-size:22px;font-weight:700;margin-bottom:20px}
+.outline-block{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;transition:all .15s}
+.outline-block:first-child{border-color:var(--green);background:#f0fdf4}
+.outline-block:hover{box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.outline-num{width:36px;height:36px;border-radius:50%;background:var(--green);color:var(--dark);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.outline-text{flex:1}
+.outline-text h4{font-size:15px;font-weight:700;margin-bottom:2px}
+.outline-text p{font-size:13px;color:var(--muted)}
+.outline-drag{color:var(--muted);cursor:grab;padding:4px}
+.outline-drag:hover{color:var(--text)}
+.outline-footer{display:flex;align-items:center;justify-content:space-between;margin-top:20px}
+.outline-count{font-size:14px;color:var(--muted)}
+.btn-generate{display:inline-flex;align-items:center;gap:8px;background:var(--dark);color:#fff;padding:14px 28px;border-radius:var(--radius);font-size:15px;font-weight:600;transition:all .15s}
+.btn-generate:hover{opacity:.9;transform:translateY(-1px)}
+
+/* EDITOR */
+.editor{background:var(--dark);color:#fff;min-height:100vh;display:flex;flex-direction:column}
+.editor-topbar{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.1)}
+.editor-logo{width:28px;height:28px;border-radius:6px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--dark)}
+.editor-title{font-size:14px;font-weight:600}
+.editor-saved{font-size:12px;color:var(--green);font-weight:500;display:flex;align-items:center;gap:4px}
+.editor-saved::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green)}
+.editor-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.editor-btn{padding:8px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;transition:all .15s;color:#fff}
+.editor-btn:hover{background:rgba(255,255,255,.1)}
+.editor-btn.primary{background:var(--green);color:var(--dark);border-radius:var(--radius)}
+.editor-btn.primary:hover{opacity:.9}
+.editor-icon-btn{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:#fff;transition:background .15s}
+.editor-icon-btn:hover{background:rgba(255,255,255,.1)}
+.editor-icon-btn svg{width:20px;height:20px}
+.editor-body{display:flex;flex:1;overflow:hidden}
+.editor-sidebar{width:200px;border-right:1px solid rgba(255,255,255,.1);padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+.add-question{display:flex;align-items:center;gap:6px;padding:10px 14px;border:1px dashed rgba(255,255,255,.2);border-radius:var(--radius-sm);font-size:13px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s}
+.add-question:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.q-thumb{border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.q-thumb.active{border-color:var(--green)}
+.q-thumb:hover{border-color:rgba(255,255,255,.3)}
+.q-thumb-inner{height:80px;display:flex;align-items:center;justify-content:center}
+.q-thumb-inner.green{background:linear-gradient(135deg,#d4fce0,#E3FFE0)}
+.q-thumb-inner.dark{background:#1a1a1a}
+.q-thumb-inner.gray{background:#2a2a2a}
+.q-thumb-label{padding:6px 10px;font-size:11px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.05)}
+.editor-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.editor-canvas{flex:1;display:flex;align-items:center;justify-content:center;padding:32px}
+.question-card{background:linear-gradient(135deg,#1a1a1a,#111);border:2px solid var(--green);border-radius:var(--radius);max-width:700px;width:100%;display:flex;overflow:hidden}
+.question-left{flex:1;padding:32px}
+.question-badge{display:inline-block;padding:4px 12px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;letter-spacing:.05em;margin-bottom:16px;color:var(--green)}
+.question-badge{background:rgba(92,230,63,.15)}
+.question-text{font-size:22px;font-weight:700;line-height:1.3;margin-bottom:24px}
+.question-options{display:flex;flex-direction:column;gap:10px}
+.option{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);font-size:14px;cursor:pointer;transition:all .15s}
+.option:hover{border-color:rgba(255,255,255,.3)}
+.option.correct{border-color:var(--green);background:rgba(92,230,63,.08)}
+.option-letter{width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.option.correct .option-letter{border-color:var(--green);background:var(--green);color:var(--dark)}
+.question-right{width:280px;background:linear-gradient(135deg,#E3FFE0,#d4fce0);display:flex;align-items:center;justify-content:center;padding:24px}
+.question-img{width:100%;max-width:200px;border-radius:50%;background:#fff;padding:8px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.editor-toolbar{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;background:rgba(26,26,26,.9);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:8px}
+.toolbar-btn{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);transition:all .15s}
+.toolbar-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.toolbar-btn.active{color:var(--green)}
+.toolbar-btn svg{width:20px;height:20px}
+
+/* AI ASSIST BAR */
+.ai-assist{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:rgba(26,26,26,.95);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-pill);padding:8px 16px;backdrop-filter:blur(8px)}
+.ai-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;transition:background .15s}
+.ai-btn:hover{background:rgba(255,255,255,.1)}
+.ai-btn svg{width:18px;height:18px}
+.ai-btn.green{background:var(--green);color:var(--dark)}
+.ai-divider{width:1px;height:24px;background:rgba(255,255,255,.15)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .create-options{grid-template-columns:repeat(2,1fr)}
+  .eval-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .create-options{grid-template-columns:1fr}
+  .question-right{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <svg viewBox="0 0 28 28" fill="none"><path d="M4 6C4 4.895 4.895 4 6 4H11L14 7H22C23.105 7 24 7.895 24 9V22C24 23.105 23.105 24 22 24H6C4.895 24 4 23.105 4 22V6Z" stroke="#111" stroke-width="2.2"/><path d="M10 14h8M10 17.5h5" stroke="#111" stroke-width="1.8" stroke-linecap="round"/></svg>
+    EVALIA
+  </div>
+  <nav class="sidebar-nav">
+    <a href="#" onclick="showPage('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Inicio</a>
+    <a href="#" onclick="showPage('dashboard')" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Mis evaluaciones</a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Plantillas</a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Banco de reactivos</a>
+    <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analíticas</a>
+  </nav>
+  <div class="sidebar-plan">
+    <div class="plan-label">PLAN DOCENTE PRO</div>
+    <p>Genera evaluaciones ilimitadas y exporta sin marca.</p>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- TOPBAR -->
+<div class="topbar" id="topbar">
+  <div class="topbar-title" id="topbarTitle">Mis evaluaciones</div>
+  <div class="topbar-credits">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>
+    400 créditos
+  </div>
+  <button class="topbar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+  <button class="topbar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></button>
+  <div class="topbar-avatar">E</div>
+</div>
+
+<!-- ==================== DASHBOARD ==================== -->
+<div class="page active" id="page-dashboard">
+  <div class="page-header">
+    <h1>Tus evaluaciones</h1>
+    <button class="btn-create" onclick="showPage('create')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Crear evaluación</button>
+  </div>
+  <p class="page-subtitle">Crea, adapta y comparte materiales rigurosos en minutos.</p>
+
+  <div class="idea-banner">
+    <div class="idea-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+    <div class="idea-text">
+      <h3>Empieza con una idea</h3>
+      <p>Describe el tema y Evalia diseñará la estructura, reactivos y rúbrica.</p>
+    </div>
+    <button class="btn-ai" onclick="showPage('create')"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Generar con IA</button>
+  </div>
+
+  <div class="section-header">
+    <h2>Recientes</h2>
+    <a href="#">Ver todas →</a>
+  </div>
+  <div class="eval-grid">
+    <div class="eval-card" onclick="showPage('editor')">
+      <div class="eval-thumb green"></div>
+      <div class="eval-info">
+        <div class="eval-title">Química básica · 2º ESO</div>
+        <div class="eval-meta">12 preguntas · Hace 2 horas</div>
+      </div>
+    </div>
+    <div class="eval-card" onclick="showPage('editor')">
+      <div class="eval-thumb dark"></div>
+      <div class="eval-info">
+        <div class="eval-title">Historia de España</div>
+        <div class="eval-meta">10 preguntas · Ayer</div>
+      </div>
+    </div>
+    <div class="eval-card" onclick="showPage('editor')">
+      <div class="eval-thumb lavender"></div>
+      <div class="eval-info">
+        <div class="eval-title">Comprensión lectora</div>
+        <div class="eval-meta">8 preguntas · 12 ago</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CREATE EVALUATION ==================== -->
+<div class="page" id="page-create" style="padding:0">
+  <div class="create-page">
+    <div class="wizard-header">
+      <button class="back-btn" onclick="showPage('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15,18 9,12 15,6"/></svg>Volver</button>
+      <div class="wizard-title">Crear evaluación</div>
+    </div>
+    <div class="create-header">
+      <span class="create-badge">NUEVA EVALUACIÓN</span>
+      <h1>¿Cómo quieres empezar?</h1>
+      <p>Elige un punto de partida. Podrás revisar y editar cada pregunta antes de publicar.</p>
+    </div>
+    <div class="create-options">
+      <div class="option-card selected" onclick="selectOption(this)">
+        <div class="option-thumb green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>
+        </div>
+        <div class="option-content">
+          <h3>Generar con IA</h3>
+          <p>Parte de una consigna breve y crea una evaluación completa.</p>
+        </div>
+      </div>
+      <div class="option-card" onclick="selectOption(this)">
+        <div class="option-thumb dark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+        <div class="option-content">
+          <h3>Pegar contenido</h3>
+          <p>Convierte apuntes o un temario en preguntas organizadas.</p>
+        </div>
+      </div>
+      <div class="option-card" onclick="selectOption(this)">
+        <div class="option-thumb lavender">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="option-content">
+          <h3>Usar una plantilla</h3>
+          <p>Elige una estructura docente lista para personalizar.</p>
+        </div>
+      </div>
+      <div class="option-card" onclick="selectOption(this)">
+        <div class="option-thumb gray">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="option-content">
+          <h3>Importar archivo</h3>
+          <p>Sube PDF, Word o una URL como material de origen.</p>
+        </div>
+      </div>
+    </div>
+    <div class="create-hint">¿No sabes cuál elegir? Empieza con IA; siempre tendrás el control editorial.</div>
+    <div style="text-align:center;padding:0 20px 40px">
+      <button class="btn-create" onclick="continueFromCreate()" style="display:inline-flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9,18 15,12 9,6"/></svg>Continuar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== AI WIZARD ==================== -->
+<div class="page" id="page-wizard" style="padding:0">
+  <div class="create-page">
+    <div class="wizard-header">
+      <button class="back-btn" onclick="showPage('create')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15,18 9,12 15,6"/></svg>Volver</button>
+      <div class="wizard-title">Generar con IA</div>
+    </div>
+    <div class="wizard-steps">
+      <div class="w-step active"><span class="w-num">1</span>Configurar</div>
+      <div class="w-divider"></div>
+      <div class="w-step"><span class="w-num">2</span>Revisar esquema</div>
+      <div class="w-divider"></div>
+      <div class="w-step"><span class="w-num">3</span>Generar</div>
+    </div>
+
+    <!-- Step 1: Configurar -->
+    <div id="wizardStep1">
+      <div class="config-card">
+        <div class="config-chips">
+          <div class="chip" onclick="this.classList.toggle('selected')">12 preguntas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg></div>
+          <div class="chip" onclick="this.classList.toggle('selected')">Secundaria <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg></div>
+          <div class="chip" onclick="this.classList.toggle('selected')">Dificultad media <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg></div>
+          <div class="chip" onclick="this.classList.toggle('selected')">Español <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg></div>
+        </div>
+        <div class="ai-prompt">
+          <div class="ai-prompt-text">Crea una evaluación de Biología sobre la célula para 3º de secundaria</div>
+          <div class="ai-prompt-edit">Editar</div>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <button class="btn-generate" onclick="showWizardStep(2)"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Generar esquema</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Revisar esquema -->
+    <div id="wizardStep2" style="display:none">
+      <div class="outline-section">
+        <h2>Revisa el esquema propuesto</h2>
+        <div class="outline-block">
+          <div class="outline-num">1</div>
+          <div class="outline-text">
+            <h4>Fundamentos de la célula</h4>
+            <p>Partes de la célula y funciones principales</p>
+          </div>
+          <div class="outline-drag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></div>
+        </div>
+        <div class="outline-block">
+          <div class="outline-num">2</div>
+          <div class="outline-text">
+            <h4>Membrana y transporte</h4>
+            <p>Difusión, ósmosis y transporte activo</p>
+          </div>
+          <div class="outline-drag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></div>
+        </div>
+        <div class="outline-block">
+          <div class="outline-num">3</div>
+          <div class="outline-text">
+            <h4>Metabolismo celular</h4>
+            <p>Respiración celular y obtención de energía</p>
+          </div>
+          <div class="outline-drag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></div>
+        </div>
+        <div class="outline-block">
+          <div class="outline-num">4</div>
+          <div class="outline-text">
+            <h4>División celular</h4>
+            <p>Mitosis, meiosis y ciclo celular</p>
+          </div>
+          <div class="outline-drag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></div>
+        </div>
+        <div class="outline-footer">
+          <div class="outline-count">4 bloques · 12 preguntas en total</div>
+          <button class="btn-generate" onclick="showPage('editor')"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Generar evaluación</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== EDITOR ==================== -->
+<div class="page" id="page-editor" style="padding:0">
+  <div class="editor">
+    <div class="editor-topbar">
+      <div class="editor-logo">E</div>
+      <div class="editor-title">Biología · La célula</div>
+      <div class="editor-saved">Guardado</div>
+      <div class="editor-actions">
+        <button class="editor-btn">Tema</button>
+        <button class="editor-btn">Compartir</button>
+        <button class="editor-btn primary">Vista previa</button>
+      </div>
+    </div>
+    <div class="editor-body">
+      <div class="editor-sidebar">
+        <div class="add-question">+ Nueva pregunta</div>
+        <div class="q-thumb active" onclick="selectQuestion(this, 0)">
+          <div class="q-thumb-inner green"></div>
+          <div class="q-thumb-label">1 · Portada</div>
+        </div>
+        <div class="q-thumb" onclick="selectQuestion(this, 1)">
+          <div class="q-thumb-inner dark"></div>
+          <div class="q-thumb-label">2 · Opción múltiple</div>
+        </div>
+        <div class="q-thumb" onclick="selectQuestion(this, 2)">
+          <div class="q-thumb-inner gray"></div>
+          <div class="q-thumb-label">3 · Respuesta corta</div>
+        </div>
+        <div class="q-thumb" onclick="selectQuestion(this, 3)">
+          <div class="q-thumb-inner gray"></div>
+          <div class="q-thumb-label">4 · Verdadero / falso</div>
+        </div>
+      </div>
+      <div class="editor-main">
+        <div class="editor-canvas">
+          <div class="question-card" id="questionCard">
+            <div class="question-left">
+              <div class="question-badge">PREGUNTA 2 · OPCIÓN MÚLTIPLE</div>
+              <div class="question-text" id="questionText">¿Qué estructura controla el intercambio de sustancias con el exterior?</div>
+              <div class="question-options">
+                <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter">A</span>Núcleo</div>
+                <div class="option correct" onclick="selectOptionAnswer(this)"><span class="option-letter">B</span>Membrana plasmática</div>
+                <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter">C</span>Mitocondria</div>
+              </div>
+            </div>
+            <div class="question-right">
+              <div class="question-img">
+                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="90" stroke="#94a3b8" stroke-width="1.5"/><ellipse cx="100" cy="100" rx="90" ry="60" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 2"/><circle cx="100" cy="100" r="30" stroke="#94a3b8" stroke-width="1.5"/><circle cx="100" cy="100" r="8" fill="#94a3b8" opacity=".3"/><text x="100" y="40" text-anchor="middle" font-size="8" fill="#64748b">Célula</text><text x="100" y="155" text-anchor="middle" font-size="7" fill="#64748b">Membrana</text></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="editor-toolbar">
+      <button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+      <button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg></button>
+      <button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></button>
+      <button class="toolbar-btn active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></button>
+      <button class="toolbar-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+    </div>
+
+    <!-- AI Assist -->
+    <div class="ai-assist">
+      <button class="ai-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+      <div class="ai-divider"></div>
+      <button class="ai-btn green"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg></button>
+      <div class="ai-divider"></div>
+      <button class="ai-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+    </div>
+  </div>
+</div>
+
+</div><!-- .main -->
+</div><!-- .app -->
+
+<script>
+const pages = ['dashboard','create','wizard','editor'];
+const titles = {dashboard:'Mis evaluaciones',create:'Crear evaluación',wizard:'Generar con IA',editor:'Biología · La célula'};
+
+function showPage(page) {
+  pages.forEach(p => {
+    document.getElementById('page-'+p).classList.toggle('active', p===page);
+  });
+  document.getElementById('topbarTitle').textContent = titles[page] || '';
+  document.querySelectorAll('.sidebar-nav a').forEach((a,i) => {
+    a.classList.toggle('active', i===1 && page==='dashboard');
+  });
+  const hideChrome = ['create','wizard','editor'].includes(page);
+  document.getElementById('topbar').style.display = hideChrome ? 'none' : 'flex';
+  document.getElementById('sidebar').style.display = hideChrome ? 'none' : 'flex';
+  document.querySelector('.main').style.marginLeft = hideChrome ? '0' : 'var(--sidebar-w)';
+}
+
+function selectOption(el) {
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function continueFromCreate() {
+  const selected = document.querySelector('.option-card.selected h3').textContent;
+  if (selected === 'Generar con IA') {
+    showPage('wizard');
+  } else if (selected === 'Pegar contenido') {
+    showPage('editor');
+  } else if (selected === 'Usar una plantilla') {
+    showPage('editor');
+  } else {
+    showPage('editor');
+  }
+}
+
+function showWizardStep(step) {
+  document.getElementById('wizardStep1').style.display = step===1 ? 'block' : 'none';
+  document.getElementById('wizardStep2').style.display = step===2 ? 'block' : 'none';
+  document.querySelectorAll('.w-step').forEach((s,i) => {
+    s.classList.toggle('active', i===step-1);
+    s.classList.toggle('done', i<step-1);
+  });
+}
+
+function selectOptionAnswer(el) {
+  document.querySelectorAll('.question-options .option').forEach(o => o.classList.remove('correct'));
+  el.classList.add('correct');
+}
+
+function selectQuestion(el, idx) {
+  document.querySelectorAll('.q-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Mobile sidebar toggle
+document.querySelector('.topbar-title')?.addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('open');
+});
+</script>
+
+</body>
+</html>
