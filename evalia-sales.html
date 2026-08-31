@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVALIA — Generación de Exámenes con IA para Docentes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dark:#111111;--green:#89FF5C;--green-dark:#3ACC1C;--green-light:#A1F06C;
+  --bg:#ffffff;--surface:#f8f9fc;--muted:#8E8C9A;--border:#E8E9ED;
+  --font:'Inter','Inter Fallback',system-ui,-apple-system,sans-serif;
+}
+html{font-family:var(--font);background:var(--bg);color:var(--dark);scroll-behavior:smooth}
+body{min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(24px,5vw,80px);background:linear-gradient(135deg,#89FF5C 0%,#CCFFA6 30%,rgba(255,255,255,.8) 60%,#fff 100%)}
+.nav-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;color:var(--dark);letter-spacing:-.01em}
+.nav-logo svg{width:28px;height:28px;flex-shrink:0}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:13px;font-weight:600;color:var(--dark);opacity:.7;transition:opacity .2s;letter-spacing:.02em}
+.nav-links a:hover{opacity:1}
+.btn-cta{display:inline-block;background:var(--dark);color:#fff;border:none;padding:10px 22px;border-radius:15.5px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s;letter-spacing:.01em;text-align:center;opacity:1!important}
+.btn-cta:hover{opacity:.85}
+
+/* HERO */
+.hero{padding-top:100px;background:linear-gradient(180deg,#89FF5C 0%,#CCFFA6 30%,rgba(255,255,255,.7) 60%,#fff 100%);text-align:center;padding-bottom:60px}
+.hero-inner{max-width:700px;margin:0 auto;padding:40px clamp(24px,5vw,60px) 0}
+.badge{display:inline-flex;align-items:center;background:#E3FFB3;color:var(--dark);font-size:13px;font-weight:700;padding:8px 20px;border-radius:20px;margin-bottom:24px}
+.hero h1{font-size:clamp(36px,5.5vw,56px);font-weight:900;line-height:1.02;color:var(--dark);margin-bottom:16px;letter-spacing:-.03em}
+.hero .subtitle{font-size:clamp(15px,2vw,18px);font-weight:500;color:var(--muted);line-height:1.5;max-width:520px;margin:0 auto 32px}
+.hero-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{display:inline-block;background:var(--dark);color:#fff;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;transition:all .2s;text-align:center}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(17,17,17,.25)}
+.btn-outline{display:inline-block;background:transparent;color:var(--dark);border:1.5px solid var(--border);padding:13px 32px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.btn-outline:hover{border-color:var(--dark);background:var(--bg)}
+
+/* PROOF BAR */
+.proof{padding:48px clamp(24px,5vw,60px);border-top:1px solid var(--border);background:#fff}
+.proof-inner{max-width:900px;margin:0 auto;display:flex;justify-content:center;gap:48px;flex-wrap:wrap;text-align:center}
+.proof-stat .num{font-size:32px;font-weight:900;color:var(--dark);letter-spacing:-.02em}
+.proof-stat .label{font-size:13px;color:var(--muted);margin-top:4px;font-weight:500}
+
+/* FEATURES */
+.features{padding:80px clamp(24px,5vw,60px);background:var(--bg)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto}
+.feature-card{padding:32px;border-radius:20px;transition:transform .2s}
+.feature-card:hover{transform:translateY(-2px)}
+.feature-card.dark{background:var(--dark);color:#fff}
+.feature-card.light{background:#fff;border:1px solid var(--border)}
+.feature-card.green{background:var(--green);color:var(--dark)}
+.feature-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.feature-card.dark .feature-icon{background:rgba(255,255,255,.1)}
+.feature-card.light .feature-icon{background:var(--surface)}
+.feature-card.green .feature-icon{background:rgba(0,0,0,.08)}
+.feature-card h3{font-size:18px;font-weight:800;margin-bottom:8px}
+.feature-card p{font-size:14px;opacity:.8;line-height:1.5}
+
+/* HOW IT WORKS */
+.steps{padding:80px clamp(24px,5vw,60px);background:var(--surface)}
+.steps-inner{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:24px;counter-reset:step}
+.step{display:flex;align-items:flex-start;gap:16px;background:#fff;border-radius:16px;padding:24px;border:1px solid var(--border)}
+.step-num{min-width:40px;height:40px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}
+.step h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.step p{font-size:14px;color:var(--muted);line-height:1.5}
+
+/* TESTIMONIALS */
+.testimonials{padding:80px clamp(24px,5vw,60px);background:#fff}
+.test-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:900px;margin:0 auto}
+.test-card{padding:28px;border-radius:16px;border:1px solid var(--border);background:#fff}
+.test-quote{font-size:15px;line-height:1.6;color:var(--dark);margin-bottom:16px;font-style:italic}
+.test-author{display:flex;align-items:center;gap:12px}
+.test-avatar{width:40px;height:40px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--dark)}
+.test-name{font-size:13px;font-weight:700}
+.test-role{font-size:12px;color:var(--muted)}
+
+/* CTA */
+.cta{padding:80px clamp(24px,5vw,60px);background:var(--dark);color:#fff;text-align:center}
+.cta h2{font-size:clamp(28px,4vw,40px);font-weight:900;margin-bottom:12px;letter-spacing:-.02em}
+.cta p{font-size:16px;opacity:.7;max-width:500px;margin:0 auto 32px}
+.btn-cta-hero{display:inline-block;background:var(--green);color:var(--dark);padding:16px 40px;border-radius:12px;font-size:16px;font-weight:800;border:none;cursor:pointer;transition:all .2s;text-align:center}
+.btn-cta-hero:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(137,255,92,.3)}
+
+/* FOOTER */
+.footer{padding:32px clamp(24px,5vw,60px);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;color:var(--dark)}
+.footer-brand svg{width:24px;height:24px}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:13px;color:var(--muted);transition:color .2s}
+.footer-links a:hover{color:var(--dark)}
+
+@media(max-width:900px){
+  .features-grid{grid-template-columns:1fr}
+  .test-grid{grid-template-columns:1fr}
+  .proof-inner{gap:32px}
+  .nav-links{display:none}
+}
+@media(max-width:600px){
+  .hero h1{font-size:32px}
+  .proof-inner{flex-direction:column;align-items:center;gap:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 28 28" fill="none">
+      <path d="M4 6C4 4.89543 4.89543 4 6 4H11L14 7H22C23.1046 7 24 7.89543 24 9V22C24 23.1046 23.1046 24 22 24H6C4.89543 24 4 23.1046 4 22V6Z" stroke="#111" stroke-width="2.2" fill="none"/>
+      <path d="M10 14h8M10 17.5h5" stroke="#111" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    EVALIA
+  </a>
+  <div class="nav-links">
+    <a href="#beneficios">BENEFICIOS</a>
+    <a href="#como-funciona">CÓMO FUNCIONA</a>
+    <a href="#testimonios">TESTIMONIOS</a>
+    <a href="#contacto" class="btn-cta">CONTACTAR</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="badge">Plataforma de Evaluación IA</span>
+    <h1>Crea exámenes profesionales en minutos</h1>
+    <p class="subtitle">Diseña evaluaciones personalizadas alineadas al currículo escolar. Ahorra horas de preparación con Inteligencia Artificial para profesores.</p>
+    <div class="hero-buttons">
+      <a href="#contacto" class="btn-primary">Solicitar Demo</a>
+      <a href="#como-funciona" class="btn-outline">Ver Cómo Funciona</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF BAR -->
+<section class="proof">
+  <div class="proof-inner">
+    <div class="proof-stat">
+      <div class="num">10 min</div>
+      <div class="label">Tiempo promedio de generación</div>
+    </div>
+    <div class="proof-stat">
+      <div class="num">500+</div>
+      <div class="label">Docentes usando EVALIA</div>
+    </div>
+    <div class="proof-stat">
+      <div class="num">95%</div>
+      <div class="label">Satisfacción docente</div>
+    </div>
+    <div class="proof-stat">
+      <div class="num">3 pasos</div>
+      <div class="label">De material a examen</div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="beneficios">
+  <div class="features-grid">
+    <div class="feature-card dark">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>Generación Automática</h3>
+      <p>Sube tus materiales y obtén un examen completo alineado al currículo en minutos.</p>
+    </div>
+    <div class="feature-card green">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      </div>
+      <h3>Revisión Inteligente</h3>
+      <p>Edita, aprueba o descarta preguntas antes de publicar. Control total del docente.</p>
+    </div>
+    <div class="feature-card light">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      </div>
+      <h3>Alineado al Currículo</h3>
+      <p>Exámenes diseñados específicamente para el programa académico de tu institución.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="steps" id="como-funciona">
+  <div class="steps-inner">
+    <div style="text-align:center;margin-bottom:16px">
+      <h2 style="font-size:clamp(24px,3.5vw,32px);font-weight:800;color:var(--dark);margin-bottom:8px">Cómo Funciona</h2>
+      <p style="font-size:15px;color:var(--muted)">De material a examen en 3 pasos simples</p>
+    </div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Sube tus materiales</h3>
+        <p>PDFs, apuntes, presentaciones o cualquier documento. Nuestra IA analiza el contenido automáticamente.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h3>Configura tu examen</h3>
+        <p>Selecciona tipos de pregunta, dificultad, número de ítems y nivel académico.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h3>Revisa y comparte</h3>
+        <p>Edita las preguntas generadas, aprueba el examen y comparte el enlace con tus estudiantes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonios">
+  <div style="text-align:center;margin-bottom:40px">
+    <h2 style="font-size:clamp(24px,3.5vw,32px);font-weight:800;color:var(--dark);margin-bottom:8px">Lo que dicen los docentes</h2>
+    <p style="font-size:15px;color:var(--muted)">Profesores que ya están usando EVALIA</p>
+  </div>
+  <div class="test-grid">
+    <div class="test-card">
+      <p class="test-quote">"Antes dedicaba 4 horas por examen. Ahora en 15 minutos tengo uno profesional y alineado al programa."</p>
+      <div class="test-author">
+        <div class="test-avatar">M</div>
+        <div>
+          <div class="test-name">María García</div>
+          <div class="test-role">Profesora de Matemáticas</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card">
+      <p class="test-quote">"La revisión de preguntas es intuitiva. Puedo editar cada pregunta antes de publicar, lo cual me da total confianza."</p>
+      <div class="test-author">
+        <div class="test-avatar">C</div>
+        <div>
+          <div class="test-name">Carlos Ruiz</div>
+          <div class="test-role">Director Académico</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card">
+      <p class="test-quote">"Mis estudiantes reciben evaluaciones más justas y variadas. El nivel de personalización es increíble."</p>
+      <div class="test-author">
+        <div class="test-avatar">A</div>
+        <div>
+          <div class="test-name">Ana López</div>
+          <div class="test-role">Profesora de Ciencias</div>
+        </div>
+      </div>
+    </div>
+    <div class="test-card">
+      <p class="test-quote">"Implementar EVALIA en nuestro instituto fue sencillo. El equipo de soporte nos acompañó todo el proceso."</p>
+      <div class="test-author">
+        <div class="test-avatar">R</div>
+        <div>
+          <div class="test-name">Roberto Díaz</div>
+          <div class="test-role">Rector de Instituto</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contacto">
+  <h2>Empieza a crear exámenes con IA</h2>
+  <p>Solicita una demo personalizada y descubre cómo EVALIA puede transformar la evaluación en tu institución.</p>
+  <a href="mailto:hola@evalia-ai.es" class="btn-cta-hero">Solicitar Demo</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">
+    <svg viewBox="0 0 28 28" fill="none">
+      <path d="M4 6C4 4.89543 4.89543 4 6 4H11L14 7H22C23.1046 7 24 7.89543 24 9V22C24 23.1046 23.1046 24 22 24H6C4.89543 24 4 23.1046 4 22V6Z" stroke="#111" stroke-width="2.2" fill="none"/>
+      <path d="M10 14h8M10 17.5h5" stroke="#111" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    EVALIA
+  </div>
+  <div class="footer-links">
+    <a href="#">Política de Privacidad</a>
+    <a href="#">Términos de Uso</a>
+    <a href="mailto:hola@evalia-ai.es">Contacto</a>
+  </div>
+</footer>
+
+</body>
+</html>
