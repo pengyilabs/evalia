@@ -1,4 +1,15 @@
-.file-versions/
+# OpenDesign internals
 .od-skills/
+.open-design/
 *.artifact.json
-drawing-*.png
+
+# Images & assets (keep in project, don't push)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.zip
+*.svg
+
+# OS files
+.DS_Store
