@@ -231,11 +231,16 @@ input,textarea{font-family:inherit}
 /* OUTLINE */
 .outline-section{max-width:800px;margin:0 auto}
 .outline-section h2{font-size:22px;font-weight:700;margin-bottom:20px}
-.outline-block{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;transition:all .15s}
-.outline-block:first-child{border-color:var(--green);background:#f0fdf4}
-.outline-block:hover{box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.outline-block{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:12px;transition:all .15s;cursor:text}
+.outline-block:hover{box-shadow:0 2px 8px rgba(0,0,0,.06);border-color:#d1d5db}
+.outline-block:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.12)}
+.outline-block .outline-edit-hint{opacity:0;transition:opacity .15s;pointer-events:none}
+.outline-block:hover .outline-edit-hint{opacity:1}
 .outline-num{width:36px;height:36px;border-radius:50%;background:var(--green);color:var(--dark);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
 .outline-text{flex:1}
+.outline-text input{transition:background .15s;border-radius:4px;padding:2px 6px;margin:-2px -6px}
+.outline-text input:hover{background:var(--bg)}
+.outline-text input:focus{background:#f0fdf4;outline:none}
 .outline-text h4{font-size:15px;font-weight:700;margin-bottom:2px}
 .outline-text p{font-size:13px;color:var(--muted)}
 .outline-drag{color:var(--muted);cursor:grab;padding:4px}
@@ -697,7 +702,8 @@ input,textarea{font-family:inherit}
               <input type="text" value="Fundamentos de la célula" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
               <input type="text" value="Partes de la célula y funciones principales" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
             </div>
-            <div style="display:flex;gap:2px;flex-shrink:0">
+            <div style="display:flex;gap:2px;flex-shrink:0;align-items:center">
+              <span class="outline-edit-hint" style="margin-right:4px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
               <button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button>
               <button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button>
               <button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -709,7 +715,8 @@ input,textarea{font-family:inherit}
               <input type="text" value="Membrana y transporte" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
               <input type="text" value="Difusión, ósmosis y transporte activo" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
             </div>
-            <div style="display:flex;gap:2px;flex-shrink:0">
+            <div style="display:flex;gap:2px;flex-shrink:0;align-items:center">
+              <span class="outline-edit-hint" style="margin-right:4px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
               <button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button>
               <button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button>
               <button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -721,7 +728,8 @@ input,textarea{font-family:inherit}
               <input type="text" value="Metabolismo celular" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
               <input type="text" value="Respiración celular y obtención de energía" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
             </div>
-            <div style="display:flex;gap:2px;flex-shrink:0">
+            <div style="display:flex;gap:2px;flex-shrink:0;align-items:center">
+              <span class="outline-edit-hint" style="margin-right:4px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
               <button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button>
               <button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button>
               <button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -733,7 +741,8 @@ input,textarea{font-family:inherit}
               <input type="text" value="División celular" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
               <input type="text" value="Mitosis, meiosis y ciclo celular" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
             </div>
-            <div style="display:flex;gap:2px;flex-shrink:0">
+            <div style="display:flex;gap:2px;flex-shrink:0;align-items:center">
+              <span class="outline-edit-hint" style="margin-right:4px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
               <button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button>
               <button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button>
               <button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -1243,7 +1252,7 @@ function addOutlineBlock() {
   const block = document.createElement('div');
   block.className = 'outline-block';
   block.draggable = true;
-  block.innerHTML = '<div class="outline-num">'+count+'</div><div class="outline-text"><input type="text" value="Nuevo bloque" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px"><input type="text" value="Descripción del bloque" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0"></div><div style="display:flex;gap:2px;flex-shrink:0"><button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button><button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button><button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>';
+  block.innerHTML = '<div class="outline-num">'+count+'</div><div class="outline-text"><input type="text" value="Nuevo bloque" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px"><input type="text" value="Descripción del bloque" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0"></div><div style="display:flex;gap:2px;flex-shrink:0;align-items:center"><span class="outline-edit-hint" style="margin-right:4px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span><button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button><button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button><button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>';
   container.appendChild(block);
   renumberBlocks();
   block.querySelector('input').focus();
