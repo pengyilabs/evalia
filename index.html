@@ -386,40 +386,9 @@ input,textarea{font-family:inherit}
 <div class="page" id="page-materials">
   <div class="page-header">
     <h1>Materiales</h1>
+    <button class="btn-create" onclick="document.getElementById('uploadModal').style.display='flex'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Subir material</button>
   </div>
   <p class="page-subtitle">Administra los documentos que Evalia usa para generar evaluaciones personalizadas.</p>
-
-  <div class="materials-upload-zone" id="uploadZone" onclick="document.getElementById('fileUpload').click()">
-    <div class="upload-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-    </div>
-    <div class="upload-title">Arrastra archivos aquí</div>
-    <div class="upload-sub">o haz clic para seleccionar desde tu computadora</div>
-    <button class="upload-btn" onclick="event.stopPropagation();document.getElementById('fileUpload').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Seleccionar archivos</button>
-    <div class="upload-formats">
-      <span class="format-badge pdf">PDF</span>
-      <span class="format-badge docx">DOCX</span>
-      <span class="format-badge pptx">PPTX</span>
-      <span class="format-badge csv">CSV</span>
-      <span class="format-badge txt">TXT</span>
-    </div>
-    <input type="file" id="fileUpload" multiple accept=".pdf,.docx,.pptx,.txt,.csv,.xlsx" style="display:none" onchange="handleFileUpload(this)">
-  </div>
-
-  <div class="materials-stats">
-    <div class="stat-card">
-      <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div>
-      <div><div class="stat-number">12</div><div class="stat-label">Archivos subidos</div></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg></div>
-      <div><div class="stat-number">3</div><div class="stat-label">En uso activo</div></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg></div>
-      <div><div class="stat-number">24</div><div class="stat-label">Evaluaciones generadas</div></div>
-    </div>
-  </div>
 
   <div class="materials-toolbar">
     <div class="materials-search">
@@ -499,6 +468,28 @@ input,textarea{font-family:inherit}
         <button class="material-btn" title="Descargar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
         <button class="material-btn danger" title="Eliminar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD MODAL -->
+<div id="uploadModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--surface);border-radius:var(--radius);padding:32px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);position:relative">
+    <button onclick="document.getElementById('uploadModal').style.display='none'" style="position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;background:none;border:none;cursor:pointer;font-size:18px" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'">&times;</button>
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">Subir material</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:24px">Arrastra archivos aquí o selecciona desde tu computadora.</p>
+    <div id="modalDropZone" style="border:2px dashed var(--border);border-radius:var(--radius);padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s" onclick="document.getElementById('modalFileInput').click()" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2" stroke-linecap="round" width="40" height="40" style="margin-bottom:12px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <div style="font-size:14px;font-weight:600;margin-bottom:4px">Arrastra archivos aquí</div>
+      <div style="font-size:12px;color:var(--muted)">o haz clic para seleccionar</div>
+    </div>
+    <input type="file" id="modalFileInput" multiple accept=".pdf,.docx,.pptx,.txt,.csv,.xlsx" style="display:none" onchange="handleModalUpload(this)">
+    <div style="display:flex;gap:6px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+      <span class="format-badge pdf">PDF</span>
+      <span class="format-badge docx">DOCX</span>
+      <span class="format-badge pptx">PPTX</span>
+      <span class="format-badge csv">CSV</span>
+      <span class="format-badge txt">TXT</span>
     </div>
   </div>
 </div>
@@ -922,23 +913,33 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 function handleFileUpload(input) {
-  const files = input.files;
+  var files = input.files;
   if (files.length > 0) {
-    alert(files.length + ' archivo(s) seleccionado(s): ' + Array.from(files).map(f => f.name).join(', '));
+    alert(files.length + ' archivo(s) seleccionado(s): ' + Array.from(files).map(function(f){ return f.name; }).join(', '));
   }
   input.value = '';
 }
 
-// Drag & drop for materials upload zone
+function handleModalUpload(input) {
+  var files = input.files;
+  if (files.length > 0) {
+    alert(files.length + ' archivo(s) subido(s): ' + Array.from(files).map(function(f){ return f.name; }).join(', '));
+    document.getElementById('uploadModal').style.display = 'none';
+  }
+  input.value = '';
+}
+
+// Drag & drop for modal
 (function() {
-  const zone = document.getElementById('uploadZone');
+  var zone = document.getElementById('modalDropZone');
   if (!zone) return;
-  ['dragenter','dragover'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.add('dragover'); }));
-  ['dragleave','drop'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.remove('dragover'); }));
-  zone.addEventListener('drop', ev => {
-    const files = ev.dataTransfer.files;
+  ['dragenter','dragover'].forEach(function(e) { zone.addEventListener(e, function(ev) { ev.preventDefault(); zone.style.borderColor = 'var(--green)'; zone.style.background = 'rgba(92,230,63,.03)'; }); });
+  ['dragleave','drop'].forEach(function(e) { zone.addEventListener(e, function(ev) { ev.preventDefault(); zone.style.borderColor = 'var(--border)'; zone.style.background = ''; }); });
+  zone.addEventListener('drop', function(ev) {
+    var files = ev.dataTransfer.files;
     if (files.length > 0) {
-      alert(files.length + ' archivo(s) arrastrado(s): ' + Array.from(files).map(f => f.name).join(', '));
+      alert(files.length + ' archivo(s) arrastrado(s): ' + Array.from(files).map(function(f){ return f.name; }).join(', '));
+      document.getElementById('uploadModal').style.display = 'none';
     }
   });
 })();
