@@ -867,8 +867,8 @@ input,textarea{font-family:inherit}
 </div><!-- .app -->
 
 <script>
-var pages = ['dashboard','materials','create','wizard','editor'];
-var titles = {dashboard:'Mis evaluaciones',materials:'Materiales',create:'Crear evaluación',wizard:'Generar con IA',editor:'Biología · La célula'};
+const pages = ['dashboard','materials','create','wizard','editor'];
+const titles = {dashboard:'Mis evaluaciones',materials:'Materiales',create:'Crear evaluación',wizard:'Generar con IA',editor:'Biología · La célula'};
 
 function showPage(page) {
   if (!pages.includes(page)) return;
@@ -969,21 +969,28 @@ function filterMaterials() {
 }
 
 function addMaterialChip(btn, fileName, ext) {
-  const container = document.getElementById('selectedMaterials');
-  const colors = {PDF:'#dc2626',PPT:'#d97706',DOC:'#2563eb',CSV:'#059669',TXT:'#6b7280'};
-  const color = colors[ext] || '#6b7280';
+  var container = document.getElementById('selectedMaterials');
+  if (!container) return;
+  var colors = {PDF:'#dc2626',PPT:'#d97706',DOC:'#2563eb',CSV:'#059669',TXT:'#6b7280'};
+  var color = colors[ext] || '#6b7280';
   if (btn.classList.contains('active')) {
     btn.classList.remove('active');
-    const tag = container.querySelector(`[data-file="${fileName}"]`);
+    var tag = container.querySelector('[data-file="' + fileName + '"]');
     if (tag) tag.remove();
   } else {
     btn.classList.add('active');
-    const tag = document.createElement('div');
+    var tag = document.createElement('div');
     tag.className = 'material-tag';
     tag.dataset.file = fileName;
     tag.style.background = color + '15';
     tag.style.color = color;
-    tag.innerHTML = '<span style="font-size:8px;font-weight:800">'+ext+'</span> ' + fileName.split(' - ')[0].split('.')[0] + ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" onclick="event.stopPropagation();this.parentElement.remove();document.querySelector(\\'.material-chip-btn[onclick*=\\''+fileName.replace(/'/g,"\\'")+'\\']\\')?.classList.remove(\\'active\\')"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    var shortName = fileName.split(' - ')[0].split('.')[0];
+    tag.innerHTML = '<span style="font-size:8px;font-weight:800">' + ext + '</span> ' + shortName + ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    tag.querySelector('svg').addEventListener('click', function(e) {
+      e.stopPropagation();
+      tag.remove();
+      btn.classList.remove('active');
+    });
     container.appendChild(tag);
   }
 }
