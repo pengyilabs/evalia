@@ -879,8 +879,9 @@ function showPage(page) {
     document.querySelectorAll('.sidebar-nav a').forEach((a,i) => {
       a.classList.toggle('active', (i===0 && page==='dashboard') || (i===1 && page==='materials'));
     });
-    const hideChrome = true;
+    const hideChrome = ['create','wizard','editor'].includes(page);
     if (topbar) topbar.style.display = 'none';
+    if (sidebar) sidebar.style.display = hideChrome ? 'none' : 'flex';
     if (sidebar) sidebar.style.display = hideChrome ? 'none' : 'flex';
     if (main) main.style.marginLeft = hideChrome ? '0' : 'var(--sidebar-w)';
     if (page === 'wizard') {
