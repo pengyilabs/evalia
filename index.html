@@ -198,11 +198,23 @@ input,textarea{font-family:inherit}
 .chat-input-wrap{position:relative;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);transition:border-color .15s,box-shadow .15s;overflow:hidden}
 .chat-input-wrap:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.15)}
 .chat-input-wrap.drag-over{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.2)}
-.attach-dropdown{position:absolute;bottom:calc(100% + 8px);left:0;min-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:100;padding:6px 0}
-.attach-dropdown-item{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);font-family:var(--font);text-align:left;transition:background .1s}
-.attach-dropdown-item:hover{background:var(--bg)}
-.attach-dropdown-divider{height:1px;background:var(--border);margin:4px 0}
-.attach-dropdown-label{padding:8px 14px 4px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.attach-dropdown{position:absolute;bottom:calc(100% + 8px);left:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:100;overflow:hidden}
+.attach-tabs{display:flex;border-bottom:1px solid var(--border)}
+.attach-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 0;border:none;background:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);font-family:var(--font);transition:all .15s;border-bottom:2px solid transparent}
+.attach-tab:hover{color:var(--text);background:var(--bg)}
+.attach-tab.active{color:var(--green-dark);border-bottom-color:var(--green)}
+.attach-tab-content{padding:0}
+.attach-upload-btn{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border:none;background:none;cursor:pointer;font-family:var(--font);text-align:left;transition:background .1s}
+.attach-upload-btn:hover{background:var(--bg)}
+.attach-drop-small{display:flex;align-items:center;justify-content:center;gap:8px;border:1.5px dashed var(--border);border-radius:var(--radius-sm);padding:12px;cursor:pointer;transition:all .15s}
+.attach-drop-small:hover{border-color:var(--green);background:#f0fdf4}
+.attach-search-wrap{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg)}
+.attach-search-wrap:focus-within{border-color:var(--green);background:var(--surface)}
+.attach-filters{display:flex;gap:6px;padding:4px 12px 8px;flex-wrap:wrap}
+.attach-filter-pill{padding:4px 10px;border-radius:var(--radius-pill);border:1px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;transition:all .1s;background:var(--surface);color:var(--muted);font-family:var(--font)}
+.attach-filter-pill:hover{border-color:var(--green);color:var(--text)}
+.attach-filter-pill.active{background:var(--green);color:var(--dark);border-color:var(--green)}
+.attach-materials-scroll{max-height:240px;overflow-y:auto;padding:0 4px 4px}
 .attach-material-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px 14px;border:none;background:none;cursor:pointer;font-family:var(--font);text-align:left;transition:background .1s;border-radius:0}
 .attach-material-item:hover{background:var(--bg)}
 .attach-material-ext{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0}
@@ -590,13 +602,45 @@ input,textarea{font-family:inherit}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
               </button>
               <div id="attachDropdown" class="attach-dropdown" style="display:none">
-                <button class="attach-dropdown-item" onclick="document.getElementById('wizardFileUpload').click();closeAttachMenu()">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                  Subir archivo
-                </button>
-                <div class="attach-dropdown-divider"></div>
-                <div class="attach-dropdown-label">Mis Materiales</div>
-                <div id="materialesList"></div>
+                <div class="attach-tabs">
+                  <button class="attach-tab active" onclick="switchAttachTab('upload',this)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Subir archivo
+                  </button>
+                  <button class="attach-tab" onclick="switchAttachTab('materiales',this)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+                    Mis Materiales
+                  </button>
+                </div>
+                <div id="attachTabUpload" class="attach-tab-content">
+                  <button class="attach-upload-btn" onclick="document.getElementById('wizardFileUpload').click();closeAttachMenu()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <div style="text-align:left"><div style="font-size:13px;font-weight:600">Subir desde tu computadora</div><div style="font-size:11px;color:var(--muted)">PDF, Word, PowerPoint, CSV — máx. 25 MB</div></div>
+                  </button>
+                  <div style="padding:10px 14px;border-top:1px solid var(--border)">
+                    <div class="attach-drop-small" onclick="document.getElementById('wizardFileUpload').click()" ondragover="event.preventDefault();this.style.borderColor='var(--green)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="event.preventDefault();handleWizardFiles(event.dataTransfer.files);closeAttachMenu()">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+                      <span style="font-size:12px;color:var(--muted)">o arrastra aquí</span>
+                    </div>
+                  </div>
+                </div>
+                <div id="attachTabMateriales" class="attach-tab-content" style="display:none">
+                  <div style="padding:8px 12px">
+                    <div class="attach-search-wrap">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                      <input type="text" id="attachSearchInput" placeholder="Buscar material..." oninput="filterMateriales(this.value)" style="border:none;outline:none;font-size:13px;font-family:var(--font);width:100%;background:transparent">
+                    </div>
+                  </div>
+                  <div class="attach-filters">
+                    <button class="attach-filter-pill active" onclick="filterByType('all',this)">Todos</button>
+                    <button class="attach-filter-pill" onclick="filterByType('PDF',this)">PDF</button>
+                    <button class="attach-filter-pill" onclick="filterByType('DOC',this)">DOC</button>
+                    <button class="attach-filter-pill" onclick="filterByType('PPT',this)">PPT</button>
+                    <button class="attach-filter-pill" onclick="filterByType('CSV',this)">CSV</button>
+                  </div>
+                  <div id="materialesList" class="attach-materials-scroll"></div>
+                  <div id="attachEmptyState" style="display:none;padding:20px;text-align:center;color:var(--muted);font-size:13px">No se encontraron materiales</div>
+                </div>
               </div>
             </div>
             <input type="file" id="wizardFileUpload" multiple accept=".pdf,.docx,.pptx,.txt,.csv,.xlsx" style="display:none" onchange="handleWizardFiles(this.files)">
@@ -1063,11 +1107,27 @@ const userMateriales = [
   { name: 'Formulaario Quimica.pdf', ext: 'PDF', size: '420 KB', color: '#dc2626' },
 ];
 
-function renderMaterialesList() {
+let currentAttachFilter = 'all';
+let currentAttachSearch = '';
+
+function renderMaterialesList(filter, search) {
   const list = document.getElementById('materialesList');
+  const empty = document.getElementById('attachEmptyState');
   if (!list) return;
   list.innerHTML = '';
-  userMateriales.forEach(function(m) {
+  const f = filter || currentAttachFilter;
+  const s = (search || currentAttachSearch).toLowerCase();
+  const filtered = userMateriales.filter(function(m) {
+    const matchType = f === 'all' || m.ext === f;
+    const matchSearch = !s || m.name.toLowerCase().indexOf(s) !== -1;
+    return matchType && matchSearch;
+  });
+  if (filtered.length === 0) {
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+  filtered.forEach(function(m) {
     const btn = document.createElement('button');
     btn.className = 'attach-material-item';
     btn.innerHTML = '<div class="attach-material-ext" style="background:'+m.color+'12;color:'+m.color+'">'+m.ext+'</div><div class="attach-material-name">'+m.name+'</div><div class="attach-material-size">'+m.size+'</div>';
@@ -1077,6 +1137,30 @@ function renderMaterialesList() {
     });
     list.appendChild(btn);
   });
+}
+
+function switchAttachTab(tab, el) {
+  document.querySelectorAll('.attach-tab').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+  document.getElementById('attachTabUpload').style.display = tab === 'upload' ? 'block' : 'none';
+  document.getElementById('attachTabMateriales').style.display = tab === 'materiales' ? 'block' : 'none';
+  if (tab === 'materiales') {
+    renderMaterialesList();
+    document.getElementById('attachSearchInput').value = '';
+    currentAttachSearch = '';
+  }
+}
+
+function filterMateriales(query) {
+  currentAttachSearch = query;
+  renderMaterialesList();
+}
+
+function filterByType(type, el) {
+  document.querySelectorAll('.attach-filter-pill').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+  currentAttachFilter = type;
+  renderMaterialesList();
 }
 
 function addMaterialFromPlatform(m) {
@@ -1096,7 +1180,12 @@ function toggleAttachMenu() {
   const dd = document.getElementById('attachDropdown');
   if (dd.style.display === 'none') {
     dd.style.display = 'block';
-    renderMaterialesList();
+    currentAttachFilter = 'all';
+    currentAttachSearch = '';
+    document.querySelectorAll('.attach-tab').forEach(function(t,i) { t.classList.toggle('active', i===0); });
+    document.getElementById('attachTabUpload').style.display = 'block';
+    document.getElementById('attachTabMateriales').style.display = 'none';
+    document.querySelectorAll('.attach-filter-pill').forEach(function(p,i) { p.classList.toggle('active', i===0); });
   } else {
     dd.style.display = 'none';
   }
