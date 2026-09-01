@@ -872,7 +872,8 @@ const titles = {dashboard:'Mis evaluaciones',materials:'Materiales',create:'Crea
 
 function showPage(page) {
   pages.forEach(p => {
-    document.getElementById('page-'+p).classList.toggle('active', p===page);
+    const el = document.getElementById('page-'+p);
+    if (el) el.classList.toggle('active', p===page);
   });
   document.getElementById('topbarTitle').textContent = titles[page] || '';
   document.querySelectorAll('.sidebar-nav a').forEach((a,i) => {
