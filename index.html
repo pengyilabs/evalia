@@ -198,6 +198,16 @@ input,textarea{font-family:inherit}
 .chat-input-wrap{position:relative;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);transition:border-color .15s,box-shadow .15s;overflow:hidden}
 .chat-input-wrap:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.15)}
 .chat-input-wrap.drag-over{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.2)}
+.attach-dropdown{position:absolute;bottom:calc(100% + 8px);left:0;min-width:240px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:100;padding:6px 0}
+.attach-dropdown-item{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--text);font-family:var(--font);text-align:left;transition:background .1s}
+.attach-dropdown-item:hover{background:var(--bg)}
+.attach-dropdown-divider{height:1px;background:var(--border);margin:4px 0}
+.attach-dropdown-label{padding:8px 14px 4px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.attach-material-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px 14px;border:none;background:none;cursor:pointer;font-family:var(--font);text-align:left;transition:background .1s;border-radius:0}
+.attach-material-item:hover{background:var(--bg)}
+.attach-material-ext{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0}
+.attach-material-name{font-size:13px;font-weight:500;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.attach-material-size{font-size:11px;color:var(--muted);flex-shrink:0}
 .material-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--radius-pill);font-size:11px;font-weight:600;animation:chipIn .2s ease;cursor:pointer;transition:opacity .15s}
 .material-tag:hover{opacity:.7}
 @keyframes chipIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
@@ -575,9 +585,20 @@ input,textarea{font-family:inherit}
           <div id="selectedMaterials" style="display:flex;gap:6px;flex-wrap:wrap;padding:0 16px;min-height:0"></div>
           <textarea id="ideaInput" placeholder="Describe tu evaluación..." rows="3" style="width:100%;min-height:60px;padding:14px 16px;border:none;border-radius:var(--radius) var(--radius) 0 0;font-size:14px;line-height:1.6;resize:none;font-family:var(--font);background:transparent;outline:none"></textarea>
           <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:1px solid var(--border)">
-            <button onclick="document.getElementById('wizardFileUpload').click()" style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;background:none;border:none;cursor:pointer;flex-shrink:0" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'" title="Adjuntar archivo">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
-            </button>
+            <div style="position:relative" id="attachMenuWrap">
+              <button id="attachBtn" style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;background:none;border:none;cursor:pointer;flex-shrink:0" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='none'" title="Adjuntar archivo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+              </button>
+              <div id="attachDropdown" class="attach-dropdown" style="display:none">
+                <button class="attach-dropdown-item" onclick="document.getElementById('wizardFileUpload').click();closeAttachMenu()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  Subir archivo
+                </button>
+                <div class="attach-dropdown-divider"></div>
+                <div class="attach-dropdown-label">Mis Materiales</div>
+                <div id="materialesList"></div>
+              </div>
+            </div>
             <input type="file" id="wizardFileUpload" multiple accept=".pdf,.docx,.pptx,.txt,.csv,.xlsx" style="display:none" onchange="handleWizardFiles(this.files)">
             <div style="flex:1"></div>
             <button class="btn-generate" onclick="startProcessing()" style="padding:10px 20px;font-size:13px"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Generar</button>
@@ -1030,6 +1051,72 @@ function handleWizardFiles(files) {
     container.appendChild(chip);
   });
 }
+
+const userMateriales = [
+  { name: 'Biologia Celular - Cap 3.pdf', ext: 'PDF', size: '2.4 MB', color: '#dc2626' },
+  { name: 'Clases de Anatomia.pptx', ext: 'PPT', size: '5.1 MB', color: '#d97706' },
+  { name: 'Guia de Estudio.docx', ext: 'DOC', size: '890 KB', color: '#2563eb' },
+  { name: 'Preguntas Banco.csv', ext: 'CSV', size: '124 KB', color: '#059669' },
+  { name: 'Syllabus Semester 1.pdf', ext: 'PDF', size: '1.8 MB', color: '#dc2626' },
+  { name: 'Examenes Anteriores.docx', ext: 'DOC', size: '3.2 MB', color: '#2563eb' },
+  { name: 'Notas de Clase Sem 5.pptx', ext: 'PPT', size: '7.6 MB', color: '#d97706' },
+  { name: 'Formulaario Quimica.pdf', ext: 'PDF', size: '420 KB', color: '#dc2626' },
+];
+
+function renderMaterialesList() {
+  const list = document.getElementById('materialesList');
+  if (!list) return;
+  list.innerHTML = '';
+  userMateriales.forEach(function(m) {
+    const btn = document.createElement('button');
+    btn.className = 'attach-material-item';
+    btn.innerHTML = '<div class="attach-material-ext" style="background:'+m.color+'12;color:'+m.color+'">'+m.ext+'</div><div class="attach-material-name">'+m.name+'</div><div class="attach-material-size">'+m.size+'</div>';
+    btn.addEventListener('click', function() {
+      addMaterialFromPlatform(m);
+      closeAttachMenu();
+    });
+    list.appendChild(btn);
+  });
+}
+
+function addMaterialFromPlatform(m) {
+  const container = document.getElementById('selectedMaterials');
+  const chip = document.createElement('div');
+  chip.className = 'material-chip-btn active';
+  chip.innerHTML = '<span style="width:20px;height:20px;border-radius:4px;background:'+m.color+'15;color:'+m.color+';display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;flex-shrink:0">'+m.ext+'</span><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px">'+m.name+'</span><span style="font-size:10px;color:var(--muted)">'+m.size+'</span>';
+  const removeBtn = document.createElement('button');
+  removeBtn.style.cssText = 'border:none;background:none;cursor:pointer;display:flex;align-items:center;color:var(--muted);padding:0;margin-left:2px';
+  removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  removeBtn.addEventListener('click', function() { chip.remove(); });
+  chip.appendChild(removeBtn);
+  container.appendChild(chip);
+}
+
+function toggleAttachMenu() {
+  const dd = document.getElementById('attachDropdown');
+  if (dd.style.display === 'none') {
+    dd.style.display = 'block';
+    renderMaterialesList();
+  } else {
+    dd.style.display = 'none';
+  }
+}
+
+function closeAttachMenu() {
+  const dd = document.getElementById('attachDropdown');
+  if (dd) dd.style.display = 'none';
+}
+
+document.getElementById('attachBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  toggleAttachMenu();
+});
+
+document.addEventListener('click', function(e) {
+  if (!document.getElementById('attachMenuWrap').contains(e.target)) {
+    closeAttachMenu();
+  }
+});
 
 const chatInputWrap = document.getElementById('chatInputWrap');
 const chatDropOverlay = document.getElementById('chatDropOverlay');
