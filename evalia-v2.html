@@ -191,23 +191,25 @@ input,textarea{font-family:inherit}
 .editor-icon-btn:hover{background:rgba(255,255,255,.1)}
 .editor-icon-btn svg{width:20px;height:20px}
 .editor-body{display:flex;flex:1;overflow:hidden}
-.editor-sidebar{width:200px;border-right:1px solid rgba(255,255,255,.1);padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
-.add-question{display:flex;align-items:center;gap:6px;padding:10px 14px;border:1px dashed rgba(255,255,255,.2);border-radius:var(--radius-sm);font-size:13px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s}
+.editor-sidebar{width:180px;border-right:1px solid rgba(255,255,255,.1);padding:12px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex-shrink:0}
+.add-question{padding:8px;border-radius:var(--radius-sm);font-size:12px;color:rgba(255,255,255,.5);text-align:center;cursor:pointer;border:1.5px dashed rgba(255,255,255,.2);transition:all .15s}
 .add-question:hover{border-color:rgba(255,255,255,.4);color:#fff}
-.q-thumb{border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .15s}
+.q-thumb{border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .2s}
 .q-thumb.active{border-color:var(--green)}
-.q-thumb:hover{border-color:rgba(255,255,255,.3)}
-.q-thumb-inner{height:80px;display:flex;align-items:center;justify-content:center}
-.q-thumb-inner.green{background:linear-gradient(135deg,#d4fce0,#E3FFE0)}
-.q-thumb-inner.dark{background:#1a1a1a}
-.q-thumb-inner.gray{background:#2a2a2a}
-.q-thumb-label{padding:6px 10px;font-size:11px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.05)}
+.q-thumb:hover:not(.active){border-color:rgba(255,255,255,.3)}
+.q-thumb-inner{height:60px;display:flex;align-items:center;justify-content:center}
+.q-thumb-inner svg{width:28px;height:28px;opacity:.5}
+.q-thumb.active .q-thumb-inner svg{opacity:1}
+.q-thumb-label{font-size:11px;padding:4px 8px;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:rgba(255,255,255,.03)}
+.q-thumb.active .q-thumb-label{color:var(--green);background:rgba(92,230,63,.08)}
 .editor-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.editor-canvas{flex:1;display:flex;align-items:center;justify-content:center;padding:32px}
-.question-card{background:linear-gradient(135deg,#1a1a1a,#111);border:2px solid var(--green);border-radius:var(--radius);max-width:700px;width:100%;display:flex;overflow:hidden}
+.editor-canvas{flex:1;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.editor-canvas::-webkit-scrollbar{display:none}
+.question-slide{min-height:100%;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;padding:32px}
+.question-card{background:linear-gradient(135deg,#1a1a1a,#111);border:2px solid rgba(255,255,255,.15);border-radius:var(--radius);max-width:700px;width:100%;display:flex;overflow:hidden;transition:border-color .3s}
+.question-slide.active .question-card{border-color:var(--green)}
 .question-left{flex:1;padding:32px}
-.question-badge{display:inline-block;padding:4px 12px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;letter-spacing:.05em;margin-bottom:16px;color:var(--green)}
-.question-badge{background:rgba(92,230,63,.15)}
+.question-badge{display:inline-block;padding:4px 12px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;letter-spacing:.05em;margin-bottom:16px;color:var(--green);background:rgba(92,230,63,.15)}
 .question-text{font-size:22px;font-weight:700;line-height:1.3;margin-bottom:24px}
 .question-options{display:flex;flex-direction:column;gap:10px}
 .option{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);font-size:14px;cursor:pointer;transition:all .15s}
@@ -217,7 +219,7 @@ input,textarea{font-family:inherit}
 .option.correct .option-letter{border-color:var(--green);background:var(--green);color:var(--dark)}
 .question-right{width:280px;background:linear-gradient(135deg,#E3FFE0,#d4fce0);display:flex;align-items:center;justify-content:center;padding:24px}
 .question-img{width:100%;max-width:200px;border-radius:50%;background:#fff;padding:8px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
-.editor-toolbar{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;background:rgba(26,26,26,.9);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:8px}
+.editor-toolbar{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:4px;background:rgba(26,26,26,.9);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:8px;z-index:10}
 .toolbar-btn{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);transition:all .15s}
 .toolbar-btn:hover{background:rgba(255,255,255,.1);color:#fff}
 .toolbar-btn.active{color:var(--green)}
@@ -655,38 +657,115 @@ input,textarea{font-family:inherit}
     <div class="editor-body">
       <div class="editor-sidebar">
         <div class="add-question">+ Nueva pregunta</div>
-        <div class="q-thumb active" onclick="selectQuestion(this, 0)">
-          <div class="q-thumb-inner green"></div>
+        <div class="q-thumb active" data-slide="0" onclick="scrollToSlide(0)">
+          <div class="q-thumb-inner" style="background:linear-gradient(135deg,#d4fce0,#E3FFE0)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>
+          </div>
           <div class="q-thumb-label">1 · Portada</div>
         </div>
-        <div class="q-thumb" onclick="selectQuestion(this, 1)">
-          <div class="q-thumb-inner dark"></div>
+        <div class="q-thumb" data-slide="1" onclick="scrollToSlide(1)">
+          <div class="q-thumb-inner" style="background:#1a1a1a">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </div>
           <div class="q-thumb-label">2 · Opción múltiple</div>
         </div>
-        <div class="q-thumb" onclick="selectQuestion(this, 2)">
-          <div class="q-thumb-inner gray"></div>
+        <div class="q-thumb" data-slide="2" onclick="scrollToSlide(2)">
+          <div class="q-thumb-inner" style="background:#2a2a2a">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
           <div class="q-thumb-label">3 · Respuesta corta</div>
         </div>
-        <div class="q-thumb" onclick="selectQuestion(this, 3)">
-          <div class="q-thumb-inner gray"></div>
+        <div class="q-thumb" data-slide="3" onclick="scrollToSlide(3)">
+          <div class="q-thumb-inner" style="background:#2a2a2a">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+          </div>
           <div class="q-thumb-label">4 · Verdadero / falso</div>
+        </div>
+        <div class="q-thumb" data-slide="4" onclick="scrollToSlide(4)">
+          <div class="q-thumb-inner" style="background:#1a1a1a">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </div>
+          <div class="q-thumb-label">5 · Opción múltiple</div>
         </div>
       </div>
       <div class="editor-main">
-        <div class="editor-canvas">
-          <div class="question-card" id="questionCard">
-            <div class="question-left">
-              <div class="question-badge">PREGUNTA 2 · OPCIÓN MÚLTIPLE</div>
-              <div class="question-text" id="questionText">¿Qué estructura controla el intercambio de sustancias con el exterior?</div>
-              <div class="question-options">
-                <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter">A</span>Núcleo</div>
-                <div class="option correct" onclick="selectOptionAnswer(this)"><span class="option-letter">B</span>Membrana plasmática</div>
-                <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter">C</span>Mitocondria</div>
+        <div class="editor-canvas" id="editorCanvas">
+          <div class="question-slide active" data-q="0">
+            <div class="question-card" style="flex-direction:column;text-align:center;padding:48px;max-width:500px">
+              <div style="font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--green);margin-bottom:12px">BIOLOGÍA · LA CÉLULA</div>
+              <div style="font-size:28px;font-weight:800;line-height:1.2;margin-bottom:12px">Evaluación: La célula y sus estructuras</div>
+              <div style="font-size:14px;color:rgba(255,255,255,.5);margin-bottom:24px">5 preguntas · 3º Secundaria</div>
+              <div style="width:60px;height:3px;background:var(--green);border-radius:2px;margin:0 auto"></div>
+            </div>
+          </div>
+          <div class="question-slide" data-q="1">
+            <div class="question-card">
+              <div class="question-left">
+                <div class="question-badge">PREGUNTA 1 · OPCIÓN MÚLTIPLE</div>
+                <div class="question-text">¿Qué estructura controla el intercambio de sustancias con el exterior?</div>
+                <div class="question-options">
+                  <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter">A</span>Núcleo</div>
+                  <div class="option correct" onclick="selectOptionAnswer(this)"><span class="option-letter">B</span>Membrana plasmática</div>
+                  <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter">C</span>Mitocondria</div>
+                </div>
+              </div>
+              <div class="question-right">
+                <div class="question-img">
+                  <svg viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="90" stroke="#111" stroke-width="1.5"/><ellipse cx="100" cy="100" rx="90" ry="60" stroke="#111" stroke-width="1" stroke-dasharray="4 2"/><circle cx="100" cy="100" r="30" stroke="#111" stroke-width="1.5"/><circle cx="100" cy="100" r="8" fill="#111" opacity=".3"/><text x="100" y="40" text-anchor="middle" font-size="8" fill="#555">Célula</text><text x="100" y="155" text-anchor="middle" font-size="7" fill="#555">Membrana</text></svg>
+                </div>
               </div>
             </div>
-            <div class="question-right">
-              <div class="question-img">
-                <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="90" stroke="#94a3b8" stroke-width="1.5"/><ellipse cx="100" cy="100" rx="90" ry="60" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 2"/><circle cx="100" cy="100" r="30" stroke="#94a3b8" stroke-width="1.5"/><circle cx="100" cy="100" r="8" fill="#94a3b8" opacity=".3"/><text x="100" y="40" text-anchor="middle" font-size="8" fill="#64748b">Célula</text><text x="100" y="155" text-anchor="middle" font-size="7" fill="#64748b">Membrana</text></svg>
+          </div>
+          <div class="question-slide" data-q="2">
+            <div class="question-card">
+              <div class="question-left">
+                <div class="question-badge">PREGUNTA 2 · RESPUESTA CORTA</div>
+                <div class="question-text">Describe las funciones principales de la mitocondria en la célula animal.</div>
+                <div style="margin-top:20px;padding:16px;border:1.5px dashed rgba(255,255,255,.2);border-radius:var(--radius-sm);min-height:120px;color:rgba(255,255,255,.3);font-size:14px">Escribe tu respuesta aquí...</div>
+              </div>
+              <div class="question-right">
+                <div class="question-img">
+                  <svg viewBox="0 0 200 200" fill="none"><ellipse cx="100" cy="100" rx="80" ry="50" stroke="#111" stroke-width="2"/><path d="M40 100 Q70 60 100 100 Q130 140 160 100" stroke="#111" stroke-width="1.5" fill="none"/><text x="100" y="170" text-anchor="middle" font-size="8" fill="#555">Mitocondria</text></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="question-slide" data-q="3">
+            <div class="question-card">
+              <div class="question-left">
+                <div class="question-badge">PREGUNTA 3 · VERDADERO / FALSO</div>
+                <div class="question-text">El ADN se encuentra exclusivamente en el núcleo de la célula.</div>
+                <div class="question-options">
+                  <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter" style="background:var(--green);color:var(--dark);border-color:var(--green)">✓</span>Verdadero</div>
+                  <div class="option correct" onclick="selectOptionAnswer(this)"><span class="option-letter" style="background:#dc2626;color:#fff;border-color:#dc2626">✗</span>Falso</div>
+                </div>
+                <div style="margin-top:16px;padding:12px 16px;background:rgba(92,230,63,.08);border-radius:var(--radius-sm);font-size:13px;color:rgba(255,255,255,.6)">
+                  <strong style="color:var(--green)">Explicación:</strong> También se encuentra en mitocondrias (ADNmt) y cloroplastos.
+                </div>
+              </div>
+              <div class="question-right">
+                <div class="question-img">
+                  <svg viewBox="0 0 200 200" fill="none"><circle cx="100" cy="90" r="60" stroke="#111" stroke-width="2"/><path d="M70 70 Q100 50 130 70 Q100 90 70 70Z" stroke="#111" stroke-width="1.5" fill="none"/><text x="100" y="170" text-anchor="middle" font-size="8" fill="#555">Núcleo</text></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="question-slide" data-q="4">
+            <div class="question-card">
+              <div class="question-left">
+                <div class="question-badge">PREGUNTA 4 · OPCIÓN MÚLTIPLE</div>
+                <div class="question-text">¿Cuál de las siguientes orgánulas no se encuentra en las células animales?</div>
+                <div class="question-options">
+                  <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter">A</span>Ribosomas</div>
+                  <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter">B</span>Lisosomas</div>
+                  <div class="option correct" onclick="selectOptionAnswer(this)"><span class="option-letter">C</span>Cloroplastos</div>
+                  <div class="option" onclick="selectOptionAnswer(this)"><span class="option-letter">D</span>Retículo endoplasmático</div>
+                </div>
+              </div>
+              <div class="question-right">
+                <div class="question-img">
+                  <svg viewBox="0 0 200 200" fill="none"><rect x="40" y="60" width="120" height="80" rx="10" stroke="#111" stroke-width="2"/><ellipse cx="80" cy="100" rx="15" ry="10" stroke="#111" stroke-width="1.5"/><circle cx="130" cy="95" r="12" stroke="#111" stroke-width="1.5"/><text x="100" y="170" text-anchor="middle" font-size="8" fill="#555">Célula vegetal</text></svg>
+                </div>
               </div>
             </div>
           </div>
@@ -745,6 +824,17 @@ function showPage(page) {
     document.getElementById('procStep3Icon').style.borderColor = 'var(--border)';
     document.getElementById('procStep3Icon').innerHTML = '';
   }
+  if (page === 'editor') {
+    setTimeout(initEditorScroll, 100);
+  }
+}
+
+function handleFileUpload(input) {
+  const files = input.files;
+  if (files.length > 0) {
+    alert(files.length + ' archivo(s) seleccionado(s): ' + Array.from(files).map(f => f.name).join(', '));
+  }
+  input.value = '';
 }
 
 function showWizardStep(step) {
@@ -831,22 +921,39 @@ function renumberBlocks() {
   document.getElementById('outlineCount').textContent = blocks.length + ' bloques · ' + (blocks.length * 3) + ' preguntas en total';
 }
 
+function scrollToSlide(idx) {
+  const canvas = document.getElementById('editorCanvas');
+  const slide = canvas.querySelectorAll('.question-slide')[idx];
+  if (slide) slide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function selectOptionAnswer(el) {
-  document.querySelectorAll('.question-options .option').forEach(o => o.classList.remove('correct'));
+  const parent = el.closest('.question-options');
+  parent.querySelectorAll('.option').forEach(o => o.classList.remove('correct'));
   el.classList.add('correct');
 }
 
-function handleFileUpload(input) {
-  const files = input.files;
-  if (files.length > 0) {
-    alert(files.length + ' archivo(s) seleccionado(s): ' + Array.from(files).map(f => f.name).join(', '));
-  }
-  input.value = '';
-}
-
-function selectQuestion(el, idx) {
-  document.querySelectorAll('.q-thumb').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+function initEditorScroll() {
+  const canvas = document.getElementById('editorCanvas');
+  if (!canvas) return;
+  const slides = canvas.querySelectorAll('.question-slide');
+  const thumbs = document.querySelectorAll('.q-thumb');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = entry.target.dataset.q;
+        slides.forEach(s => s.classList.remove('active'));
+        entry.target.classList.add('active');
+        thumbs.forEach(t => t.classList.remove('active'));
+        const activeThumb = document.querySelector(`.q-thumb[data-slide="${idx}"]`);
+        if (activeThumb) {
+          activeThumb.classList.add('active');
+          activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    });
+  }, { root: canvas, threshold: 0.6 });
+  slides.forEach(s => observer.observe(s));
 }
 
 // Mobile sidebar toggle
