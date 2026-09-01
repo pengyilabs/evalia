@@ -170,6 +170,10 @@ input,textarea{font-family:inherit}
 .outline-drag:hover{color:var(--text)}
 .outline-footer{display:flex;align-items:center;justify-content:space-between;margin-top:20px}
 .outline-count{font-size:14px;color:var(--muted)}
+.outline-action{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;border:none;background:none;cursor:pointer}
+.outline-action:hover{background:var(--bg);color:var(--text)}
+.outline-action.danger:hover{background:#fee2e2;color:#dc2626}
+@keyframes spin{to{transform:rotate(360deg)}}
 .btn-generate{display:inline-flex;align-items:center;gap:8px;background:var(--dark);color:#fff;padding:14px 28px;border-radius:var(--radius);font-size:15px;font-weight:600;transition:all .15s}
 .btn-generate:hover{opacity:.9;transform:translateY(-1px)}
 
@@ -461,74 +465,128 @@ input,textarea{font-family:inherit}
 <div class="page" id="page-wizard" style="padding:0">
   <div class="create-page">
     <div class="wizard-header">
-      <button class="back-btn" onclick="showPage('create')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15,18 9,12 15,6"/></svg>Volver</button>
+      <button class="back-btn" onclick="showPage('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15,18 9,12 15,6"/></svg>Volver</button>
       <div class="wizard-title">Generar con IA</div>
     </div>
-    <div class="wizard-steps">
-      <div class="w-step active"><span class="w-num">1</span>Configurar</div>
+    <div class="wizard-steps" id="wizardSteps">
+      <div class="w-step active"><span class="w-num">1</span>Idea</div>
       <div class="w-divider"></div>
-      <div class="w-step"><span class="w-num">2</span>Revisar esquema</div>
+      <div class="w-step"><span class="w-num">2</span>Procesando</div>
       <div class="w-divider"></div>
-      <div class="w-step"><span class="w-num">3</span>Generar</div>
+      <div class="w-step"><span class="w-num">3</span>Esquema</div>
+      <div class="w-divider"></div>
+      <div class="w-step"><span class="w-num">4</span>Generar</div>
     </div>
 
-    <!-- Step 1: Configurar -->
+    <!-- Step 1: Input idea + files -->
     <div id="wizardStep1">
-      <div class="config-card">
-        <div class="config-chips">
+      <div class="config-card" style="max-width:700px">
+        <label style="display:block;font-size:14px;font-weight:600;margin-bottom:8px">Describe tu evaluación</label>
+        <textarea id="ideaInput" placeholder="Ej: Crea una evaluación de Biología sobre la célula para 3º de secundaria con 12 preguntas de dificultad media..." style="width:100%;min-height:120px;padding:14px 16px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:14px;line-height:1.6;resize:vertical;font-family:var(--font);background:var(--surface)"></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
           <div class="chip" onclick="this.classList.toggle('selected')">12 preguntas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg></div>
           <div class="chip" onclick="this.classList.toggle('selected')">Secundaria <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg></div>
           <div class="chip" onclick="this.classList.toggle('selected')">Dificultad media <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg></div>
           <div class="chip" onclick="this.classList.toggle('selected')">Español <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg></div>
         </div>
-        <div class="ai-prompt">
-          <div class="ai-prompt-text">Crea una evaluación de Biología sobre la célula para 3º de secundaria</div>
-          <div class="ai-prompt-edit">Editar</div>
-        </div>
       </div>
-      <div style="text-align:center">
-        <button class="btn-generate" onclick="showWizardStep(2)"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Generar esquema</button>
+      <div class="config-card" style="max-width:700px">
+        <label style="display:block;font-size:14px;font-weight:600;margin-bottom:8px">Materiales de referencia (opcional)</label>
+        <div id="fileDropZone" style="border:2px dashed var(--border);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:all .15s" onclick="document.getElementById('wizardFileUpload').click()" ondragover="event.preventDefault();this.style.borderColor='var(--green)';this.style.background='#f0fdf4'" ondragleave="this.style.borderColor='var(--border)';this.style.background=''" ondrop="event.preventDefault();this.style.borderColor='var(--border)';this.style.background='';handleWizardFiles(event.dataTransfer.files)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" width="32" height="32" style="margin-bottom:8px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px">Arrastra archivos aquí o haz clic para buscar</div>
+          <div style="font-size:12px;color:var(--muted)">PDF, Word, PowerPoint, TXT, CSV — máx. 25 MB por archivo</div>
+        </div>
+        <input type="file" id="wizardFileUpload" multiple accept=".pdf,.docx,.pptx,.txt,.csv,.xlsx" style="display:none" onchange="handleWizardFiles(this.files)">
+        <div id="uploadedFilesList" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
+      </div>
+      <div style="text-align:center;padding-bottom:40px">
+        <button class="btn-generate" onclick="startProcessing()"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Generar esquema</button>
       </div>
     </div>
 
-    <!-- Step 2: Revisar esquema -->
+    <!-- Step 2: Processing/Loading -->
     <div id="wizardStep2" style="display:none">
+      <div style="text-align:center;padding:60px 20px">
+        <div class="processing-spinner" style="width:64px;height:64px;border:4px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 24px"></div>
+        <h2 style="font-size:22px;font-weight:700;margin-bottom:8px">Analizando tu idea...</h2>
+        <p style="font-size:14px;color:var(--muted);max-width:400px;margin:0 auto" id="processingText">Evalia está diseñando la estructura óptima para tu evaluación.</p>
+        <div style="margin-top:32px;max-width:400px;margin-left:auto;margin-right:auto">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;opacity:1;transition:all .3s" id="procStep1">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" width="14" height="14"><polyline points="20,6 9,17 4,12"/></svg></div>
+            <span style="font-size:13px;font-weight:500">Interpretando los requerimientos</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;opacity:0.4;transition:all .3s" id="procStep2">
+            <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0" id="procStep2Icon"></div>
+            <span style="font-size:13px;font-weight:500">Diseñando la estructura</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;opacity:0.4;transition:all .3s" id="procStep3">
+            <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0" id="procStep3Icon"></div>
+            <span style="font-size:13px;font-weight:500">Generando el esquema</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Review & Edit Schema -->
+    <div id="wizardStep3" style="display:none">
       <div class="outline-section">
-        <h2>Revisa el esquema propuesto</h2>
-        <div class="outline-block">
-          <div class="outline-num">1</div>
-          <div class="outline-text">
-            <h4>Fundamentos de la célula</h4>
-            <p>Partes de la célula y funciones principales</p>
-          </div>
-          <div class="outline-drag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <h2>Revisa y edita el esquema</h2>
+          <button class="btn-add-outline" onclick="addOutlineBlock()" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1.5px dashed var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:600;color:var(--muted);background:var(--surface);cursor:pointer;transition:all .15s"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Agregar bloque</button>
         </div>
-        <div class="outline-block">
-          <div class="outline-num">2</div>
-          <div class="outline-text">
-            <h4>Membrana y transporte</h4>
-            <p>Difusión, ósmosis y transporte activo</p>
+        <div id="outlineBlocks">
+          <div class="outline-block" draggable="true">
+            <div class="outline-num">1</div>
+            <div class="outline-text">
+              <input type="text" value="Fundamentos de la célula" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
+              <input type="text" value="Partes de la célula y funciones principales" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
+            </div>
+            <div style="display:flex;gap:2px;flex-shrink:0">
+              <button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button>
+              <button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button>
+              <button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
           </div>
-          <div class="outline-drag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></div>
-        </div>
-        <div class="outline-block">
-          <div class="outline-num">3</div>
-          <div class="outline-text">
-            <h4>Metabolismo celular</h4>
-            <p>Respiración celular y obtención de energía</p>
+          <div class="outline-block" draggable="true">
+            <div class="outline-num">2</div>
+            <div class="outline-text">
+              <input type="text" value="Membrana y transporte" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
+              <input type="text" value="Difusión, ósmosis y transporte activo" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
+            </div>
+            <div style="display:flex;gap:2px;flex-shrink:0">
+              <button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button>
+              <button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button>
+              <button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
           </div>
-          <div class="outline-drag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></div>
-        </div>
-        <div class="outline-block">
-          <div class="outline-num">4</div>
-          <div class="outline-text">
-            <h4>División celular</h4>
-            <p>Mitosis, meiosis y ciclo celular</p>
+          <div class="outline-block" draggable="true">
+            <div class="outline-num">3</div>
+            <div class="outline-text">
+              <input type="text" value="Metabolismo celular" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
+              <input type="text" value="Respiración celular y obtención de energía" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
+            </div>
+            <div style="display:flex;gap:2px;flex-shrink:0">
+              <button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button>
+              <button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button>
+              <button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
           </div>
-          <div class="outline-drag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></div>
+          <div class="outline-block" draggable="true">
+            <div class="outline-num">4</div>
+            <div class="outline-text">
+              <input type="text" value="División celular" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
+              <input type="text" value="Mitosis, meiosis y ciclo celular" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
+            </div>
+            <div style="display:flex;gap:2px;flex-shrink:0">
+              <button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button>
+              <button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button>
+              <button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+          </div>
         </div>
         <div class="outline-footer">
-          <div class="outline-count">4 bloques · 12 preguntas en total</div>
+          <div class="outline-count" id="outlineCount">4 bloques · 12 preguntas en total</div>
           <button class="btn-generate" onclick="showPage('editor')"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Generar evaluación</button>
         </div>
       </div>
@@ -632,6 +690,17 @@ function showPage(page) {
   document.getElementById('topbar').style.display = hideChrome ? 'none' : 'flex';
   document.getElementById('sidebar').style.display = hideChrome ? 'none' : 'flex';
   document.querySelector('.main').style.marginLeft = hideChrome ? '0' : 'var(--sidebar-w)';
+  if (page === 'wizard') {
+    showWizardStep(1);
+    document.getElementById('procStep2').style.opacity = '0.4';
+    document.getElementById('procStep2Icon').style.background = '';
+    document.getElementById('procStep2Icon').style.borderColor = 'var(--border)';
+    document.getElementById('procStep2Icon').innerHTML = '';
+    document.getElementById('procStep3').style.opacity = '0.4';
+    document.getElementById('procStep3Icon').style.background = '';
+    document.getElementById('procStep3Icon').style.borderColor = 'var(--border)';
+    document.getElementById('procStep3Icon').innerHTML = '';
+  }
 }
 
 function selectOption(el) {
@@ -653,12 +722,87 @@ function continueFromCreate() {
 }
 
 function showWizardStep(step) {
-  document.getElementById('wizardStep1').style.display = step===1 ? 'block' : 'none';
-  document.getElementById('wizardStep2').style.display = step===2 ? 'block' : 'none';
-  document.querySelectorAll('.w-step').forEach((s,i) => {
+  for (let i = 1; i <= 3; i++) {
+    document.getElementById('wizardStep'+i).style.display = i===step ? 'block' : 'none';
+  }
+  document.querySelectorAll('#wizardSteps .w-step').forEach((s,i) => {
     s.classList.toggle('active', i===step-1);
     s.classList.toggle('done', i<step-1);
   });
+}
+
+function startProcessing() {
+  showWizardStep(2);
+  const steps = [
+    { el: 'procStep2', delay: 1200 },
+    { el: 'procStep3', delay: 2400 }
+  ];
+  steps.forEach(s => {
+    setTimeout(() => {
+      const el = document.getElementById(s.el);
+      el.style.opacity = '1';
+      el.querySelector('div').style.background = 'var(--green)';
+      el.querySelector('div').style.borderColor = 'var(--green)';
+      el.querySelector('div').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" width="14" height="14"><polyline points="20,6 9,17 4,12"/></svg>';
+    }, s.delay);
+  });
+  setTimeout(() => showWizardStep(3), 3200);
+}
+
+function handleWizardFiles(files) {
+  const list = document.getElementById('uploadedFilesList');
+  Array.from(files).forEach(f => {
+    const ext = f.name.split('.').pop().toUpperCase();
+    const size = f.size > 1048576 ? (f.size/1048576).toFixed(1)+' MB' : (f.size/1024).toFixed(0)+' KB';
+    const colors = {PDF:'#dc2626',DOCX:'#2563eb',PPTX:'#d97706',TXT:'#6b7280',CSV:'#059669',XLSX:'#059669'};
+    const color = colors[ext] || '#6b7280';
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm)';
+    row.innerHTML = '<div style="width:36px;height:36px;border-radius:6px;background:'+color+'15;color:'+color+';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">'+ext+'</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+f.name+'</div><div style="font-size:11px;color:var(--muted)">'+size+'</div></div><button onclick="this.parentElement.remove()" style="width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--muted);border:none;background:none;cursor:pointer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+    list.appendChild(row);
+  });
+}
+
+function addOutlineBlock() {
+  const container = document.getElementById('outlineBlocks');
+  const count = container.children.length + 1;
+  const block = document.createElement('div');
+  block.className = 'outline-block';
+  block.draggable = true;
+  block.innerHTML = '<div class="outline-num">'+count+'</div><div class="outline-text"><input type="text" value="Nuevo bloque" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px"><input type="text" value="Descripción del bloque" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0"></div><div style="display:flex;gap:2px;flex-shrink:0"><button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button><button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button><button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>';
+  container.appendChild(block);
+  renumberBlocks();
+  block.querySelector('input').focus();
+  block.querySelector('input').select();
+}
+
+function removeBlock(btn) {
+  const block = btn.closest('.outline-block');
+  block.style.opacity = '0';
+  block.style.transform = 'translateX(-20px)';
+  block.style.transition = 'all .2s';
+  setTimeout(() => { block.remove(); renumberBlocks(); }, 200);
+}
+
+function moveBlock(btn, dir) {
+  const block = btn.closest('.outline-block');
+  const container = document.getElementById('outlineBlocks');
+  const siblings = Array.from(container.children);
+  const idx = siblings.indexOf(block);
+  if (dir === -1 && idx > 0) {
+    container.insertBefore(block, siblings[idx - 1]);
+  } else if (dir === 1 && idx < siblings.length - 1) {
+    container.insertBefore(siblings[idx + 1], block);
+  }
+  renumberBlocks();
+}
+
+function renumberBlocks() {
+  const blocks = document.querySelectorAll('#outlineBlocks .outline-block');
+  blocks.forEach((b, i) => {
+    b.querySelector('.outline-num').textContent = i + 1;
+  });
+  document.getElementById('outlineCount').textContent = blocks.length + ' bloques · ' + (blocks.length * 3) + ' preguntas en total';
 }
 
 function selectOptionAnswer(el) {
