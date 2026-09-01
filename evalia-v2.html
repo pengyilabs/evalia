@@ -85,10 +85,51 @@ input,textarea{font-family:inherit}
 .create-page{background:linear-gradient(180deg,#E3FFE0 0%,#f8f9fb 30%);min-height:100vh}
 
 /* MATERIALS PAGE */
-.materials-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px}
-.stat-number{font-size:28px;font-weight:800;color:var(--text);margin-bottom:2px}
-.stat-label{font-size:13px;color:var(--muted)}
+.materials-upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:48px 24px;text-align:center;margin-bottom:32px;transition:all .2s;cursor:pointer;position:relative;background:var(--surface)}
+.materials-upload-zone:hover,.materials-upload-zone.dragover{border-color:var(--green);background:rgba(92,230,63,.03)}
+.materials-upload-zone.dragover{box-shadow:0 0 0 4px rgba(92,230,63,.15)}
+.upload-icon{width:56px;height:56px;border-radius:50%;background:#E3FFE0;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.upload-icon svg{width:28px;height:28px;color:var(--green-dark)}
+.upload-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.upload-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+.upload-btn{display:inline-flex;align-items:center;gap:8px;background:var(--dark);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:600;transition:all .15s}
+.upload-btn:hover{opacity:.85}
+.upload-btn svg{width:16px;height:16px}
+.upload-or{font-size:12px;color:var(--muted);margin-top:12px}
+.upload-formats{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap}
+.format-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:var(--radius-pill);letter-spacing:.04em;text-transform:uppercase}
+.format-badge.pdf{background:#fee2e2;color:#dc2626}
+.format-badge.docx{background:#dbeafe;color:#2563eb}
+.format-badge.pptx{background:#fef3c7;color:#d97706}
+.format-badge.csv{background:#d1fae5;color:#059669}
+.format-badge.txt{background:#f3f4f6;color:#6b7280}
+
+.materials-toolbar{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.materials-search{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:0 16px;height:42px;transition:border-color .15s}
+.materials-search:focus-within{border-color:var(--green)}
+.materials-search svg{width:16px;height:16px;color:var(--muted);flex-shrink:0}
+.materials-search input{flex:1;border:none;background:none;outline:none;font-size:13px;color:var(--text)}
+.materials-search input::placeholder{color:var(--muted)}
+.filter-pills{display:flex;gap:6px}
+.filter-pill{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:var(--radius-pill);border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;background:var(--surface);color:var(--muted)}
+.filter-pill:hover{border-color:var(--text);color:var(--text)}
+.filter-pill.active{border-color:var(--green);background:rgba(92,230,63,.08);color:var(--green-dark)}
+.filter-pill .count{background:var(--bg);padding:1px 6px;border-radius:var(--radius-pill);font-size:10px;font-weight:700}
+.filter-pill.active .count{background:rgba(92,230,63,.15)}
+
+.materials-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;display:flex;align-items:center;gap:16px}
+.stat-icon{width:44px;height:44px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-icon svg{width:22px;height:22px}
+.stat-icon.blue{background:#dbeafe;color:#2563eb}
+.stat-icon.green{background:#E3FFE0;color:var(--green-dark)}
+.stat-icon.purple{background:#ede9fe;color:#7c3aed}
+.stat-number{font-size:26px;font-weight:800;color:var(--text);line-height:1}
+.stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+
+.materials-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.materials-list-header h2{font-size:16px;font-weight:700}
+.materials-count{font-size:12px;color:var(--muted);font-weight:500}
 .materials-list{display:flex;flex-direction:column;gap:8px}
 .material-row{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);transition:all .15s}
 .material-row:hover{box-shadow:0 2px 8px rgba(0,0,0,.06)}
@@ -99,7 +140,9 @@ input,textarea{font-family:inherit}
 .material-icon.csv{background:#d1fae5;color:#059669}
 .material-info{flex:1;min-width:0}
 .material-name{font-size:14px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.material-meta{font-size:12px;color:var(--muted)}
+.material-meta{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.material-tag-inline{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:var(--radius-pill);font-size:10px;font-weight:600;background:#E3FFE0;color:var(--green-dark)}
+.material-tag-inline.inactive{background:#f3f4f6;color:var(--muted)}
 .material-actions{display:flex;gap:4px;flex-shrink:0}
 .material-btn{width:32px;height:32px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s}
 .material-btn:hover{background:var(--bg);color:var(--text)}
@@ -343,73 +386,118 @@ input,textarea{font-family:inherit}
 <div class="page" id="page-materials">
   <div class="page-header">
     <h1>Materiales</h1>
-    <button class="btn-create" onclick="document.getElementById('fileUpload').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Subir material</button>
-    <input type="file" id="fileUpload" multiple accept=".pdf,.docx,.pptx,.txt,.csv,.xlsx" style="display:none" onchange="handleFileUpload(this)">
   </div>
   <p class="page-subtitle">Administra los documentos que Evalia usa para generar evaluaciones personalizadas.</p>
 
+  <div class="materials-upload-zone" id="uploadZone" onclick="document.getElementById('fileUpload').click()">
+    <div class="upload-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    </div>
+    <div class="upload-title">Arrastra archivos aquí</div>
+    <div class="upload-sub">o haz clic para seleccionar desde tu computadora</div>
+    <button class="upload-btn" onclick="event.stopPropagation();document.getElementById('fileUpload').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Seleccionar archivos</button>
+    <div class="upload-formats">
+      <span class="format-badge pdf">PDF</span>
+      <span class="format-badge docx">DOCX</span>
+      <span class="format-badge pptx">PPTX</span>
+      <span class="format-badge csv">CSV</span>
+      <span class="format-badge txt">TXT</span>
+    </div>
+    <input type="file" id="fileUpload" multiple accept=".pdf,.docx,.pptx,.txt,.csv,.xlsx" style="display:none" onchange="handleFileUpload(this)">
+  </div>
+
   <div class="materials-stats">
     <div class="stat-card">
-      <div class="stat-number">12</div>
-      <div class="stat-label">Archivos subidos</div>
+      <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div>
+      <div><div class="stat-number">12</div><div class="stat-label">Archivos subidos</div></div>
     </div>
     <div class="stat-card">
-      <div class="stat-number">3</div>
-      <div class="stat-label">En uso</div>
+      <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+      <div><div class="stat-number">3</div><div class="stat-label">En uso activo</div></div>
     </div>
     <div class="stat-card">
-      <div class="stat-number">24</div>
-      <div class="stat-label">Evaluaciones generadas</div>
+      <div class="stat-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg></div>
+      <div><div class="stat-number">24</div><div class="stat-label">Evaluaciones generadas</div></div>
     </div>
   </div>
 
-  <div class="materials-list">
-    <div class="material-row">
+  <div class="materials-toolbar">
+    <div class="materials-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Buscar materiales..." id="materialsSearchInput" oninput="filterMaterials()">
+    </div>
+    <div class="filter-pills">
+      <button class="filter-pill active" onclick="filterByType(this,'all')">Todos <span class="count">12</span></button>
+      <button class="filter-pill" onclick="filterByType(this,'pdf')">PDF <span class="count">4</span></button>
+      <button class="filter-pill" onclick="filterByType(this,'pptx')">PPT <span class="count">3</span></button>
+      <button class="filter-pill" onclick="filterByType(this,'doc')">DOC <span class="count">3</span></button>
+      <button class="filter-pill" onclick="filterByType(this,'csv')">CSV <span class="count">2</span></button>
+    </div>
+  </div>
+
+  <div class="materials-list-header">
+    <h2>Tus materiales</h2>
+    <span class="materials-count" id="materialsCount">4 archivos</span>
+  </div>
+  <div class="materials-list" id="materialsList">
+    <div class="material-row" data-type="pdf">
       <div class="material-icon pdf">PDF</div>
       <div class="material-info">
         <div class="material-name">Biologia Celular - Capitulo 3.pdf</div>
-        <div class="material-meta">2.4 MB · Subido el 28 ago 2026 · Usado en 8 evaluaciones</div>
+        <div class="material-meta">
+          <span>2.4 MB</span><span>·</span><span>Subido el 28 ago 2026</span><span>·</span>
+          <span class="material-tag-inline">En uso</span>
+        </div>
       </div>
       <div class="material-actions">
-        <button class="material-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-        <button class="material-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
-        <button class="material-btn danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+        <button class="material-btn" title="Vista previa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="material-btn" title="Descargar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+        <button class="material-btn danger" title="Eliminar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
       </div>
     </div>
-    <div class="material-row">
+    <div class="material-row" data-type="pptx">
       <div class="material-icon pptx">PPT</div>
       <div class="material-info">
         <div class="material-name">Clases de Anatomia - Semana 1-5.pptx</div>
-        <div class="material-meta">15.8 MB · Subido el 25 ago 2026 · Usado en 6 evaluaciones</div>
+        <div class="material-meta">
+          <span>15.8 MB</span><span>·</span><span>Subido el 25 ago 2026</span><span>·</span>
+          <span class="material-tag-inline">En uso</span>
+        </div>
       </div>
       <div class="material-actions">
-        <button class="material-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-        <button class="material-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
-        <button class="material-btn danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+        <button class="material-btn" title="Vista previa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="material-btn" title="Descargar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+        <button class="material-btn danger" title="Eliminar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
       </div>
     </div>
-    <div class="material-row">
+    <div class="material-row" data-type="doc">
       <div class="material-icon doc">DOC</div>
       <div class="material-info">
         <div class="material-name">Guia de Estudio - Matematicas Avanzadas.docx</div>
-        <div class="material-meta">890 KB · Subido el 22 ago 2026 · Usado en 10 evaluaciones</div>
+        <div class="material-meta">
+          <span>890 KB</span><span>·</span><span>Subido el 22 ago 2026</span><span>·</span>
+          <span class="material-tag-inline">En uso</span>
+        </div>
       </div>
       <div class="material-actions">
-        <button class="material-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-        <button class="material-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
-        <button class="material-btn danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+        <button class="material-btn" title="Vista previa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="material-btn" title="Descargar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+        <button class="material-btn danger" title="Eliminar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
       </div>
     </div>
-    <div class="material-row">
+    <div class="material-row" data-type="csv">
       <div class="material-icon csv">CSV</div>
       <div class="material-info">
         <div class="material-name">Preguntas Banco - Quimica General.csv</div>
-        <div class="material-meta">45 KB · Subido el 20 ago 2026 · Usado en 0 evaluaciones</div>
+        <div class="material-meta">
+          <span>45 KB</span><span>·</span><span>Subido el 20 ago 2026</span><span>·</span>
+          <span class="material-tag-inline inactive">Sin usar</span>
+        </div>
       </div>
       <div class="material-actions">
-        <button class="material-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-        <button class="material-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
-        <button class="material-btn danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+        <button class="material-btn" title="Vista previa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="material-btn" title="Descargar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+        <button class="material-btn danger" title="Eliminar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
       </div>
     </div>
   </div>
@@ -816,6 +904,45 @@ function handleFileUpload(input) {
     alert(files.length + ' archivo(s) seleccionado(s): ' + Array.from(files).map(f => f.name).join(', '));
   }
   input.value = '';
+}
+
+// Drag & drop for materials upload zone
+(function() {
+  const zone = document.getElementById('uploadZone');
+  if (!zone) return;
+  ['dragenter','dragover'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.add('dragover'); }));
+  ['dragleave','drop'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.remove('dragover'); }));
+  zone.addEventListener('drop', ev => {
+    const files = ev.dataTransfer.files;
+    if (files.length > 0) {
+      alert(files.length + ' archivo(s) arrastrado(s): ' + Array.from(files).map(f => f.name).join(', '));
+    }
+  });
+})();
+
+let currentFilter = 'all';
+function filterByType(btn, type) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  filterMaterials();
+}
+
+function filterMaterials() {
+  const query = (document.getElementById('materialsSearchInput')?.value || '').toLowerCase();
+  const rows = document.querySelectorAll('#materialsList .material-row');
+  let shown = 0;
+  rows.forEach(row => {
+    const name = row.querySelector('.material-name')?.textContent.toLowerCase() || '';
+    const rowType = row.dataset.type || '';
+    const matchType = currentFilter === 'all' || rowType === currentFilter;
+    const matchSearch = !query || name.includes(query);
+    const visible = matchType && matchSearch;
+    row.style.display = visible ? '' : 'none';
+    if (visible) shown++;
+  });
+  const countEl = document.getElementById('materialsCount');
+  if (countEl) countEl.textContent = shown + ' archivo' + (shown !== 1 ? 's' : '');
 }
 
 function addMaterialChip(btn, fileName, ext) {
