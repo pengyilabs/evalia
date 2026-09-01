@@ -195,10 +195,11 @@ input,textarea{font-family:inherit}
 .material-chip-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-pill);border:1.5px solid var(--border);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;background:var(--surface);color:var(--text)}
 .material-chip-btn:hover{border-color:var(--green);background:rgba(92,230,63,.04)}
 .material-chip-btn.active{border-color:var(--green);background:rgba(92,230,63,.1)}
-.chat-input-wrap{position:relative;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);transition:border-color .15s,box-shadow .15s;overflow:hidden}
+.chat-input-wrap{position:relative;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);transition:border-color .15s,box-shadow .15s}
+.chat-input-wrap textarea,.chat-input-wrap .chat-bottom-bar{border-radius:0}
 .chat-input-wrap:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.15)}
 .chat-input-wrap.drag-over{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.2)}
-.attach-dropdown{position:absolute;bottom:calc(100% + 8px);left:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:100;overflow:hidden}
+.attach-dropdown{position:absolute;bottom:calc(100% + 8px);left:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:100;overflow:visible}
 .attach-tabs{display:flex;border-bottom:1px solid var(--border)}
 .attach-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 0;border:none;background:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);font-family:var(--font);transition:all .15s;border-bottom:2px solid transparent}
 .attach-tab:hover{color:var(--text);background:var(--bg)}
