@@ -239,6 +239,52 @@ input,textarea{font-family:inherit}
 .share-option-desc{font-size:12px;color:var(--muted);margin-top:2px}
 .share-copied-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;z-index:300;opacity:0;transition:opacity .2s;pointer-events:none}
 .share-copied-toast.show{opacity:1}
+.fill-test{display:flex;height:100vh;background:var(--bg)}
+.fill-test-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.fill-test-topbar{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.fill-test-title{font-size:15px;font-weight:600;flex:1}
+.fill-test-timer{font-size:18px;font-weight:700;color:var(--green);font-variant-numeric:tabular-nums}
+.fill-test-progress{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.fill-test-progress-bar{width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.fill-test-progress-fill{height:100%;background:var(--green);border-radius:3px;transition:width .3s}
+.fill-test-canvas{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
+.fill-test-canvas::-webkit-scrollbar{display:none}
+.fill-question{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;max-width:680px;width:100%;margin:0 auto;transition:border-color .2s}
+.fill-question.current{border-color:var(--green)}
+.fill-question-badge{display:inline-block;padding:4px 12px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;letter-spacing:.05em;margin-bottom:12px;color:var(--green);background:rgba(92,230,63,.1)}
+.fill-question-text{font-size:16px;font-weight:600;line-height:1.5;margin-bottom:16px}
+.fill-options{display:flex;flex-direction:column;gap:8px}
+.fill-option{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:14px;transition:all .15s}
+.fill-option:hover{border-color:var(--green);background:rgba(92,230,63,.03)}
+.fill-option.selected{border-color:var(--green);background:rgba(92,230,63,.06)}
+.fill-option-letter{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;transition:all .15s}
+.fill-option.selected .fill-option-letter{border-color:var(--green);background:var(--green);color:var(--dark)}
+.fill-textarea{width:100%;min-height:100px;padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:var(--font);resize:vertical;outline:none;transition:border-color .15s}
+.fill-textarea:focus{border-color:var(--green)}
+.fill-test-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.fill-nav-btn{padding:10px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:1.5px solid var(--border);background:var(--surface);color:var(--text)}
+.fill-nav-btn:hover{border-color:var(--green);background:rgba(92,230,63,.05)}
+.fill-nav-btn.primary{background:var(--green);color:var(--dark);border-color:var(--green)}
+.fill-nav-btn.primary:hover{opacity:.85}
+.fill-nav-dots{display:flex;gap:6px}
+.fill-nav-dot{width:10px;height:10px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .15s}
+.fill-nav-dot.current{background:var(--green);transform:scale(1.2)}
+.fill-nav-dot.answered{background:var(--green);opacity:.5}
+.fill-chat{width:340px;border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);flex-shrink:0}
+.fill-chat-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.fill-chat-avatar{width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fill-chat-info h4{font-size:14px;font-weight:600}
+.fill-chat-info p{font-size:11px;color:var(--muted)}
+.fill-chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.fill-chat-messages::-webkit-scrollbar{display:none}
+.fill-chat-msg{max-width:85%;padding:10px 14px;border-radius:var(--radius);font-size:13px;line-height:1.5}
+.fill-chat-msg.ai{background:var(--surface);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+.fill-chat-msg.user{background:var(--green);color:var(--dark);align-self:flex-end;border-bottom-right-radius:4px}
+.fill-chat-input-wrap{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end}
+.fill-chat-input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:var(--font);outline:none;resize:none;min-height:40px;max-height:120px;transition:border-color .15s}
+.fill-chat-input:focus{border-color:var(--green)}
+.fill-chat-send{width:36px;height:36px;border-radius:50%;background:var(--green);color:var(--dark);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;transition:opacity .15s}
+.fill-chat-send:hover{opacity:.85}
 .attach-material-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px 14px;border:none;background:none;cursor:pointer;font-family:var(--font);text-align:left;transition:background .1s;border-radius:0}
 .attach-material-item:hover{background:var(--bg)}
 .attach-material-ext{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0}
@@ -793,7 +839,7 @@ input,textarea{font-family:inherit}
       <div class="editor-actions">
         <button class="editor-btn">Tema</button>
         <button class="editor-btn" onclick="openShareModal()">Compartir</button>
-        <button class="editor-btn primary">Vista previa</button>
+        <button class="editor-btn primary" onclick="showPage('fill-test')">Vista previa</button>
       </div>
     </div>
     <div class="editor-body">
@@ -937,10 +983,91 @@ input,textarea{font-family:inherit}
 </div>
 
 </div><!-- .main -->
+
+<!-- Fill Test Page -->
+<div class="page" id="page-fill-test" style="padding:0">
+  <div class="fill-test">
+    <div class="fill-test-main">
+      <div class="fill-test-topbar">
+        <button class="editor-icon-btn" onclick="showPage('dashboard')" title="Salir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15,18 9,12 15,6"/></svg></button>
+        <div class="fill-test-title">Biología · La célula y sus estructuras</div>
+        <div class="fill-test-timer" id="fillTimer">25:00</div>
+        <div class="fill-test-progress">
+          <div class="fill-test-progress-bar"><div class="fill-test-progress-fill" id="fillProgressFill" style="width:20%"></div></div>
+          <span id="fillProgressText">1/5</span>
+        </div>
+        <button class="fill-nav-btn primary" onclick="submitTest()">Entregar</button>
+      </div>
+      <div class="fill-test-canvas" id="fillCanvas">
+        <div class="fill-question current" data-q="0">
+          <div class="fill-question-badge">PREGUNTA 1 · OPCIÓN MÚLTIPLE</div>
+          <div class="fill-question-text">¿Qué estructura controla el intercambio de sustancias con el exterior?</div>
+          <div class="fill-options">
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">A</span>Núcleo</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">B</span>Membrana plasmática</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">C</span>Mitocondria</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">D</span>Ribosoma</div>
+          </div>
+        </div>
+        <div class="fill-question" data-q="1">
+          <div class="fill-question-badge">PREGUNTA 2 · OPCIÓN MÚLTIPLE</div>
+          <div class="fill-question-text">¿Cuál es la función principal de la mitocondria?</div>
+          <div class="fill-options">
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">A</span>Sintetizar proteínas</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">B</span>Producir energía (ATP)</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">C</span>Almacenar información genética</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">D</span>Digerir sustancias</div>
+          </div>
+        </div>
+        <div class="fill-question" data-q="2">
+          <div class="fill-question-badge">PREGUNTA 3 · PREGUNTA CORTA</div>
+          <div class="fill-question-text">Explica brevemente la diferencia entre mitosis y meiosis.</div>
+          <textarea class="fill-textarea" placeholder="Escribe tu respuesta aquí..."></textarea>
+        </div>
+        <div class="fill-question" data-q="3">
+          <div class="fill-question-badge">PREGUNTA 4 · VERDADERO / FALSO</div>
+          <div class="fill-question-text">El ADN se encuentra exclusivamente en el núcleo de la célula.</div>
+          <div class="fill-options">
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter" style="border-radius:4px">✓</span>Verdadero</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter" style="border-radius:4px">✗</span>Falso</div>
+          </div>
+        </div>
+        <div class="fill-question" data-q="4">
+          <div class="fill-question-badge">PREGUNTA 5 · OPCIÓN MÚLTIPLE</div>
+          <div class="fill-question-text">¿En qué organela se realiza la fotosíntesis?</div>
+          <div class="fill-options">
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">A</span>Mitocondria</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">B</span>Ribosoma</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">C</span>Cloroplasto</div>
+            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">D</span>Aparato de Golgi</div>
+          </div>
+        </div>
+      </div>
+      <div class="fill-test-nav">
+        <button class="fill-nav-btn" onclick="fillNav(-1)" id="fillPrevBtn" disabled>← Anterior</button>
+        <div class="fill-nav-dots" id="fillDots"></div>
+        <button class="fill-nav-btn" onclick="fillNav(1)" id="fillNextBtn">Siguiente →</button>
+      </div>
+    </div>
+    <div class="fill-chat">
+      <div class="fill-chat-header">
+        <div class="fill-chat-avatar"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg></div>
+        <div class="fill-chat-info"><h4>Evalia AI</h4><p>Asistente de estudio</p></div>
+      </div>
+      <div class="fill-chat-messages" id="fillChatMessages">
+        <div class="fill-chat-msg ai">Hola! Soy Evalia, tu asistente de estudio. Puedo ayudarte con dudas sobre la evaluación. ¿En qué puedo ayudarte?</div>
+      </div>
+      <div class="fill-chat-input-wrap">
+        <textarea class="fill-chat-input" id="fillChatInput" placeholder="Escribe tu pregunta..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFillChat()}"></textarea>
+        <button class="fill-chat-send" onclick="sendFillChat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
 </div><!-- .app -->
 
 <script>
-const pages = ['dashboard','materials','create','wizard','editor'];
+const pages = ['dashboard','materials','create','wizard','editor','fill-test'];
 const titles = {dashboard:'Mis evaluaciones',materials:'Materiales',create:'Crear evaluación',wizard:'Generar con IA',editor:'Biología · La célula'};
 
 function showPage(page) {
@@ -961,7 +1088,7 @@ function showPage(page) {
     document.querySelectorAll('.sidebar-nav a').forEach((a,i) => {
       a.classList.toggle('active', (i===0 && page==='dashboard') || (i===1 && page==='materials'));
     });
-    const hideChrome = ['create','wizard','editor'].includes(page);
+    const hideChrome = ['create','wizard','editor','fill-test'].includes(page);
     if (topbar) topbar.style.display = 'none';
     if (sidebar) sidebar.style.display = hideChrome ? 'none' : 'flex';
     if (sidebar) sidebar.style.display = hideChrome ? 'none' : 'flex';
@@ -979,6 +1106,9 @@ function showPage(page) {
     }
     if (page === 'editor') {
       setTimeout(initEditorScroll, 100);
+    }
+    if (page === 'fill-test') {
+      setTimeout(initFillTest, 100);
     }
     window.location.hash = page === 'dashboard' ? '' : page;
   } catch(e) {
@@ -1391,6 +1521,123 @@ function shareVia(platform) {
   closeShareModal();
 }
 
+var fillCurrentQ = 0;
+var fillTotalQ = 5;
+var fillTimerInterval = null;
+var fillTimeLeft = 25 * 60;
+
+function initFillTest() {
+  fillCurrentQ = 0;
+  fillTimeLeft = 25 * 60;
+  renderFillDots();
+  updateFillNav();
+  startFillTimer();
+}
+
+function renderFillDots() {
+  var dots = document.getElementById('fillDots');
+  if (!dots) return;
+  dots.innerHTML = '';
+  for (var i = 0; i < fillTotalQ; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'fill-nav-dot' + (i === 0 ? ' current' : '');
+    dot.setAttribute('data-idx', i);
+    dot.addEventListener('click', function() {
+      fillGoTo(parseInt(this.getAttribute('data-idx')));
+    });
+    dots.appendChild(dot);
+  }
+}
+
+function updateFillNav() {
+  var questions = document.querySelectorAll('.fill-question');
+  questions.forEach(function(q, i) {
+    q.classList.toggle('current', i === fillCurrentQ);
+  });
+  var dots = document.querySelectorAll('.fill-nav-dot');
+  dots.forEach(function(d, i) {
+    d.classList.toggle('current', i === fillCurrentQ);
+  });
+  document.getElementById('fillPrevBtn').disabled = fillCurrentQ === 0;
+  var nextBtn = document.getElementById('fillNextBtn');
+  if (fillCurrentQ === fillTotalQ - 1) {
+    nextBtn.textContent = 'Entregar';
+    nextBtn.onclick = submitTest;
+  } else {
+    nextBtn.textContent = 'Siguiente →';
+    nextBtn.onclick = function() { fillNav(1); };
+  }
+  var current = document.querySelector('.fill-question.current');
+  if (current) current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  var pct = Math.round(((fillCurrentQ + 1) / fillTotalQ) * 100);
+  document.getElementById('fillProgressFill').style.width = pct + '%';
+  document.getElementById('fillProgressText').textContent = (fillCurrentQ + 1) + '/' + fillTotalQ;
+}
+
+function fillNav(dir) {
+  fillCurrentQ = Math.max(0, Math.min(fillTotalQ - 1, fillCurrentQ + dir));
+  updateFillNav();
+}
+
+function fillGoTo(idx) {
+  fillCurrentQ = idx;
+  updateFillNav();
+}
+
+function selectFillOption(el) {
+  var siblings = el.parentElement.querySelectorAll('.fill-option');
+  siblings.forEach(function(s) { s.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function startFillTimer() {
+  if (fillTimerInterval) clearInterval(fillTimerInterval);
+  fillTimerInterval = setInterval(function() {
+    fillTimeLeft--;
+    if (fillTimeLeft <= 0) {
+      clearInterval(fillTimerInterval);
+      submitTest();
+      return;
+    }
+    var m = Math.floor(fillTimeLeft / 60);
+    var s = fillTimeLeft % 60;
+    document.getElementById('fillTimer').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }, 1000);
+}
+
+function submitTest() {
+  if (fillTimerInterval) clearInterval(fillTimerInterval);
+  alert('¡Evaluación entregada! (Demo)');
+  showPage('dashboard');
+}
+
+function sendFillChat() {
+  var input = document.getElementById('fillChatInput');
+  var msg = input.value.trim();
+  if (!msg) return;
+  var container = document.getElementById('fillChatMessages');
+  var userMsg = document.createElement('div');
+  userMsg.className = 'fill-chat-msg user';
+  userMsg.textContent = msg;
+  container.appendChild(userMsg);
+  input.value = '';
+  container.scrollTop = container.scrollHeight;
+  setTimeout(function() {
+    var aiMsg = document.createElement('div');
+    aiMsg.className = 'fill-chat-msg ai';
+    var responses = [
+      'Buena pregunta! La membrana plasmática es la estructura que controla el intercambio de sustancias entre la célula y el exterior.',
+      'Recuerda que las mitocondrias son las "centrales energéticas" de la célula, donde se produce ATP mediante respiración celular.',
+      'La meiosis produce células con la mitad de cromosomas (gametos), mientras que la mitosis produce células idénticas.',
+      'El ADN también se encuentra en las mitocondrias (ADNmt) y en los cloroplastos de las células vegetales.',
+      'El cloroplasto es el organela donde se realiza la fotosíntesis, convirtiendo luz solar en energía química.'
+    ];
+    aiMsg.textContent = responses[Math.floor(Math.random() * responses.length)];
+    container.appendChild(aiMsg);
+    container.scrollTop = container.scrollHeight;
+  }, 800);
+}
+
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeShareModal();
 });
@@ -1421,6 +1668,10 @@ document.addEventListener('keydown', function(e) {
         <div class="share-option" onclick="shareVia('qr')">
           <div class="share-option-icon" style="background:#7c3aed15;color:#7c3aed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/><line x1="21" y1="14" x2="21" y2="14.01"/><line x1="21" y1="21" x2="21" y2="21.01"/><line x1="17" y1="21" x2="17" y2="21.01"/></svg></div>
           <div class="share-option-text"><div class="share-option-title">Código QR</div><div class="share-option-desc">Generar código QR para escanear</div></div>
+        </div>
+        <div class="share-option" onclick="closeShareModal();showPage('fill-test')">
+          <div class="share-option-icon" style="background:var(--green);color:var(--dark)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><polygon points="5,3 19,12 5,21 5,3"/></svg></div>
+          <div class="share-option-text"><div class="share-option-title">Iniciar prueba</div><div class="share-option-desc">Abrir vista del estudiante para responder</div></div>
         </div>
       </div>
     </div>
