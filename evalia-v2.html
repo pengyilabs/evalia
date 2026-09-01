@@ -75,10 +75,8 @@ input,textarea{font-family:inherit}
 .eval-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
 .eval-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .2s}
 .eval-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px)}
-.eval-thumb{height:160px;display:flex;align-items:center;justify-content:center}
-.eval-thumb.green{background:linear-gradient(135deg,#d4fce0,#E3FFE0)}
-.eval-thumb.dark{background:var(--dark)}
-.eval-thumb.lavender{background:linear-gradient(135deg,#ede9fe,#f3e8ff)}
+.eval-thumb{height:180px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.eval-thumb svg{width:100%;height:100%}
 .eval-info{padding:16px}
 .eval-title{font-size:15px;font-weight:700;margin-bottom:4px}
 .eval-meta{font-size:13px;color:var(--muted)}
@@ -304,21 +302,71 @@ input,textarea{font-family:inherit}
   </div>
   <div class="eval-grid">
     <div class="eval-card" onclick="showPage('editor')">
-      <div class="eval-thumb green"></div>
+      <div class="eval-thumb">
+        <svg viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="180" fill="#E3FFE0"/>
+          <circle cx="150" cy="80" r="40" stroke="#22c55e" stroke-width="2" fill="none"/>
+          <circle cx="150" cy="80" r="12" fill="#22c55e" opacity=".3"/>
+          <circle cx="130" cy="70" r="6" fill="#22c55e" opacity=".5"/>
+          <circle cx="170" cy="90" r="4" fill="#22c55e" opacity=".5"/>
+          <ellipse cx="150" cy="80" rx="40" ry="20" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="4 2" fill="none"/>
+          <path d="M110 130h80" stroke="#22c55e" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M120 140h60" stroke="#22c55e" stroke-width="1" stroke-linecap="round" opacity=".5"/>
+          <circle cx="80" cy="50" r="3" fill="#22c55e" opacity=".3"/>
+          <circle cx="220" cy="40" r="2" fill="#22c55e" opacity=".3"/>
+          <circle cx="200" cy="130" r="4" fill="#22c55e" opacity=".2"/>
+          <text x="150" y="165" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#16a34a" font-weight="600">QUÍMICA</text>
+        </svg>
+      </div>
       <div class="eval-info">
         <div class="eval-title">Química básica · 2º ESO</div>
         <div class="eval-meta">12 preguntas · Hace 2 horas</div>
       </div>
     </div>
     <div class="eval-card" onclick="showPage('editor')">
-      <div class="eval-thumb dark"></div>
+      <div class="eval-thumb">
+        <svg viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="180" fill="#1a1a1a"/>
+          <rect x="100" y="30" width="100" height="120" rx="4" stroke="#666" stroke-width="1.5" fill="none"/>
+          <rect x="110" y="45" width="80" height="6" rx="2" fill="#444"/>
+          <rect x="110" y="58" width="60" height="4" rx="1" fill="#333"/>
+          <rect x="110" y="68" width="70" height="4" rx="1" fill="#333"/>
+          <rect x="110" y="78" width="50" height="4" rx="1" fill="#333"/>
+          <line x1="110" y1="95" x2="190" y2="95" stroke="#444" stroke-width="1"/>
+          <rect x="110" y="105" width="80" height="6" rx="2" fill="#444"/>
+          <rect x="110" y="118" width="60" height="4" rx="1" fill="#333"/>
+          <rect x="110" y="128" width="75" height="4" rx="1" fill="#333"/>
+          <circle cx="60" cy="60" r="20" stroke="#555" stroke-width="1" fill="none" opacity=".4"/>
+          <path d="M55 55l10 10M65 55l-10 10" stroke="#555" stroke-width="1" opacity=".4"/>
+          <circle cx="240" cy="120" r="15" stroke="#555" stroke-width="1" fill="none" opacity=".3"/>
+          <text x="150" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#888" font-weight="600">HISTORIA</text>
+        </svg>
+      </div>
       <div class="eval-info">
         <div class="eval-title">Historia de España</div>
         <div class="eval-meta">10 preguntas · Ayer</div>
       </div>
     </div>
     <div class="eval-card" onclick="showPage('editor')">
-      <div class="eval-thumb lavender"></div>
+      <div class="eval-thumb">
+        <svg viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="180" fill="#f3e8ff"/>
+          <rect x="90" y="25" width="120" height="130" rx="6" stroke="#a855f7" stroke-width="1.5" fill="none"/>
+          <rect x="105" y="40" width="90" height="8" rx="2" fill="#c084fc" opacity=".4"/>
+          <rect x="105" y="55" width="75" height="5" rx="1.5" fill="#c084fc" opacity=".25"/>
+          <rect x="105" y="65" width="85" height="5" rx="1.5" fill="#c084fc" opacity=".25"/>
+          <rect x="105" y="75" width="60" height="5" rx="1.5" fill="#c084fc" opacity=".25"/>
+          <line x1="105" y1="90" x2="195" y2="90" stroke="#d8b4fe" stroke-width="1"/>
+          <rect x="105" y="100" width="90" height="8" rx="2" fill="#c084fc" opacity=".4"/>
+          <rect x="105" y="115" width="70" height="5" rx="1.5" fill="#c084fc" opacity=".25"/>
+          <rect x="105" y="125" width="80" height="5" rx="1.5" fill="#c084fc" opacity=".25"/>
+          <rect x="105" y="135" width="55" height="5" rx="1.5" fill="#c084fc" opacity=".25"/>
+          <circle cx="55" cy="50" r="18" stroke="#c084fc" stroke-width="1" fill="none" opacity=".3"/>
+          <path d="M48 50h14M55 43v14" stroke="#c084fc" stroke-width="1.5" opacity=".4"/>
+          <circle cx="250" cy="130" r="12" stroke="#c084fc" stroke-width="1" fill="none" opacity=".25"/>
+          <text x="150" y="168" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#9333ea" font-weight="600">LECTURA</text>
+        </svg>
+      </div>
       <div class="eval-info">
         <div class="eval-title">Comprensión lectora</div>
         <div class="eval-meta">8 preguntas · 12 ago</div>
