@@ -306,8 +306,8 @@ input,textarea{font-family:inherit}
     EVALIA
   </div>
   <nav class="sidebar-nav">
-    <a href="#" onclick="showPage('dashboard')" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Inicio</a>
-    <a href="#" onclick="showPage('materials')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Materiales</a>
+    <a href="#dashboard" onclick="showPage('dashboard');return false" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Inicio</a>
+    <a href="#materials" onclick="showPage('materials');return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Materiales</a>
   </nav>
   <div class="sidebar-plan">
     <div class="plan-label">PLAN DOCENTE PRO</div>
@@ -871,33 +871,55 @@ const pages = ['dashboard','materials','create','wizard','editor'];
 const titles = {dashboard:'Mis evaluaciones',materials:'Materiales',create:'Crear evaluación',wizard:'Generar con IA',editor:'Biología · La célula'};
 
 function showPage(page) {
-  pages.forEach(p => {
-    const el = document.getElementById('page-'+p);
-    if (el) el.classList.toggle('active', p===page);
-  });
-  document.getElementById('topbarTitle').textContent = titles[page] || '';
-  document.querySelectorAll('.sidebar-nav a').forEach((a,i) => {
-    a.classList.toggle('active', (i===0 && page==='dashboard') || (i===1 && page==='materials'));
-  });
-  const hideChrome = ['create','wizard','editor'].includes(page);
-  document.getElementById('topbar').style.display = hideChrome ? 'none' : 'flex';
-  document.getElementById('sidebar').style.display = hideChrome ? 'none' : 'flex';
-  document.querySelector('.main').style.marginLeft = hideChrome ? '0' : 'var(--sidebar-w)';
-  if (page === 'wizard') {
-    showWizardStep(1);
-    document.getElementById('procStep2').style.opacity = '0.4';
-    document.getElementById('procStep2Icon').style.background = '';
-    document.getElementById('procStep2Icon').style.borderColor = 'var(--border)';
-    document.getElementById('procStep2Icon').innerHTML = '';
-    document.getElementById('procStep3').style.opacity = '0.4';
-    document.getElementById('procStep3Icon').style.background = '';
-    document.getElementById('procStep3Icon').style.borderColor = 'var(--border)';
-    document.getElementById('procStep3Icon').innerHTML = '';
-  }
-  if (page === 'editor') {
-    setTimeout(initEditorScroll, 100);
+  if (!pages.includes(page)) return;
+  try {
+    pages.forEach(p => {
+      const el = document.getElementById('page-'+p);
+      if (el) {
+        if (p === page) { el.classList.add('active'); }
+        else { el.classList.remove('active'); }
+      }
+    });
+    const topbar = document.getElementById('topbar');
+    const sidebar = document.getElementById('sidebar');
+    const main = document.querySelector('.main');
+    const titleEl = document.getElementById('topbarTitle');
+    if (titleEl) titleEl.textContent = titles[page] || '';
+    document.querySelectorAll('.sidebar-nav a').forEach((a,i) => {
+      a.classList.toggle('active', (i===0 && page==='dashboard') || (i===1 && page==='materials'));
+    });
+    const hideChrome = ['create','wizard','editor'].includes(page);
+    if (topbar) topbar.style.display = hideChrome ? 'none' : 'flex';
+    if (sidebar) sidebar.style.display = hideChrome ? 'none' : 'flex';
+    if (main) main.style.marginLeft = hideChrome ? '0' : 'var(--sidebar-w)';
+    if (page === 'wizard') {
+      showWizardStep(1);
+      var s2 = document.getElementById('procStep2');
+      var s2i = document.getElementById('procStep2Icon');
+      var s3 = document.getElementById('procStep3');
+      var s3i = document.getElementById('procStep3Icon');
+      if (s2) s2.style.opacity = '0.4';
+      if (s2i) { s2i.style.background = ''; s2i.style.borderColor = 'var(--border)'; s2i.innerHTML = ''; }
+      if (s3) s3.style.opacity = '0.4';
+      if (s3i) { s3i.style.background = ''; s3i.style.borderColor = 'var(--border)'; s3i.innerHTML = ''; }
+    }
+    if (page === 'editor') {
+      setTimeout(initEditorScroll, 100);
+    }
+    window.location.hash = page === 'dashboard' ? '' : page;
+  } catch(e) {
+    console.error('showPage error:', e);
   }
 }
+
+window.addEventListener('hashchange', function() {
+  var hash = window.location.hash.replace('#','') || 'dashboard';
+  if (pages.includes(hash)) showPage(hash);
+});
+window.addEventListener('DOMContentLoaded', function() {
+  var hash = window.location.hash.replace('#','');
+  if (hash && pages.includes(hash)) showPage(hash);
+});
 
 function handleFileUpload(input) {
   const files = input.files;
