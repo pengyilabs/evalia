@@ -464,7 +464,7 @@ input,textarea{font-family:inherit}
       <p>Elige un punto de partida. Podrás revisar y editar cada pregunta antes de publicar.</p>
     </div>
     <div class="create-options">
-      <div class="option-card selected" onclick="selectOption(this)">
+      <div class="option-card" onclick="showPage('wizard')">
         <div class="option-thumb green">
           <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>
         </div>
@@ -473,7 +473,7 @@ input,textarea{font-family:inherit}
           <p>Parte de una consigna breve y crea una evaluación completa.</p>
         </div>
       </div>
-      <div class="option-card" onclick="selectOption(this)">
+      <div class="option-card" onclick="showPage('editor')">
         <div class="option-thumb dark">
           <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </div>
@@ -482,7 +482,7 @@ input,textarea{font-family:inherit}
           <p>Convierte apuntes o un temario en preguntas organizadas.</p>
         </div>
       </div>
-      <div class="option-card" onclick="selectOption(this)">
+      <div class="option-card" onclick="showPage('editor')">
         <div class="option-thumb lavender">
           <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
         </div>
@@ -491,7 +491,7 @@ input,textarea{font-family:inherit}
           <p>Elige una estructura docente lista para personalizar.</p>
         </div>
       </div>
-      <div class="option-card" onclick="selectOption(this)">
+      <div class="option-card" onclick="showPage('editor')">
         <div class="option-thumb gray">
           <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </div>
@@ -502,9 +502,6 @@ input,textarea{font-family:inherit}
       </div>
     </div>
     <div class="create-hint">¿No sabes cuál elegir? Empieza con IA; siempre tendrás el control editorial.</div>
-    <div style="text-align:center;padding:0 20px 40px">
-      <button class="btn-create" onclick="continueFromCreate()" style="display:inline-flex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9,18 15,12 9,6"/></svg>Continuar</button>
-    </div>
   </div>
 </div>
 
@@ -747,24 +744,6 @@ function showPage(page) {
     document.getElementById('procStep3Icon').style.background = '';
     document.getElementById('procStep3Icon').style.borderColor = 'var(--border)';
     document.getElementById('procStep3Icon').innerHTML = '';
-  }
-}
-
-function selectOption(el) {
-  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function continueFromCreate() {
-  const selected = document.querySelector('.option-card.selected h3').textContent;
-  if (selected === 'Generar con IA') {
-    showPage('wizard');
-  } else if (selected === 'Pegar contenido') {
-    showPage('editor');
-  } else if (selected === 'Usar una plantilla') {
-    showPage('editor');
-  } else {
-    showPage('editor');
   }
 }
 
