@@ -250,10 +250,12 @@ input,textarea{font-family:inherit}
 .fill-test-progress{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
 .fill-test-progress-bar{width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
 .fill-test-progress-fill{height:100%;background:var(--green);border-radius:3px;transition:width .3s}
-.fill-test-canvas{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
+.fill-test-canvas{flex:1;overflow:hidden;position:relative}
 .fill-test-canvas::-webkit-scrollbar{display:none}
-.fill-question{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;max-width:680px;width:100%;margin:0 auto;transition:border-color .2s}
-.fill-question.current{border-color:var(--green)}
+.fill-question{position:absolute;inset:0;padding:24px;display:none;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto}
+.fill-question.active{display:flex}
+.fill-question-inner{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;max-width:600px;width:100%;transition:border-color .2s}
+.fill-question.current .fill-question-inner{border-color:var(--green)}
 .fill-question-badge{display:inline-block;padding:4px 12px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;letter-spacing:.05em;margin-bottom:12px;color:var(--green);background:rgba(92,230,63,.1)}
 .fill-question-text{font-size:16px;font-weight:600;line-height:1.5;margin-bottom:16px}
 .fill-options{display:flex;flex-direction:column;gap:8px}
@@ -1002,47 +1004,57 @@ input,textarea{font-family:inherit}
         <button class="fill-nav-btn primary" onclick="submitTest()">Entregar</button>
       </div>
       <div class="fill-test-canvas" id="fillCanvas">
-        <div class="fill-question current" data-q="0">
-          <div class="fill-question-badge">PREGUNTA 1 · OPCIÓN MÚLTIPLE</div>
-          <div class="fill-question-text">¿Qué estructura controla el intercambio de sustancias con el exterior?</div>
-          <div class="fill-options">
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">A</span>Núcleo</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">B</span>Membrana plasmática</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">C</span>Mitocondria</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">D</span>Ribosoma</div>
+        <div class="fill-question active" data-q="0">
+          <div class="fill-question-inner">
+            <div class="fill-question-badge">PREGUNTA 1 · OPCIÓN MÚLTIPLE</div>
+            <div class="fill-question-text">¿Qué estructura controla el intercambio de sustancias con el exterior?</div>
+            <div class="fill-options">
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">A</span>Núcleo</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">B</span>Membrana plasmática</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">C</span>Mitocondria</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">D</span>Ribosoma</div>
+            </div>
           </div>
         </div>
         <div class="fill-question" data-q="1">
-          <div class="fill-question-badge">PREGUNTA 2 · OPCIÓN MÚLTIPLE</div>
-          <div class="fill-question-text">¿Cuál es la función principal de la mitocondria?</div>
-          <div class="fill-options">
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">A</span>Sintetizar proteínas</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">B</span>Producir energía (ATP)</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">C</span>Almacenar información genética</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">D</span>Digerir sustancias</div>
+          <div class="fill-question-inner">
+            <div class="fill-question-badge">PREGUNTA 2 · OPCIÓN MÚLTIPLE</div>
+            <div class="fill-question-text">¿Cuál es la función principal de la mitocondria?</div>
+            <div class="fill-options">
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">A</span>Sintetizar proteínas</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">B</span>Producir energía (ATP)</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">C</span>Almacenar información genética</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">D</span>Digerir sustancias</div>
+            </div>
           </div>
         </div>
         <div class="fill-question" data-q="2">
-          <div class="fill-question-badge">PREGUNTA 3 · PREGUNTA CORTA</div>
-          <div class="fill-question-text">Explica brevemente la diferencia entre mitosis y meiosis.</div>
-          <textarea class="fill-textarea" placeholder="Escribe tu respuesta aquí..."></textarea>
+          <div class="fill-question-inner">
+            <div class="fill-question-badge">PREGUNTA 3 · PREGUNTA CORTA</div>
+            <div class="fill-question-text">Explica brevemente la diferencia entre mitosis y meiosis.</div>
+            <textarea class="fill-textarea" placeholder="Escribe tu respuesta aquí..."></textarea>
+          </div>
         </div>
         <div class="fill-question" data-q="3">
-          <div class="fill-question-badge">PREGUNTA 4 · VERDADERO / FALSO</div>
-          <div class="fill-question-text">El ADN se encuentra exclusivamente en el núcleo de la célula.</div>
-          <div class="fill-options">
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter" style="border-radius:4px">✓</span>Verdadero</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter" style="border-radius:4px">✗</span>Falso</div>
+          <div class="fill-question-inner">
+            <div class="fill-question-badge">PREGUNTA 4 · VERDADERO / FALSO</div>
+            <div class="fill-question-text">El ADN se encuentra exclusivamente en el núcleo de la célula.</div>
+            <div class="fill-options">
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter" style="border-radius:4px">✓</span>Verdadero</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter" style="border-radius:4px">✗</span>Falso</div>
+            </div>
           </div>
         </div>
         <div class="fill-question" data-q="4">
-          <div class="fill-question-badge">PREGUNTA 5 · OPCIÓN MÚLTIPLE</div>
-          <div class="fill-question-text">¿En qué organela se realiza la fotosíntesis?</div>
-          <div class="fill-options">
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">A</span>Mitocondria</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">B</span>Ribosoma</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">C</span>Cloroplasto</div>
-            <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">D</span>Aparato de Golgi</div>
+          <div class="fill-question-inner">
+            <div class="fill-question-badge">PREGUNTA 5 · OPCIÓN MÚLTIPLE</div>
+            <div class="fill-question-text">¿En qué organela se realiza la fotosíntesis?</div>
+            <div class="fill-options">
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">A</span>Mitocondria</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">B</span>Ribosoma</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">C</span>Cloroplasto</div>
+              <div class="fill-option" onclick="selectFillOption(this)"><span class="fill-option-letter">D</span>Aparato de Golgi</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1566,7 +1578,7 @@ function renderFillDots() {
 function updateFillNav() {
   var questions = document.querySelectorAll('.fill-question');
   questions.forEach(function(q, i) {
-    q.classList.toggle('current', i === fillCurrentQ);
+    q.classList.toggle('active', i === fillCurrentQ);
   });
   var dots = document.querySelectorAll('.fill-nav-dot');
   dots.forEach(function(d, i) {
@@ -1581,8 +1593,6 @@ function updateFillNav() {
     nextBtn.textContent = 'Siguiente →';
     nextBtn.onclick = function() { fillNav(1); };
   }
-  var current = document.querySelector('.fill-question.current');
-  if (current) current.scrollIntoView({ behavior: 'smooth', block: 'center' });
   var pct = Math.round(((fillCurrentQ + 1) / fillTotalQ) * 100);
   document.getElementById('fillProgressFill').style.width = pct + '%';
   document.getElementById('fillProgressText').textContent = (fillCurrentQ + 1) + '/' + fillTotalQ;
