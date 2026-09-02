@@ -1311,7 +1311,6 @@ function renderMaterialesList(filter, search) {
     btn.innerHTML = '<div class="attach-material-ext" style="background:'+m.color+'12;color:'+m.color+'">'+m.ext+'</div><div class="attach-material-name">'+m.name+'</div><div class="attach-material-size">'+m.size+'</div>';
     btn.addEventListener('click', function() {
       addMaterialFromPlatform(m);
-      closeAttachMenu();
     });
     list.appendChild(btn);
   });
@@ -1388,6 +1387,10 @@ function closeAttachMenu() {
 document.getElementById('attachBtn').addEventListener('click', function(e) {
   e.stopPropagation();
   toggleAttachMenu();
+});
+
+document.getElementById('attachDropdown').addEventListener('click', function(e) {
+  e.stopPropagation();
 });
 
 document.addEventListener('click', function(e) {
