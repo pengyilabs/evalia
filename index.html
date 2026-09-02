@@ -313,8 +313,9 @@ input,textarea{font-family:inherit}
 .fill-chat-send:hover{opacity:.85}
 
 /* Fill Intro Overlay */
-.fill-intro{position:fixed;inset:0;z-index:500;background:linear-gradient(135deg,#f0fdf4 0%,#fff 40%,#f8f9fb 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:1;transition:opacity .5s ease}
-.fill-intro.hidden{opacity:0;pointer-events:none}
+.fill-intro{position:fixed;inset:0;z-index:500;background:linear-gradient(135deg,#f0fdf4 0%,#fff 40%,#f8f9fb 100%);display:none;flex-direction:column;align-items:center;justify-content:center;opacity:1;transition:opacity .5s ease}
+.fill-intro.visible{display:flex}
+.fill-intro.hiding{opacity:0;pointer-events:none}
 .fill-intro-center{display:flex;flex-direction:column;align-items:center;gap:20px;max-width:560px;width:90%;text-align:center}
 .fill-intro-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#E3FFE0,var(--green-light));display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px var(--surface),0 0 0 7px var(--green),0 8px 32px rgba(92,230,63,.2);animation:introPulse 2s ease-in-out infinite}
 .fill-intro-avatar img{width:68px;height:68px}
@@ -1214,12 +1215,12 @@ function showPage(page) {
     }
     if (page === 'fill-test') {
       var intro = document.getElementById('fillIntro');
-      if (intro) { intro.classList.remove('hidden'); intro.style.display = ''; }
+      if (intro) { intro.classList.remove('hiding'); intro.classList.add('visible'); }
       introIdx = 0;
       setTimeout(initFillTest, 100);
     } else {
       var introEl = document.getElementById('fillIntro');
-      if (introEl) introEl.style.display = 'none';
+      if (introEl) { introEl.classList.remove('visible','hiding'); }
     }
     window.location.hash = page === 'dashboard' ? '' : page;
   } catch(e) {
@@ -1717,7 +1718,8 @@ function showNextIntroMsg() {
 function startFillIntro() {
   var intro = document.getElementById('fillIntro');
   if (!intro) return;
-  intro.classList.remove('hidden');
+  intro.classList.add('visible');
+  intro.classList.remove('hiding');
   introIdx = 0;
   var container = document.getElementById('fillIntroMessages');
   if (container) container.innerHTML = '';
@@ -1728,13 +1730,17 @@ function startFillIntro() {
 
 function dismissFillIntro() {
   var intro = document.getElementById('fillIntro');
-  if (intro) intro.classList.add('hidden');
+  if (intro) { intro.classList.add('hiding'); intro.classList.remove('visible'); }
+  setTimeout(function() {
+    var el = document.getElementById('fillIntro');
+    if (el) el.classList.remove('hiding');
+  }, 500);
   initFillTest();
 }
 
 function initFillTest() {
   var intro = document.getElementById('fillIntro');
-  if (intro && !intro.classList.contains('hidden')) {
+  if (intro && intro.classList.contains('visible')) {
     startFillIntro();
     return;
   }
