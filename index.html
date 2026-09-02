@@ -330,7 +330,7 @@ input,textarea{font-family:inherit}
 .btn-generate:hover{opacity:.9;transform:translateY(-1px)}
 
 /* EDITOR */
-.editor{background:var(--dark);color:#fff;min-height:100vh;display:flex;flex-direction:column}
+.editor{background:var(--dark);color:#fff;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 .editor-topbar{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.1)}
 .editor-logo{width:28px;height:28px;border-radius:6px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--dark)}
 .editor-title{font-size:14px;font-weight:600}
@@ -344,8 +344,8 @@ input,textarea{font-family:inherit}
 .editor-icon-btn{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:#fff;transition:background .15s}
 .editor-icon-btn:hover{background:rgba(255,255,255,.1)}
 .editor-icon-btn svg{width:20px;height:20px}
-.editor-body{display:flex;flex:1;overflow:hidden}
-.editor-sidebar{width:180px;border-right:1px solid rgba(255,255,255,.1);padding:12px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex-shrink:0}
+.editor-body{display:flex;flex:1;overflow:hidden;min-height:0}
+.editor-sidebar{width:180px;border-right:1px solid rgba(255,255,255,.1);padding:12px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex-shrink:0;min-height:0}
 .add-question{padding:8px;border-radius:var(--radius-sm);font-size:12px;color:rgba(255,255,255,.5);text-align:center;cursor:pointer;border:1.5px dashed rgba(255,255,255,.2);transition:all .15s}
 .add-question:hover{border-color:rgba(255,255,255,.4);color:#fff}
 .q-thumb{border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .2s}
@@ -356,7 +356,7 @@ input,textarea{font-family:inherit}
 .q-thumb.active .q-thumb-inner img{opacity:1}
 .q-thumb-label{font-size:11px;padding:4px 8px;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:rgba(255,255,255,.03)}
 .q-thumb.active .q-thumb-label{color:var(--green);background:rgba(92,230,63,.08)}
-.editor-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.editor-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
 .editor-canvas{flex:1;overflow-y:auto;scroll-behavior:smooth;padding:20px 0;display:flex;flex-direction:column;gap:16px}
 .editor-canvas::-webkit-scrollbar{display:none}
 .question-slide{display:flex;align-items:center;justify-content:center;padding:0 32px}
