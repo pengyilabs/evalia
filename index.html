@@ -683,16 +683,16 @@ input,textarea{font-family:inherit}
               </button>
               <div id="attachDropdown" class="attach-dropdown" style="display:none">
                 <div class="attach-tabs">
-                  <button class="attach-tab active" onclick="switchAttachTab('upload',this)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    Subir archivo
-                  </button>
-                  <button class="attach-tab" onclick="switchAttachTab('materiales',this)">
+                  <button class="attach-tab active" onclick="switchAttachTab('materiales',this)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
                     Mis Materiales
                   </button>
+                  <button class="attach-tab" onclick="switchAttachTab('upload',this)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Subir archivo
+                  </button>
                 </div>
-                <div id="attachTabUpload" class="attach-tab-content">
+                <div id="attachTabUpload" class="attach-tab-content" style="display:none">
                   <button class="attach-upload-btn" onclick="document.getElementById('wizardFileUpload').click();closeAttachMenu()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="20" height="20"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                     <div style="text-align:left"><div style="font-size:13px;font-weight:600">Subir desde tu computadora</div><div style="font-size:11px;color:var(--muted)">PDF, Word, PowerPoint, CSV — máx. 25 MB</div></div>
@@ -704,7 +704,7 @@ input,textarea{font-family:inherit}
                     </div>
                   </div>
                 </div>
-                <div id="attachTabMateriales" class="attach-tab-content" style="display:none">
+                <div id="attachTabMateriales" class="attach-tab-content">
                   <div style="padding:8px 12px">
                     <div class="attach-search-wrap">
                       <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1360,8 +1360,11 @@ function toggleAttachMenu() {
     currentAttachFilter = 'all';
     currentAttachSearch = '';
     document.querySelectorAll('.attach-tab').forEach(function(t,i) { t.classList.toggle('active', i===0); });
-    document.getElementById('attachTabUpload').style.display = 'block';
-    document.getElementById('attachTabMateriales').style.display = 'none';
+    document.getElementById('attachTabMateriales').style.display = 'block';
+    document.getElementById('attachTabUpload').style.display = 'none';
+    renderMaterialesList();
+    document.getElementById('attachSearchInput').value = '';
+    currentAttachSearch = '';
     document.querySelectorAll('.attach-filter-pill').forEach(function(p,i) { p.classList.toggle('active', i===0); });
     var btn = document.getElementById('attachBtn');
     var rect = btn.getBoundingClientRect();
