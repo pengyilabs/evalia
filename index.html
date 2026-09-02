@@ -311,6 +311,28 @@ input,textarea{font-family:inherit}
 .fill-chat-input:focus{border-color:var(--green)}
 .fill-chat-send{width:36px;height:36px;border-radius:50%;background:var(--green);color:var(--dark);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;transition:opacity .15s}
 .fill-chat-send:hover{opacity:.85}
+
+/* Fill Intro Overlay */
+.fill-intro{position:fixed;inset:0;z-index:500;background:linear-gradient(135deg,#f0fdf4 0%,#fff 40%,#f8f9fb 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:1;transition:opacity .5s ease}
+.fill-intro.hidden{opacity:0;pointer-events:none}
+.fill-intro-center{display:flex;flex-direction:column;align-items:center;gap:20px;max-width:560px;width:90%;text-align:center}
+.fill-intro-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#E3FFE0,var(--green-light));display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 4px var(--surface),0 0 0 7px var(--green),0 8px 32px rgba(92,230,63,.2);animation:introPulse 2s ease-in-out infinite}
+.fill-intro-avatar img{width:68px;height:68px}
+@keyframes introPulse{0%,100%{box-shadow:0 0 0 4px var(--surface),0 0 0 7px var(--green),0 8px 32px rgba(92,230,63,.2)}50%{box-shadow:0 0 0 4px var(--surface),0 0 0 10px rgba(92,230,63,.3),0 8px 40px rgba(92,230,63,.3)}}
+.fill-intro-name{font-size:22px;font-weight:800;color:var(--text);margin-top:4px}
+.fill-intro-messages{display:flex;flex-direction:column;gap:12px;width:100%;min-height:200px}
+.fill-intro-msg{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;padding:14px 18px;border-radius:14px;font-size:14px;line-height:1.6;text-align:left}
+.fill-intro-msg.visible{opacity:1;transform:translateY(0)}
+.fill-intro-msg.ai{background:var(--surface);border:1.5px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;max-width:92%}
+.fill-intro-msg.ai .typing-cursor{display:inline-block;width:2px;height:1em;background:var(--green);margin-left:2px;animation:blink .7s step-end infinite;vertical-align:text-bottom}
+@keyframes blink{50%{opacity:0}}
+.fill-intro-start{opacity:0;transform:translateY(12px);transition:opacity .4s ease,transform .4s ease;margin-top:8px;padding:14px 40px;border-radius:var(--radius);background:var(--green);color:var(--dark);font-size:15px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(92,230,63,.3);transition:opacity .4s ease,transform .4s ease,box-shadow .15s}
+.fill-intro-start.visible{opacity:1;transform:translateY(0)}
+.fill-intro-start:hover{box-shadow:0 4px 20px rgba(92,230,63,.4);transform:translateY(-1px)}
+.fill-intro-start:active{transform:translateY(0)}
+.fill-intro-footer{position:absolute;bottom:28px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.fill-intro-footer svg{width:14px;height:14px;color:var(--green)}
+
 .attach-material-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px 14px;border:none;background:none;cursor:pointer;font-family:var(--font);text-align:left;transition:background .1s;border-radius:0}
 .attach-material-item:hover{background:var(--bg)}
 .attach-material-ext{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0}
@@ -1028,6 +1050,22 @@ input,textarea{font-family:inherit}
 
 </div><!-- .main -->
 
+<!-- Fill Intro Overlay -->
+<div class="fill-intro" id="fillIntro">
+  <div class="fill-intro-center">
+    <div class="fill-intro-avatar">
+      <img src="ink-illustration-character-_Vectorized_.svg" alt="Evalia">
+    </div>
+    <div class="fill-intro-name">Evalia</div>
+    <div class="fill-intro-messages" id="fillIntroMessages"></div>
+    <button class="fill-intro-start" id="fillIntroStart" onclick="dismissFillIntro()">Empezar evaluación</button>
+  </div>
+  <div class="fill-intro-footer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Tu progreso es confidencial y seguro
+  </div>
+</div>
+
 <!-- Fill Test Page -->
 <div class="page" id="page-fill-test" style="padding:0">
   <div class="fill-test">
@@ -1175,7 +1213,13 @@ function showPage(page) {
       setTimeout(initEditorScroll, 100);
     }
     if (page === 'fill-test') {
+      var intro = document.getElementById('fillIntro');
+      if (intro) { intro.classList.remove('hidden'); intro.style.display = ''; }
+      introIdx = 0;
       setTimeout(initFillTest, 100);
+    } else {
+      var introEl = document.getElementById('fillIntro');
+      if (introEl) introEl.style.display = 'none';
     }
     window.location.hash = page === 'dashboard' ? '' : page;
   } catch(e) {
@@ -1618,7 +1662,82 @@ var fillTotalQ = 5;
 var fillTimerInterval = null;
 var fillTimeLeft = 25 * 60;
 
+/* Fill Intro Typewriter */
+var introMessages = [
+  '¡Hola! Soy Evalia, tu asistente de estudio. Voy a estar contigo mientras completas tu evaluación.',
+  'Mi objetivo no es darte las respuestas, sino ayudarte a pensar. Como un compañero de estudio que va a tu lado.',
+  'Si no sabes algo, cuéntame lo que piensas. Podemos analizar juntos las opciones. A veces saber qué NO es correcto ya te acerca mucho a la respuesta.',
+  'Con cada pregunta que resuelvas, necesitarás menos mi ayuda. Eso es exactamente lo que buscamos. ¡Tú puedes!'
+];
+var introIdx = 0;
+var introCharIdx = 0;
+var introTyping = false;
+
+function typewriteIntroLine(el, text, cb) {
+  introCharIdx = 0;
+  introTyping = true;
+  var cursor = document.createElement('span');
+  cursor.className = 'typing-cursor';
+  el.appendChild(cursor);
+  function tick() {
+    if (introCharIdx < text.length) {
+      el.textContent = text.substring(0, introCharIdx + 1);
+      el.appendChild(cursor);
+      introCharIdx++;
+      setTimeout(tick, 25 + Math.random() * 20);
+    } else {
+      introTyping = false;
+      cursor.remove();
+      if (cb) setTimeout(cb, 400);
+    }
+  }
+  tick();
+}
+
+function showNextIntroMsg() {
+  if (introIdx >= introMessages.length) {
+    var startBtn = document.getElementById('fillIntroStart');
+    if (startBtn) startBtn.classList.add('visible');
+    return;
+  }
+  var container = document.getElementById('fillIntroMessages');
+  if (!container) return;
+  var msg = document.createElement('div');
+  msg.className = 'fill-intro-msg ai';
+  container.appendChild(msg);
+  setTimeout(function() { msg.classList.add('visible'); }, 50);
+  setTimeout(function() {
+    typewriteIntroLine(msg, introMessages[introIdx], function() {
+      introIdx++;
+      showNextIntroMsg();
+    });
+  }, 500);
+}
+
+function startFillIntro() {
+  var intro = document.getElementById('fillIntro');
+  if (!intro) return;
+  intro.classList.remove('hidden');
+  introIdx = 0;
+  var container = document.getElementById('fillIntroMessages');
+  if (container) container.innerHTML = '';
+  var startBtn = document.getElementById('fillIntroStart');
+  if (startBtn) startBtn.classList.remove('visible');
+  setTimeout(showNextIntroMsg, 600);
+}
+
+function dismissFillIntro() {
+  var intro = document.getElementById('fillIntro');
+  if (intro) intro.classList.add('hidden');
+  initFillTest();
+}
+
 function initFillTest() {
+  var intro = document.getElementById('fillIntro');
+  if (intro && !intro.classList.contains('hidden')) {
+    startFillIntro();
+    return;
+  }
   fillCurrentQ = 0;
   fillTimeLeft = 25 * 60;
   renderFillDots();
