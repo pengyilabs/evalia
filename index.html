@@ -1147,7 +1147,7 @@ input,textarea{font-family:inherit}
       <div class="fill-chat-header">
         <div class="fill-chat-header-row">
           <div class="fill-chat-avatar-wrap">
-            <img src="ink-illustration-character-_Vectorized_.svg" alt="Evalia" class="fill-chat-avatar-img">
+            <img src="evalia-sprites/waving.svg" alt="Evalia" class="fill-chat-avatar-img">
             <div class="fill-chat-avatar-pulse"></div>
           </div>
           <div class="fill-chat-info"><h4>Evalia AI</h4><p>Asistente de estudio</p></div>
@@ -1157,7 +1157,7 @@ input,textarea{font-family:inherit}
       <div class="fill-chat-messages" id="fillChatMessages">
         <div class="fill-chat-welcome">
           <div class="fill-chat-welcome-illustration">
-            <img src="ink-illustration-character-_Vectorized_.svg" alt="Evalia">
+      <img src="evalia-sprites/happy.svg" alt="Evalia">
           </div>
           <h5>¡Hola! Soy Evalia</h5>
           <p>Tu asistente de estudio. Puedo ayudarte con dudas sobre la evaluación.</p>
@@ -1664,6 +1664,48 @@ var fillTotalQ = 5;
 var fillTimerInterval = null;
 var fillTimeLeft = 25 * 60;
 
+/* Evalia Sprite System */
+var evaliaSprites = {
+  greeting: ['waving', 'happy', 'peace-sign'],
+  thinking: ['thinking', 'chin-rest', 'looking-up', 'focusing'],
+  encouraging: ['thumbs-up', 'okay-sign', 'nodding', 'encouraging', 'confident'],
+  explaining: ['explaining-both-hands', 'pointing-up', 'presenting'],
+  celebrating: ['celebrating', 'clapping', 'excited', 'proud', 'mind-blown'],
+  listening: ['listening', 'headphones', 'whispering'],
+  concerned: ['worried', 'nervous-smile', 'serious', 'biting-lip'],
+  playful: ['giggling', 'winking', 'heart-hands', 'mic-drop'],
+  working: ['typing', 'writing', 'reading-notes', 'checking'],
+  surprised: ['surprised', 'shock', 'dramatic-gasp'],
+  neutral: ['neutral', 'shrugging', 'sipping-coffee']
+};
+var currentSprite = 'waving';
+
+function setEvaliaSprite(category) {
+  var sprites = evaliaSprites[category] || evaliaSprites.neutral;
+  var pick = sprites[Math.floor(Math.random() * sprites.length)];
+  if (pick === currentSprite) {
+    pick = sprites[(sprites.indexOf(pick) + 1) % sprites.length];
+  }
+  currentSprite = pick;
+  var src = 'evalia-sprites/' + pick + '.svg';
+  var headerImg = document.querySelector('.fill-chat-avatar-img');
+  if (headerImg) headerImg.src = src;
+  var introAvatarImg = document.querySelector('.fill-intro-avatar img');
+  if (introAvatarImg) introAvatarImg.src = src;
+}
+
+function setSpriteForMessage(text) {
+  var t = text.toLowerCase();
+  if (t.includes('¡hola') || t.includes('bienvenido') || t.includes('empecemos')) return setEvaliaSprite('greeting');
+  if (t.includes('piensa') || t.includes('analiza') || t.includes('considera') || t.includes('reflect')) return setEvaliaSprite('thinking');
+  if (t.includes('muy bien') || t.includes('excelente') || t.includes('correcto') || t.includes('¡tú puedes') || t.includes('genial') || t.includes('buen trabajo')) return setEvaliaSprite('celebrating');
+  if (t.includes('no te preocupes') || t.includes('intent') || t.includes('sigue') || t.includes('vas bien')) return setEvaliaSprite('encouraging');
+  if (t.includes('cuéntame') || t.includes('qué piensas') || t.includes('explícame')) return setEvaliaSprite('listening');
+  if (t.includes('por qué') || t.includes('porque') || t.includes('la razón') || t.includes('la respuesta es')) return setEvaliaSprite('explaining');
+  if (t.includes('ups') || t.includes('casi') || t.includes('no exactamente') || t.includes('revisa')) return setEvaliaSprite('concerned');
+  setEvaliaSprite('neutral');
+}
+
 /* Fill Intro Typewriter */
 var introMessages = [
   '¡Hola! Soy Evalia, tu asistente de estudio. No estoy aquí para darte las respuestas, sino para ayudarte a pensar. Como un compañero que va a tu lado.',
@@ -1701,6 +1743,7 @@ function showNextIntroMsg() {
     if (startBtn) startBtn.classList.add('visible');
     return;
   }
+  setSpriteForMessage(introMessages[introIdx]);
   var container = document.getElementById('fillIntroMessages');
   if (!container) return;
   var msg = document.createElement('div');
@@ -1872,6 +1915,7 @@ function sendFillChat() {
   container.appendChild(userMsg);
   input.value = '';
   container.scrollTop = container.scrollHeight;
+  setEvaliaSprite('thinking');
   var typing = document.createElement('div');
   typing.className = 'fill-chat-typing';
   typing.innerHTML = '<span></span><span></span><span></span>';
@@ -1888,9 +1932,11 @@ function sendFillChat() {
       'El ADN también se encuentra en las mitocondrias (ADNmt) y en los cloroplastos de las células vegetales.',
       'El cloroplasto es la organela donde se realiza la fotosíntesis, convirtiendo luz solar en energía química.'
     ];
-    aiMsg.textContent = responses[Math.floor(Math.random() * responses.length)];
+    var response = responses[Math.floor(Math.random() * responses.length)];
+    aiMsg.textContent = response;
     container.appendChild(aiMsg);
     container.scrollTop = container.scrollHeight;
+    setSpriteForMessage(response);
   }, 1200);
 }
 
