@@ -199,7 +199,10 @@ input,textarea{font-family:inherit}
 .chat-input-wrap textarea,.chat-input-wrap .chat-bottom-bar{border-radius:0}
 .chat-input-wrap:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.15)}
 .chat-input-wrap.drag-over{border-color:var(--green);box-shadow:0 0 0 3px rgba(92,230,63,.2)}
-.attach-dropdown{position:absolute;bottom:calc(100% + 8px);left:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:100;overflow:visible}
+.attach-dropdown{position:absolute;left:0;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:100;overflow:visible;max-height:420px;display:flex;flex-direction:column}
+.attach-dropdown.above{bottom:calc(100% + 8px);top:auto}
+.attach-dropdown.below{top:calc(100% + 8px);bottom:auto}
+.attach-dropdown .attach-tab-content{flex:1;overflow:hidden;display:flex;flex-direction:column}
 .attach-tabs{display:flex;border-bottom:1px solid var(--border)}
 .attach-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 0;border:none;background:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);font-family:var(--font);transition:all .15s;border-bottom:2px solid transparent}
 .attach-tab:hover{color:var(--text);background:var(--bg)}
@@ -215,7 +218,7 @@ input,textarea{font-family:inherit}
 .attach-filter-pill{padding:4px 10px;border-radius:var(--radius-pill);border:1px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;transition:all .1s;background:var(--surface);color:var(--muted);font-family:var(--font)}
 .attach-filter-pill:hover{border-color:var(--green);color:var(--text)}
 .attach-filter-pill.active{background:var(--green);color:var(--dark);border-color:var(--green)}
-.attach-materials-scroll{max-height:240px;overflow-y:auto;padding:0 4px 4px}
+.attach-materials-scroll{flex:1;overflow-y:auto;padding:0 4px 4px}
 .share-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
 .share-overlay.open{opacity:1;pointer-events:auto}
 .share-modal{background:var(--surface);border-radius:var(--radius-lg);width:480px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.2);transform:translateY(20px);transition:transform .2s}
@@ -1349,6 +1352,17 @@ function toggleAttachMenu() {
     document.getElementById('attachTabUpload').style.display = 'block';
     document.getElementById('attachTabMateriales').style.display = 'none';
     document.querySelectorAll('.attach-filter-pill').forEach(function(p,i) { p.classList.toggle('active', i===0); });
+    var btn = document.getElementById('attachBtn');
+    var rect = btn.getBoundingClientRect();
+    var spaceAbove = rect.top;
+    var ddHeight = 380;
+    if (spaceAbove < ddHeight + 20) {
+      dd.classList.remove('above');
+      dd.classList.add('below');
+    } else {
+      dd.classList.remove('below');
+      dd.classList.add('above');
+    }
   } else {
     dd.style.display = 'none';
   }
