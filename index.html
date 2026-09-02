@@ -1673,6 +1673,7 @@ var introMessages = [
 var introIdx = 0;
 var introCharIdx = 0;
 var introTyping = false;
+var introRunning = false;
 
 function typewriteIntroLine(el, text, cb) {
   introCharIdx = 0;
@@ -1716,6 +1717,8 @@ function showNextIntroMsg() {
 }
 
 function startFillIntro() {
+  if (introRunning) return;
+  introRunning = true;
   var intro = document.getElementById('fillIntro');
   if (!intro) return;
   intro.classList.add('visible');
@@ -1729,6 +1732,7 @@ function startFillIntro() {
 }
 
 function dismissFillIntro() {
+  introRunning = false;
   var intro = document.getElementById('fillIntro');
   if (intro) { intro.classList.add('hiding'); intro.classList.remove('visible'); }
   setTimeout(function() {
