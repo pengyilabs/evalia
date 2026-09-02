@@ -1488,22 +1488,28 @@ function initEditorScroll() {
   if (!canvas) return;
   const slides = canvas.querySelectorAll('.question-slide');
   const thumbs = document.querySelectorAll('.q-thumb');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const idx = entry.target.dataset.q;
-        slides.forEach(s => s.classList.remove('active'));
-        entry.target.classList.add('active');
-        thumbs.forEach(t => t.classList.remove('active'));
-        const activeThumb = document.querySelector(`.q-thumb[data-slide="${idx}"]`);
-        if (activeThumb) {
-          activeThumb.classList.add('active');
-          activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  slides.forEach(s => s.classList.remove('active'));
+  thumbs.forEach(t => t.classList.remove('active'));
+  if (slides[0]) slides[0].classList.add('active');
+  if (thumbs[0]) thumbs[0].classList.add('active');
+  setTimeout(function() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = entry.target.dataset.q;
+          slides.forEach(s => s.classList.remove('active'));
+          entry.target.classList.add('active');
+          thumbs.forEach(t => t.classList.remove('active'));
+          const activeThumb = document.querySelector(`.q-thumb[data-slide="${idx}"]`);
+          if (activeThumb) {
+            activeThumb.classList.add('active');
+            activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
         }
-      }
-    });
-  }, { root: canvas, threshold: 0.3 });
-  slides.forEach(s => observer.observe(s));
+      });
+    }, { root: canvas, threshold: 0.3 });
+    slides.forEach(s => observer.observe(s));
+  }, 100);
 }
 
 // Mobile sidebar toggle
