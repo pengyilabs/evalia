@@ -325,6 +325,15 @@ input,textarea{font-family:inherit}
 .fill-mic-btn{width:36px;height:36px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;transition:all .25s;position:relative}
 .fill-mic-btn:hover{background:#333}
 .fill-mic-btn.active{background:#e53e3e;animation:micPulse 1.5s ease-in-out infinite}
+.fill-rec-controls{display:none;gap:6px;align-items:center;flex-shrink:0}
+.fill-rec-controls.visible{display:flex}
+.fill-rec-cancel{width:36px;height:36px;border-radius:50%;background:#e53e3e;color:#fff;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:opacity .15s}
+.fill-rec-cancel:hover{opacity:.85}
+.fill-rec-send{width:36px;height:36px;border-radius:50%;background:var(--green);color:var(--dark);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:opacity .15s}
+.fill-rec-send:hover{opacity:.85}
+@keyframes typingCursor{0%,100%{opacity:1}50%{opacity:0}}
+.fill-chat-input.recording{border-color:#e53e3e}
+.fill-chat-input.recording::placeholder{color:#e53e3e}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,62,62,.5)}50%{box-shadow:0 0 0 10px rgba(229,62,62,0)}}
 .fill-listening-bar{display:none;align-items:center;gap:6px;padding:8px 14px;background:#fef2f2;border-radius:var(--radius-sm);margin-bottom:8px;font-size:12px;color:#e53e3e;animation:fadeInUp .3s ease}
 .fill-listening-bar.visible{display:flex}
@@ -1200,7 +1209,11 @@ input,textarea{font-family:inherit}
         </div>
       </div>
       <div class="fill-chat-input-wrap">
-        <button class="fill-mic-btn" id="fillMicBtn" onclick="toggleFillMic()" title="Hablar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
+        <div class="fill-rec-controls" id="fillRecControls">
+          <button class="fill-rec-cancel" onclick="cancelFillRec()" title="Cancelar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          <button class="fill-rec-send" onclick="sendFillRec()" title="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><polyline points="20,6 9,17 4,12"/></svg></button>
+        </div>
+        <button class="fill-mic-btn" id="fillMicBtn" title="Hablar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
         <div style="flex:1;display:flex;flex-direction:column;gap:6px">
           <div class="fill-listening-bar" id="fillListeningBar"><div class="fill-listening-dots"><span></span><span></span><span></span></div>Escuchando...</div>
           <textarea class="fill-chat-input" id="fillChatInput" placeholder="Escribe tu pregunta..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFillChat()}"></textarea>
@@ -1992,20 +2005,68 @@ function toggleFillMic() {
   var btn = document.getElementById('fillMicBtn');
   var bar = document.getElementById('fillListeningBar');
   var input = document.getElementById('fillChatInput');
+  var recControls = document.getElementById('fillRecControls');
   fillMicActive = !fillMicActive;
   if (fillMicActive) {
     btn.classList.add('active');
     bar.classList.add('visible');
     input.placeholder = 'Escuchando...';
+    input.classList.add('recording');
     startSpriteCycle();
-    startFillRecog();
+    startSimulatedRec();
   } else {
     btn.classList.remove('active');
     bar.classList.remove('visible');
     input.placeholder = 'Escribe tu pregunta...';
+    input.classList.remove('recording');
+    input.value = '';
     stopSpriteCycle();
-    if (window._fillRecog) { try { window._fillRecog.stop(); } catch(e) {} window._fillRecog = null; }
+    if (window._simRecTimer) { clearInterval(window._simRecTimer); window._simRecTimer = null; }
+    if (window._simRecBtns) { recControls.classList.remove('visible'); window._simRecBtns = false; }
   }
+}
+function startSimulatedRec() {
+  var text = 'Quizás es el núcleo ? No creo que sea la mitocondria o el Ribosoma, esos no me suenan. Estoy entre la A y la B';
+  var input = document.getElementById('fillChatInput');
+  var idx = 0;
+  var recControls = document.getElementById('fillRecControls');
+  recControls.classList.add('visible');
+  window._simRecBtns = true;
+  if (window._simRecTimer) clearInterval(window._simRecTimer);
+  window._simRecTimer = setInterval(function() {
+    if (idx < text.length) {
+      input.value = text.substring(0, idx + 1);
+      input.scrollTop = input.scrollHeight;
+      idx++;
+    } else {
+      clearInterval(window._simRecTimer);
+      window._simRecTimer = null;
+    }
+  }, 35);
+}
+function cancelFillRec() {
+  var btn = document.getElementById('fillMicBtn');
+  var bar = document.getElementById('fillListeningBar');
+  var input = document.getElementById('fillChatInput');
+  var recControls = document.getElementById('fillRecControls');
+  fillMicActive = false;
+  btn.classList.remove('active');
+  bar.classList.remove('visible');
+  input.placeholder = 'Escribe tu pregunta...';
+  input.classList.remove('recording');
+  input.value = '';
+  recControls.classList.remove('visible');
+  window._simRecBtns = false;
+  stopSpriteCycle();
+  if (window._simRecTimer) { clearInterval(window._simRecTimer); window._simRecTimer = null; }
+}
+function sendFillRec() {
+  var input = document.getElementById('fillChatInput');
+  var text = input.value.trim();
+  if (!text) { cancelFillRec(); return; }
+  cancelFillRec();
+  input.value = text;
+  sendFillChat();
 }
 function toggleEvalDropdown(btn) {
   var dropdown = btn.nextElementSibling;
@@ -2021,6 +2082,9 @@ document.addEventListener('click', function(e) {
 
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeShareModal();
+});
+document.getElementById('fillMicBtn').addEventListener('click', function() {
+  toggleFillMic();
 });
 </script>
 
