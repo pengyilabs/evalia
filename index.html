@@ -497,6 +497,7 @@ input,textarea{font-family:inherit}
   <nav class="sidebar-nav">
     <a href="#dashboard" onclick="showPage('dashboard');return false" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>Inicio</a>
     <a href="#materials" onclick="showPage('materials');return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Materiales</a>
+    <a href="#reports" onclick="showPage('reports');return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Reportes</a>
   </nav>
   <div class="sidebar-plan">
     <div class="plan-label">PLAN DOCENTE PRO</div>
@@ -1238,11 +1239,21 @@ input,textarea{font-family:inherit}
     </div>
   </div>
 </div>
+
+<!-- PAGE: REPORTS -->
+<div class="page" id="page-reports" style="display:none">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5" width="64" height="64" style="margin-bottom:16px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    <h3 style="color:var(--muted);font-size:16px;font-weight:600;margin:0 0 8px">Reportes</h3>
+    <p style="color:#9ca3af;font-size:13px;max-width:320px;margin:0">Próximamente podrás ver estadísticas detalladas de tus evaluaciones y el rendimiento de tus estudiantes.</p>
+  </div>
+</div>
+
 </div><!-- .app -->
 
 <script>
-const pages = ['dashboard','materials','create','wizard','editor','fill-test'];
-const titles = {dashboard:'Mis evaluaciones',materials:'Materiales',create:'Crear evaluación',wizard:'Generar con IA',editor:'Biología · La célula'};
+  const pages = ['dashboard','materials','create','wizard','editor','fill-test','reports'];
+  const titles = {dashboard:'Mis evaluaciones',materials:'Materiales',create:'Crear evaluación',wizard:'Generar con IA',editor:'Biología · La célula',reports:'Reportes'};
 
 function showPage(page) {
   if (!pages.includes(page)) return;
@@ -1260,7 +1271,7 @@ function showPage(page) {
     const titleEl = document.getElementById('topbarTitle');
     if (titleEl) titleEl.textContent = titles[page] || '';
     document.querySelectorAll('.sidebar-nav a').forEach((a,i) => {
-      a.classList.toggle('active', (i===0 && page==='dashboard') || (i===1 && page==='materials'));
+      a.classList.toggle('active', (i===0 && page==='dashboard') || (i===1 && page==='materials') || (i===2 && page==='reports'));
     });
     const hideChrome = ['create','wizard','editor','fill-test'].includes(page);
     if (topbar) topbar.style.display = 'none';
