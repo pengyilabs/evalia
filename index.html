@@ -1171,7 +1171,6 @@ input,textarea{font-family:inherit}
           <h5>¡Hola! Soy Evalia</h5>
           <p>Tu asistente de estudio. Puedo ayudarte con dudas sobre la evaluación.</p>
         </div>
-        <div class="fill-chat-msg ai">Hola! Soy Evalia, tu asistente de estudio. Puedo ayudarte con dudas sobre la evaluación. ¿En qué puedo ayudarte?</div>
       </div>
       <div class="fill-chat-input-wrap">
         <button class="fill-mic-btn" id="fillMicBtn" onclick="toggleFillMic()" title="Hablar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
@@ -1735,44 +1734,59 @@ function setSpriteForMessage(text) {
 }
 
 /* Fill Test Init */
+var fillTestInited = false;
+function addFillTyping(container, cb) {
+  var typing = document.createElement('div');
+  typing.className = 'fill-chat-typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  container.appendChild(typing);
+  container.scrollTop = container.scrollHeight;
+  setEvaliaSprite('speaking');
+  setTimeout(function() {
+    if (typing.parentNode) typing.parentNode.removeChild(typing);
+    setEvaliaSprite('neutral');
+    if (cb) cb();
+  }, 1500);
+}
+function addFillAiMsg(container, text, delay) {
+  var msg = document.createElement('div');
+  msg.className = 'fill-chat-msg ai';
+  msg.style.opacity = '0';
+  msg.style.transform = 'translateY(10px)';
+  msg.style.transition = 'opacity .4s ease, transform .4s ease';
+  msg.textContent = text;
+  container.appendChild(msg);
+  setSpriteForMessage(text);
+  setTimeout(function() {
+    msg.style.opacity = '1';
+    msg.style.transform = 'translateY(0)';
+    container.scrollTop = container.scrollHeight;
+  }, delay || 100);
+}
 function initFillTest() {
+  if (fillTestInited) return;
+  fillTestInited = true;
   var chat = document.querySelector('.fill-chat');
   var chatMsgs = document.getElementById('fillChatMessages');
-  if (chatMsgs) {
-    var welcome = chatMsgs.querySelector('.fill-chat-welcome');
-    if (welcome) welcome.style.display = 'none';
-    var oldMsg = chatMsgs.querySelector('.fill-chat-msg');
-    if (oldMsg) oldMsg.style.display = 'none';
-  }
   if (chat) setTimeout(function() { chat.classList.add('slide-in'); }, 100);
   fillCurrentQ = 0;
   fillTimeLeft = 25 * 60;
   renderFillDots();
   updateFillNav();
   startFillTimer();
+  if (!chatMsgs) return;
+  var welcome = chatMsgs.querySelector('.fill-chat-welcome');
+  if (welcome) welcome.style.display = 'none';
   setTimeout(function() {
-    if (!chatMsgs) return;
-    var followUp = document.createElement('div');
-    followUp.className = 'fill-chat-msg ai';
-    followUp.style.opacity = '0';
-    followUp.style.transform = 'translateY(10px)';
-    followUp.style.transition = 'opacity .4s ease, transform .4s ease';
-    var followUps = [
-      '¿Tienes alguna duda con la primera pregunta? Estoy aquí para ayudarte a pensarla.',
-      'Cuando quieras, puedes preguntarme sobre cualquier concepto que necesites repasar.',
-      'Estoy lista para ayudarte. Puedes escribirme o usar el micrófono para hablarme.'
-    ];
-    followUp.textContent = followUps[Math.floor(Math.random() * followUps.length)];
-    chatMsgs.appendChild(followUp);
-    startSpriteCycle();
-    setTimeout(function() {
-      stopSpriteCycle();
-      followUp.style.opacity = '1';
-      followUp.style.transform = 'translateY(0)';
-      setSpriteForMessage(followUp.textContent);
-      chatMsgs.scrollTop = chatMsgs.scrollHeight;
-    }, 3000);
-  }, 2000);
+    addFillTyping(chatMsgs, function() {
+      addFillAiMsg(chatMsgs, '¡Hola! Soy Evalia, tu asistente de estudio. No estoy aquí para darte las respuestas, sino para ayudarte a pensar. Como un compañero que va a tu lado.', 100);
+      setTimeout(function() {
+        addFillTyping(chatMsgs, function() {
+          addFillAiMsg(chatMsgs, '¿Cómo te sientes con la primera pregunta? Si necesitas ayuda, escríbeme o usa el micrófono.', 100);
+        });
+      }, 2500);
+    });
+  }, 800);
 }
 
 function renderFillDots() {
