@@ -9,7 +9,6 @@
 *.jpeg
 *.gif
 *.zip
-*.svg
 
 # OS files
 .DS_Store
