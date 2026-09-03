@@ -2026,6 +2026,34 @@ function sendFillChat() {
 }
 
 var fillMicActive = false;
+function startFillRecog() {
+  var input = document.getElementById('fillChatInput');
+  if (!fillMicActive) return;
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) return;
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  window._fillRecog = new SpeechRecognition();
+  window._fillRecog.lang = 'es-ES';
+  window._fillRecog.continuous = true;
+  window._fillRecog.interimResults = true;
+  window._fillRecog.maxAlternatives = 1;
+  window._fillRecog.onresult = function(e) {
+    var last = e.results[e.results.length - 1];
+    if (last.isFinal) {
+      var transcript = last[0].transcript.trim();
+      input.value = transcript;
+      input.style.borderColor = 'var(--green)';
+      setTimeout(function() { input.style.borderColor = ''; }, 1500);
+    }
+  };
+  window._fillRecog.onerror = function(e) {
+    if (e.error === 'no-speech' || e.error === 'aborted') return;
+    if (fillMicActive) setTimeout(startFillRecog, 500);
+  };
+  window._fillRecog.onend = function() {
+    if (fillMicActive) setTimeout(startFillRecog, 300);
+  };
+  try { window._fillRecog.start(); } catch(e) {}
+}
 function toggleFillMic() {
   var btn = document.getElementById('fillMicBtn');
   var bar = document.getElementById('fillListeningBar');
@@ -2036,28 +2064,13 @@ function toggleFillMic() {
     bar.classList.add('visible');
     input.placeholder = 'Escuchando...';
     startSpriteCycle();
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      window._fillRecog = new SpeechRecognition();
-      window._fillRecog.lang = 'es-ES';
-      window._fillRecog.interimResults = false;
-      window._fillRecog.maxAlternatives = 1;
-      window._fillRecog.onresult = function(e) {
-        var transcript = e.results[0][0].transcript;
-        input.value = transcript;
-        toggleFillMic();
-        setTimeout(sendFillChat, 400);
-      };
-      window._fillRecog.onerror = function() { toggleFillMic(); };
-      window._fillRecog.onend = function() { if (fillMicActive) toggleFillMic(); };
-      window._fillRecog.start();
-    }
+    startFillRecog();
   } else {
     btn.classList.remove('active');
     bar.classList.remove('visible');
     input.placeholder = 'Escribe tu pregunta...';
     stopSpriteCycle();
-    if (window._fillRecog) { try { window._fillRecog.stop(); } catch(e) {} }
+    if (window._fillRecog) { try { window._fillRecog.stop(); } catch(e) {} window._fillRecog = null; }
   }
 }
 function toggleEvalDropdown(btn) {
