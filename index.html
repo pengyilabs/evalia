@@ -391,7 +391,13 @@ input,textarea{font-family:inherit}
 .outline-citation{font-size:11px;color:#9ca3af;margin-top:4px;padding:2px 6px;margin:-2px -6px 0;background:transparent;border-radius:4px;display:flex;align-items:center;gap:4px}
 .outline-citation svg{flex-shrink:0}
 .outline-preview{margin-top:8px;padding:10px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;font-size:12px;line-height:1.6;color:#374151}
-.outline-preview .q{font-weight:600;color:#111;margin-bottom:4px}
+.outline-preview .q{font-weight:600;color:#111;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.outline-preview .q-text{flex:1;min-width:0}
+.outline-preview .q-type{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:500;cursor:pointer;border:1px solid #d1d5db;background:#fff;color:#6b7280;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.outline-preview .q-type:hover{border-color:#9ca3af;background:#f9fafb}
+.outline-preview .q-type.single{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8}
+.outline-preview .q-type.multi{background:#fef3c7;border-color:#fcd34d;color:#b45309}
+.outline-preview .q-type.text{background:#d1fae5;border-color:#6ee7b7;color:#047857}
 .outline-preview .opts{padding-left:16px;margin:0;color:#6b7280}
 .outline-preview .opts li{margin-bottom:2px}
 .outline-drag{color:var(--muted);cursor:grab;padding:4px}
@@ -893,7 +899,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="Fundamentos de la célula" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
               <input type="text" value="Partes de la célula y funciones principales" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
               <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>Biología Celular, Cap. 1 — Libro de texto</div>
-              <div class="outline-preview"><div class="q">1. ¿Qué estructura controla el intercambio de sustancias con el exterior?</div><ul class="opts"><li>A. Núcleo</li><li>B. Membrana plasmática</li><li>C. Mitocondria</li><li>D. Ribosoma</li></ul><div class="q">2. ¿Cuál es la función principal del ribosoma?</div><ul class="opts"><li>A. Producción de ATP</li><li>B. Síntesis de proteínas</li><li>C. Transporte de oxígeno</li><li>D. Almacenamiento de ADN</li></ul><div class="q">3. ¿Qué organela contiene el material genético?</div><ul class="opts"><li>A. Núcleo</li><li>B. Lisosoma</li><li>C. Retículo endoplásmico</li><li>D. Aparato de Golgi</li></ul></div>
+              <div class="outline-preview"><div class="q"><span class="q-text">1. ¿Qué estructura controla el intercambio de sustancias con el exterior?</span><span class="q-type single" onclick="cycleQType(this)">✓ Única</span></div><ul class="opts"><li>A. Núcleo</li><li>B. Membrana plasmática</li><li>C. Mitocondria</li><li>D. Ribosoma</li></ul><div class="q"><span class="q-text">2. ¿Cuál es la función principal del ribosoma?</span><span class="q-type multi" onclick="cycleQType(this)">☑ Múltiple</span></div><ul class="opts"><li>A. Producción de ATP</li><li>B. Síntesis de proteínas</li><li>C. Transporte de oxígeno</li><li>D. Almacenamiento de ADN</li></ul><div class="q"><span class="q-text">3. ¿Qué organela contiene el material genético?</span><span class="q-type single" onclick="cycleQType(this)">✓ Única</span></div><ul class="opts"><li>A. Núcleo</li><li>B. Lisosoma</li><li>C. Retículo endoplásmico</li><li>D. Aparato de Golgi</li></ul></div>
             </div>
             <div style="display:flex;gap:2px;flex-shrink:0;align-items:center">
               <span class="outline-edit-hint" style="margin-right:4px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
@@ -908,7 +914,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="Membrana y transporte" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
               <input type="text" value="Difusión, ósmosis y transporte activo" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
               <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>Biología Celular, Cap. 2 — Apuntes clase</div>
-              <div class="outline-preview"><div class="q">1. ¿Qué tipo de transporte celular no requiere energía?</div><ul class="opts"><li>A. Transporte activo</li><li>B. Ósmosis</li><li>C. Bomba de protones</li><li>D. Endocitosis</li></ul><div class="q">2. ¿Hacia dónde se mueve el agua en la ósmosis?</div><ul class="opts"><li>A. De mayor a menor concentración de soluto</li><li>B. De menor a mayor concentración de soluto</li><li>C. Siempre hacia afuera</li><li>D. Depende de la temperatura</li></ul><div class="q">3. ¿Qué proceso celular utiliza vesículas para internalizar sustancias?</div><ul class="opts"><li>A. Exocitosis</li><li>B. Difusión simple</li><li>C. Endocitosis</li><li>D. Facilitación</li></ul></div>
+              <div class="outline-preview"><div class="q"><span class="q-text">1. ¿Qué tipo de transporte celular no requiere energía?</span><span class="q-type single" onclick="cycleQType(this)">✓ Única</span></div><ul class="opts"><li>A. Transporte activo</li><li>B. Ósmosis</li><li>C. Bomba de protones</li><li>D. Endocitosis</li></ul><div class="q"><span class="q-text">2. ¿Hacia dónde se mueve el agua en la ósmosis?</span><span class="q-type single" onclick="cycleQType(this)">✓ Única</span></div><ul class="opts"><li>A. De mayor a menor concentración de soluto</li><li>B. De menor a mayor concentración de soluto</li><li>C. Siempre hacia afuera</li><li>D. Depende de la temperatura</li></ul><div class="q"><span class="q-text">3. ¿Qué proceso celular utiliza vesículas para internalizar sustancias?</span><span class="q-type text" onclick="cycleQType(this)">✎ Abierta</span></div></div>
             </div>
             <div style="display:flex;gap:2px;flex-shrink:0;align-items:center">
               <span class="outline-edit-hint" style="margin-right:4px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
@@ -923,7 +929,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="Metabolismo celular" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
               <input type="text" value="Respiración celular y obtención de energía" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
               <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>Biología Celular, Cap. 3 — Presentación PPT</div>
-              <div class="outline-preview"><div class="q">1. ¿Dónde se produce la mayor cantidad de ATP en la célula?</div><ul class="opts"><li>A. Citoplasma</li><li>B. Mitocondria</li><li>C. Núcleo</li><li>D. Ribosoma</li></ul><div class="q">2. ¿Cuál es el producto final de la glucólisis?</div><ul class="opts"><li>A. Piruvato</li><li>B. Glucosa</li><li>C. ATP</li><li>D. Oxígeno</li></ul><div class="q">3. ¿Qué molécula actúa como transportador de electrones?</div><ul class="opts"><li>A. NAD+</li><li>B. ADP</li><li>C. Glucosa</li><li>D. Ácido pirúvico</li></ul></div>
+              <div class="outline-preview"><div class="q"><span class="q-text">1. ¿Dónde se produce la mayor cantidad de ATP en la célula?</span><span class="q-type single" onclick="cycleQType(this)">✓ Única</span></div><ul class="opts"><li>A. Citoplasma</li><li>B. Mitocondria</li><li>C. Núcleo</li><li>D. Ribosoma</li></ul><div class="q"><span class="q-text">2. ¿Cuál es el producto final de la glucólisis?</span><span class="q-type text" onclick="cycleQType(this)">✎ Abierta</span></div><ul class="opts"><li>A. Piruvato</li><li>B. Glucosa</li><li>C. ATP</li><li>D. Oxígeno</li></ul><div class="q"><span class="q-text">3. ¿Qué molécula actúa como transportador de electrones?</span><span class="q-type multi" onclick="cycleQType(this)">☑ Múltiple</span></div><ul class="opts"><li>A. NAD+</li><li>B. ADP</li><li>C. Glucosa</li><li>D. Ácido pirúvico</li></ul></div>
             </div>
             <div style="display:flex;gap:2px;flex-shrink:0;align-items:center">
               <span class="outline-edit-hint" style="margin-right:4px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
@@ -938,7 +944,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="División celular" style="border:none;background:none;font-size:15px;font-weight:700;width:100%;outline:none;padding:0;margin-bottom:2px">
               <input type="text" value="Mitosis, meiosis y ciclo celular" style="border:none;background:none;font-size:13px;color:var(--muted);width:100%;outline:none;padding:0">
               <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>Biología Celular, Cap. 4 — Resumen alumnos</div>
-              <div class="outline-preview"><div class="q">1. ¿Cuántas células hijas produce la mitosis?</div><ul class="opts"><li>A. Una</li><li>B. Dos</li><li>C. Cuatro</li><li>D. Ocho</li></ul><div class="q">2. ¿En qué fase se separan los cromosomas?</div><ul class="opts"><li>A. Profase</li><li>B. Metafase</li><li>C. Anafase</li><li>D. Telofase</li></ul><div class="q">3. ¿Cuál es el resultado final de la meiosis?</div><ul class="opts"><li>A. Dos células diploides</li><li>B. Cuatro células haploides</li><li>C. Dos células haploides</li><li>D. Cuatro células diploides</li></ul></div>
+              <div class="outline-preview"><div class="q"><span class="q-text">1. ¿Cuántas células hijas produce la mitosis?</span><span class="q-type single" onclick="cycleQType(this)">✓ Única</span></div><ul class="opts"><li>A. Una</li><li>B. Dos</li><li>C. Cuatro</li><li>D. Ocho</li></ul><div class="q"><span class="q-text">2. ¿En qué fase se separan los cromosomas?</span><span class="q-type single" onclick="cycleQType(this)">✓ Única</span></div><ul class="opts"><li>A. Profase</li><li>B. Metafase</li><li>C. Anafase</li><li>D. Telofase</li></ul><div class="q"><span class="q-text">3. ¿Cuál es el resultado final de la meiosis?</span><span class="q-type text" onclick="cycleQType(this)">✎ Abierta</span></div></div>
             </div>
             <div style="display:flex;gap:2px;flex-shrink:0;align-items:center">
               <span class="outline-edit-hint" style="margin-right:4px"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
@@ -1621,6 +1627,18 @@ function addOutlineBlock() {
   block.querySelector('input').select();
 }
 
+function cycleQType(el) {
+  const types = [
+    {cls:'single', label:'✓ Única'},
+    {cls:'multi', label:'☑ Múltiple'},
+    {cls:'text', label:'✎ Abierta'}
+  ];
+  let current = types.findIndex(t => el.classList.contains(t.cls));
+  let next = (current + 1) % types.length;
+  el.classList.remove(types[current].cls);
+  el.classList.add(types[next].cls);
+  el.textContent = types[next].label;
+}
 function removeBlock(btn) {
   const block = btn.closest('.outline-block');
   block.style.opacity = '0';
