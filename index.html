@@ -335,25 +335,7 @@ input,textarea{font-family:inherit}
 @keyframes listenDot{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1.2)}}
 
 /* Fill Intro Overlay */
-.fill-intro{position:fixed;inset:0;z-index:500;background:linear-gradient(180deg,#fff 0%,#f8f9fb 100%);display:none;flex-direction:column;align-items:center;justify-content:center;opacity:1;transition:opacity .5s ease}
-.fill-intro.visible{display:flex}
-.fill-intro.hiding{opacity:0;pointer-events:none}
-.fill-intro-center{display:flex;flex-direction:column;align-items:center;gap:24px;max-width:600px;width:90%;text-align:center}
-.fill-intro-avatar{width:200px;height:200px;border-radius:50%;background:transparent;display:flex;align-items:center;justify-content:center;position:relative}
-.fill-intro-avatar img{width:200px;height:200px;object-fit:contain;filter:drop-shadow(0 4px 20px rgba(0,0,0,.08))}
-.fill-intro-name{font-size:24px;font-weight:800;color:var(--text);margin-top:0}
-.fill-intro-messages{display:flex;flex-direction:column;gap:16px;width:100%;min-height:160px}
-.fill-intro-msg{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;padding:18px 22px;border-radius:16px;font-size:15px;line-height:1.7;text-align:left;background:var(--surface);border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.fill-intro-msg.visible{opacity:1;transform:translateY(0)}
-.fill-intro-msg.ai{background:var(--surface);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;max-width:92%;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.fill-intro-msg.ai .typing-cursor{display:inline-block;width:2px;height:1em;background:var(--green);margin-left:2px;animation:blink .7s step-end infinite;vertical-align:text-bottom}
-@keyframes blink{50%{opacity:0}}
-.fill-intro-start{opacity:0;transform:translateY(12px);transition:opacity .4s ease,transform .4s ease;margin-top:8px;padding:14px 40px;border-radius:var(--radius);background:var(--green);color:var(--dark);font-size:15px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(92,230,63,.3);transition:opacity .4s ease,transform .4s ease,box-shadow .15s}
-.fill-intro-start.visible{opacity:1;transform:translateY(0)}
-.fill-intro-start:hover{box-shadow:0 4px 20px rgba(92,230,63,.4);transform:translateY(-1px)}
-.fill-intro-start:active{transform:translateY(0)}
-.fill-intro-footer{position:absolute;bottom:28px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
-.fill-intro-footer svg{width:14px;height:14px;color:var(--green)}
+
 
 .attach-material-item{display:flex;align-items:center;gap:10px;width:100%;padding:8px 14px;border:none;background:none;cursor:pointer;font-family:var(--font);text-align:left;transition:background .1s;border-radius:0}
 .attach-material-item:hover{background:var(--bg)}
@@ -1093,21 +1075,7 @@ input,textarea{font-family:inherit}
 
 </div><!-- .main -->
 
-<!-- Fill Intro Overlay -->
-<div class="fill-intro" id="fillIntro">
-  <div class="fill-intro-center">
-    <div class="fill-intro-avatar">
-      <img src="evalia-sprites/typing.svg" alt="Evalia">
-    </div>
-    <div class="fill-intro-name">Evalia</div>
-    <div class="fill-intro-messages" id="fillIntroMessages"></div>
-    <button class="fill-intro-start" id="fillIntroStart" onclick="dismissFillIntro()">Empezar evaluación</button>
-  </div>
-  <div class="fill-intro-footer">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    Tu progreso es confidencial y seguro
-  </div>
-</div>
+
 
 <!-- Fill Test Page -->
 <div class="page" id="page-fill-test" style="padding:0">
@@ -1752,8 +1720,6 @@ function setEvaliaSprite(category) {
   var src = 'evalia-sprites/' + pick + '.svg';
   var headerImg = document.querySelector('.fill-chat-avatar-img');
   if (headerImg) headerImg.src = src;
-  var introAvatarImg = document.querySelector('.fill-intro-avatar img');
-  if (introAvatarImg) introAvatarImg.src = src;
 }
 
 function setSpriteForMessage(text) {
@@ -1768,149 +1734,45 @@ function setSpriteForMessage(text) {
   setEvaliaSprite('neutral');
 }
 
-/* Fill Intro Typewriter */
-var introMessages = [
-  '¡Hola! Soy Evalia, tu asistente de estudio. No estoy aquí para darte las respuestas, sino para ayudarte a pensar. Como un compañero que va a tu lado.',
-  'Si no sabes algo, cuéntame lo que piensas. Podemos analizar juntos las opciones. Con cada pregunta, necesitarás menos mi ayuda. ¡Tú puedes!'
-];
-var introIdx = 0;
-var introCharIdx = 0;
-var introTyping = false;
-var introRunning = false;
-
-function typewriteIntroLine(el, text, cb) {
-  introCharIdx = 0;
-  introTyping = true;
-  var cursor = document.createElement('span');
-  cursor.className = 'typing-cursor';
-  el.appendChild(cursor);
-  function tick() {
-    if (introCharIdx < text.length) {
-      el.textContent = text.substring(0, introCharIdx + 1);
-      el.appendChild(cursor);
-      introCharIdx++;
-      setTimeout(tick, 25 + Math.random() * 20);
-    } else {
-      introTyping = false;
-      cursor.remove();
-      if (cb) setTimeout(cb, 400);
-    }
-  }
-  tick();
-}
-
-function showNextIntroMsg() {
-  if (introIdx >= introMessages.length) {
-    var startBtn = document.getElementById('fillIntroStart');
-    if (startBtn) startBtn.classList.add('visible');
-    return;
-  }
-  setSpriteForMessage(introMessages[introIdx]);
-  var container = document.getElementById('fillIntroMessages');
-  if (!container) return;
-  var msg = document.createElement('div');
-  msg.className = 'fill-intro-msg ai';
-  container.insertBefore(msg, container.firstChild);
-  setTimeout(function() { msg.classList.add('visible'); }, 50);
-  setTimeout(function() {
-    typewriteIntroLine(msg, introMessages[introIdx], function() {
-      introIdx++;
-      showNextIntroMsg();
-    });
-  }, 500);
-}
-
-function startFillIntro() {
-  if (introRunning) return;
-  introRunning = true;
-  var intro = document.getElementById('fillIntro');
-  if (!intro) return;
-  intro.classList.add('visible');
-  intro.classList.remove('hiding');
-  introIdx = 0;
-  var container = document.getElementById('fillIntroMessages');
-  if (container) container.innerHTML = '';
-  var startBtn = document.getElementById('fillIntroStart');
-  if (startBtn) startBtn.classList.remove('visible');
-  setTimeout(showNextIntroMsg, 600);
-}
-
-function dismissFillIntro() {
-  introRunning = false;
-  var intro = document.getElementById('fillIntro');
-  var introMsgs = [];
-  if (intro) {
-    intro.querySelectorAll('.fill-intro-msg').forEach(function(m) {
-      introMsgs.push(m.textContent);
-    });
-    intro.classList.add('hiding');
-    intro.classList.remove('visible');
-  }
+/* Fill Test Init */
+function initFillTest() {
   var chat = document.querySelector('.fill-chat');
   var chatMsgs = document.getElementById('fillChatMessages');
-  if (chat) chat.classList.remove('slide-in');
   if (chatMsgs) {
     var welcome = chatMsgs.querySelector('.fill-chat-welcome');
     if (welcome) welcome.style.display = 'none';
     var oldMsg = chatMsgs.querySelector('.fill-chat-msg');
     if (oldMsg) oldMsg.style.display = 'none';
   }
+  if (chat) setTimeout(function() { chat.classList.add('slide-in'); }, 100);
+  fillCurrentQ = 0;
+  fillTimeLeft = 25 * 60;
+  renderFillDots();
+  updateFillNav();
+  startFillTimer();
   setTimeout(function() {
-    if (intro) intro.classList.remove('hiding');
-    if (chatMsgs && introMsgs.length > 0) {
-      introMsgs.forEach(function(text, i) {
-        var msg = document.createElement('div');
-        msg.className = 'fill-chat-msg ai';
-        msg.style.opacity = '0';
-        msg.style.transform = 'translateY(10px)';
-        msg.style.transition = 'opacity .3s ease, transform .3s ease';
-        msg.textContent = text;
-        chatMsgs.appendChild(msg);
-        setTimeout(function() {
-          msg.style.opacity = '1';
-          msg.style.transform = 'translateY(0)';
-        }, 80 + i * 200);
-      });
-    }
-    if (chat) {
-      setTimeout(function() { chat.classList.add('slide-in'); }, 50);
-    }
-    fillCurrentQ = 0;
-    fillTimeLeft = 25 * 60;
-    renderFillDots();
-    updateFillNav();
-    startFillTimer();
+    if (!chatMsgs) return;
+    var followUp = document.createElement('div');
+    followUp.className = 'fill-chat-msg ai';
+    followUp.style.opacity = '0';
+    followUp.style.transform = 'translateY(10px)';
+    followUp.style.transition = 'opacity .4s ease, transform .4s ease';
+    var followUps = [
+      '¿Tienes alguna duda con la primera pregunta? Estoy aquí para ayudarte a pensarla.',
+      'Cuando quieras, puedes preguntarme sobre cualquier concepto que necesites repasar.',
+      'Estoy lista para ayudarte. Puedes escribirme o usar el micrófono para hablarme.'
+    ];
+    followUp.textContent = followUps[Math.floor(Math.random() * followUps.length)];
+    chatMsgs.appendChild(followUp);
+    startSpriteCycle();
     setTimeout(function() {
-      var followUp = document.createElement('div');
-      followUp.className = 'fill-chat-msg ai';
-      followUp.style.opacity = '0';
-      followUp.style.transform = 'translateY(10px)';
-      followUp.style.transition = 'opacity .4s ease, transform .4s ease';
-      var followUps = [
-        '¿Tienes alguna duda con la primera pregunta? Estoy aquí para ayudarte a pensarla.',
-        'Cuando quieras, puedes preguntarme sobre cualquier concepto que necesites repasar.',
-        'Estoy lista para ayudarte. Puedes escribirme o usar el micrófono para hablarme.'
-      ];
-      followUp.textContent = followUps[Math.floor(Math.random() * followUps.length)];
-      chatMsgs.appendChild(followUp);
-      startSpriteCycle();
-      setTimeout(function() {
-        stopSpriteCycle();
-        followUp.style.opacity = '1';
-        followUp.style.transform = 'translateY(0)';
-        setSpriteForMessage(followUp.textContent);
-        chatMsgs.scrollTop = chatMsgs.scrollHeight;
-      }, 3000);
-    }, 2000);
-  }, 400);
-}
-
-function initFillTest() {
-  var intro = document.getElementById('fillIntro');
-  if (intro && intro.classList.contains('visible')) {
-    startFillIntro();
-    return;
-  }
+      stopSpriteCycle();
+      followUp.style.opacity = '1';
+      followUp.style.transform = 'translateY(0)';
+      setSpriteForMessage(followUp.textContent);
+      chatMsgs.scrollTop = chatMsgs.scrollHeight;
+    }, 3000);
+  }, 2000);
 }
 
 function renderFillDots() {
