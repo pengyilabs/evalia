@@ -1810,7 +1810,7 @@ function showNextIntroMsg() {
   if (!container) return;
   var msg = document.createElement('div');
   msg.className = 'fill-intro-msg ai';
-  container.appendChild(msg);
+  container.insertBefore(msg, container.firstChild);
   setTimeout(function() { msg.classList.add('visible'); }, 50);
   setTimeout(function() {
     typewriteIntroLine(msg, introMessages[introIdx], function() {
