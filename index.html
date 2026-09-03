@@ -311,11 +311,14 @@ input,textarea{font-family:inherit}
 .fill-chat-msg{max-width:85%;padding:10px 14px;border-radius:var(--radius);font-size:13px;line-height:1.5}
 .fill-chat-msg.ai{background:var(--surface);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;animation:msgFadeIn .3s ease-out;box-shadow:0 1px 4px rgba(0,0,0,.04);max-width:90%}
 .fill-chat-msg.user{background:var(--green);color:var(--dark);align-self:flex-end;border-bottom-right-radius:4px;animation:msgFadeIn .3s ease-out}
+.fill-chat-msg.user.recording-preview{border-bottom-right-radius:4px;position:relative}
+.fill-chat-msg.user.recording-preview::after{content:'';display:inline-block;width:2px;height:1em;background:var(--dark);animation:blinkCursor .7s step-end infinite;vertical-align:text-bottom;margin-left:1px}
 .fill-chat-typing{display:flex;gap:4px;padding:12px 16px;align-self:flex-start;animation:msgFadeIn .3s ease-out}
 .fill-chat-typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:typingBounce 1.4s ease-in-out infinite}
 .fill-chat-typing span:nth-child(2){animation-delay:.2s}
 .fill-chat-typing span:nth-child(3){animation-delay:.4s}
 @keyframes msgFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blinkCursor{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
 .fill-chat-input-wrap{padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end}
 .fill-chat-input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:var(--font);outline:none;resize:none;min-height:40px;max-height:120px;transition:border-color .15s}
@@ -331,9 +334,7 @@ input,textarea{font-family:inherit}
 .fill-rec-cancel:hover{opacity:.85}
 .fill-rec-send{width:36px;height:36px;border-radius:50%;background:var(--green);color:var(--dark);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:opacity .15s}
 .fill-rec-send:hover{opacity:.85}
-@keyframes typingCursor{0%,100%{opacity:1}50%{opacity:0}}
-.fill-chat-input.recording{border-color:#e53e3e}
-.fill-chat-input.recording::placeholder{color:#e53e3e}
+@keyframes blinkCursor{0%,100%{opacity:1}50%{opacity:0}}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,62,62,.5)}50%{box-shadow:0 0 0 10px rgba(229,62,62,0)}}
 .fill-listening-bar{display:none;align-items:center;gap:6px;padding:8px 14px;background:#fef2f2;border-radius:var(--radius-sm);margin-bottom:8px;font-size:12px;color:#e53e3e;animation:fadeInUp .3s ease}
 .fill-listening-bar.visible{display:flex}
@@ -2004,22 +2005,16 @@ function startFillRecog() {
 function toggleFillMic() {
   var btn = document.getElementById('fillMicBtn');
   var bar = document.getElementById('fillListeningBar');
-  var input = document.getElementById('fillChatInput');
   var recControls = document.getElementById('fillRecControls');
   fillMicActive = !fillMicActive;
   if (fillMicActive) {
     btn.classList.add('active');
     bar.classList.add('visible');
-    input.placeholder = 'Escuchando...';
-    input.classList.add('recording');
     startSpriteCycle();
     startSimulatedRec();
   } else {
     btn.classList.remove('active');
     bar.classList.remove('visible');
-    input.placeholder = 'Escribe tu pregunta...';
-    input.classList.remove('recording');
-    input.value = '';
     stopSpriteCycle();
     if (window._simRecTimer) { clearInterval(window._simRecTimer); window._simRecTimer = null; }
     if (window._simRecBtns) { recControls.classList.remove('visible'); window._simRecBtns = false; }
@@ -2027,16 +2022,23 @@ function toggleFillMic() {
 }
 function startSimulatedRec() {
   var text = 'Quizás es el núcleo ? No creo que sea la mitocondria o el Ribosoma, esos no me suenan. Estoy entre la A y la B';
-  var input = document.getElementById('fillChatInput');
+  var container = document.getElementById('fillChatMessages');
   var idx = 0;
   var recControls = document.getElementById('fillRecControls');
   recControls.classList.add('visible');
   window._simRecBtns = true;
+  var bubble = document.createElement('div');
+  bubble.className = 'fill-chat-msg user recording-preview';
+  bubble.textContent = '';
+  container.appendChild(bubble);
+  container.scrollTop = container.scrollHeight;
+  window._recPreviewBubble = bubble;
+  window._recFullText = text;
   if (window._simRecTimer) clearInterval(window._simRecTimer);
   window._simRecTimer = setInterval(function() {
     if (idx < text.length) {
-      input.value = text.substring(0, idx + 1);
-      input.scrollTop = input.scrollHeight;
+      bubble.textContent = text.substring(0, idx + 1);
+      container.scrollTop = container.scrollHeight;
       idx++;
     } else {
       clearInterval(window._simRecTimer);
@@ -2047,26 +2049,54 @@ function startSimulatedRec() {
 function cancelFillRec() {
   var btn = document.getElementById('fillMicBtn');
   var bar = document.getElementById('fillListeningBar');
-  var input = document.getElementById('fillChatInput');
   var recControls = document.getElementById('fillRecControls');
   fillMicActive = false;
   btn.classList.remove('active');
   bar.classList.remove('visible');
-  input.placeholder = 'Escribe tu pregunta...';
-  input.classList.remove('recording');
-  input.value = '';
   recControls.classList.remove('visible');
   window._simRecBtns = false;
   stopSpriteCycle();
   if (window._simRecTimer) { clearInterval(window._simRecTimer); window._simRecTimer = null; }
+  if (window._recPreviewBubble) {
+    window._recPreviewBubble.remove();
+    window._recPreviewBubble = null;
+  }
 }
 function sendFillRec() {
-  var input = document.getElementById('fillChatInput');
-  var text = input.value.trim();
-  if (!text) { cancelFillRec(); return; }
+  var container = document.getElementById('fillChatMessages');
+  var bubble = window._recPreviewBubble;
+  var text = bubble ? bubble.textContent.trim() : '';
   cancelFillRec();
-  input.value = text;
-  sendFillChat();
+  if (!text) return;
+  var userMsg = document.createElement('div');
+  userMsg.className = 'fill-chat-msg user';
+  userMsg.textContent = text;
+  container.appendChild(userMsg);
+  container.scrollTop = container.scrollHeight;
+  startSpriteCycle();
+  var typing = document.createElement('div');
+  typing.className = 'fill-chat-typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  container.appendChild(typing);
+  container.scrollTop = container.scrollHeight;
+  setTimeout(function() {
+    stopSpriteCycle();
+    container.removeChild(typing);
+    var aiMsg = document.createElement('div');
+    aiMsg.className = 'fill-chat-msg ai';
+    var responses = [
+      'Buena pregunta! La membrana plasmática es la estructura que controla el intercambio de sustancias entre la célula y el exterior.',
+      'Recuerda que las mitocondrias son las "centrales energéticas" de la célula, donde se produce ATP mediante respiración celular.',
+      'La meiosis produce células con la mitad de cromosomas (gametos), mientras que la mitosis produce células idénticas.',
+      'El ADN también se encuentra en las mitocondrias (ADNmt) y en los cloroplastos de las células vegetales.',
+      'El cloroplasto es la organela donde se realiza la fotosíntesis, convirtiendo luz solar en energía química.'
+    ];
+    var response = responses[Math.floor(Math.random() * responses.length)];
+    aiMsg.textContent = response;
+    container.appendChild(aiMsg);
+    container.scrollTop = container.scrollHeight;
+    setSpriteForMessage(response);
+  }, 1200);
 }
 function toggleEvalDropdown(btn) {
   var dropdown = btn.nextElementSibling;
