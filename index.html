@@ -1303,7 +1303,7 @@ input,textarea{font-family:inherit}
 <div class="fill-intro-modal" id="fillIntroModal">
   <div class="fill-intro-modal-card">
     <div class="fill-intro-modal-avatar">
-      <img src="evalia-sprites/happy.svg" alt="Metis" id="fillIntroModalAvatar">
+      <img src="curious-open-eyes.png" alt="Metis" id="fillIntroModalAvatar">
     </div>
     <div class="fill-intro-modal-bubble">
       <div class="fill-intro-modal-text" id="fillIntroModalText"></div>
@@ -1392,7 +1392,7 @@ input,textarea{font-family:inherit}
       <div class="fill-chat-header">
         <div class="fill-chat-header-row">
           <div class="fill-chat-avatar-wrap">
-            <img src="evalia-sprites/waving.svg" alt="Metis" class="fill-chat-avatar-img">
+            <img src="curious-open-eyes.png" alt="Metis" class="fill-chat-avatar-img">
             <div class="fill-chat-avatar-pulse"></div>
           </div>
           <div class="fill-chat-info"><h4>Metis AI</h4><p>Asistente de estudio</p></div>
@@ -1402,7 +1402,7 @@ input,textarea{font-family:inherit}
       <div class="fill-chat-messages" id="fillChatMessages">
         <div class="fill-chat-welcome">
           <div class="fill-chat-welcome-illustration">
-      <img src="evalia-sprites/typing.svg" alt="Metis">
+      <img src="curious-open-eyes.png" alt="Metis">
           </div>
           <h5>¡Hola! Soy Metis</h5>
           <p>Tu asistente de estudio. Puedo ayudarte con dudas sobre la evaluación.</p>
@@ -2172,15 +2172,9 @@ var currentSprite = 'waving';
 var spriteInterval = null;
 
 function startSpriteCycle() {
-  var thinkSprites = ['thinking', 'chin-rest', 'looking-up', 'focusing', 'reading-notes', 'writing'];
-  var idx = 0;
-  spriteInterval = setInterval(function() {
-    idx = (idx + 1) % thinkSprites.length;
-    currentSprite = thinkSprites[idx];
-    var src = 'evalia-sprites/' + currentSprite + '.svg';
-    var headerImg = document.querySelector('.fill-chat-avatar-img');
-    if (headerImg) headerImg.src = src;
-  }, 1500);
+  var src = 'curious-open-eyes.png';
+  var headerImg = document.querySelector('.fill-chat-avatar-img');
+  if (headerImg) headerImg.src = src;
 }
 
 function stopSpriteCycle() {
@@ -2188,13 +2182,7 @@ function stopSpriteCycle() {
 }
 
 function setMetisSprite(category) {
-  var sprites = metisSprites[category] || metisSprites.neutral;
-  var pick = sprites[Math.floor(Math.random() * sprites.length)];
-  if (pick === currentSprite) {
-    pick = sprites[(sprites.indexOf(pick) + 1) % sprites.length];
-  }
-  currentSprite = pick;
-  var src = 'evalia-sprites/' + pick + '.svg';
+  var src = 'curious-open-eyes.png';
   var headerImg = document.querySelector('.fill-chat-avatar-img');
   if (headerImg) headerImg.src = src;
 }
