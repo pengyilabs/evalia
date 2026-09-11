@@ -10,5 +10,8 @@
 *.gif
 *.zip
 
+# Exception: character illustration needed for the app
+!curious-open-eyes.png
+
 # OS files
 .DS_Store
