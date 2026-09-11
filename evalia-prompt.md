@@ -2,26 +2,6 @@
 
 Build a single-page AI-powered exam generation and test-taking platform in Spanish. The app has sidebar navigation, client-side routing, and multiple interactive pages. All UI copy is in Spanish.
 
-## Design Tokens
-
-- `--bg: #f8f9fb`
-- `--surface: #ffffff`
-- `--dark: #111111`
-- `--green: #5CE63F`
-- `--muted: #6b7280`
-- `--border: #e5e7eb`
-- Font: Inter (400–900)
-- Border radius: 12px (cards), 8px (controls), 9999px (pills)
-- Sidebar width: 240px
-- Topbar height: 64px
-
-## Layout
-
-- Fixed left sidebar with logo, 3 nav items (Inicio, Materiales, Reportes), and a dark plan card at the bottom
-- Topbar with breadcrumb title, credits counter, icon buttons, and avatar
-- Pages show/hide via `showPage()` function with hash-based routing (`#dashboard`, `#materials`, `#reports`, `#create`, `#wizard`, `#editor`, `#fill-test`)
-- Sidebar and topbar hide on full-screen pages (create, wizard, editor, fill-test)
-
 ## Pages
 
 ### 1. Dashboard (`page-dashboard`)
@@ -144,7 +124,7 @@ Build a single-page AI-powered exam generation and test-taking platform in Spani
 ## Technical Notes
 
 - Single self-contained HTML file
-- All SVG sprites referenced from `evalia-sprites/` folder
+- All SVG character sprites referenced from `evalia-sprites/` folder (Metis character illustrations)
 - Google Fonts loaded for Inter
 - Client-side routing only (no server)
 - No external JS frameworks — vanilla JavaScript
