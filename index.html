@@ -2148,6 +2148,7 @@ function toggleAgentQ(el) {
   el.title = el.classList.contains('active') ? 'Agente IA activo para esta pregunta' : 'Agente IA desactivado para esta pregunta';
 }
 function setHelpLevel(level, btn) {
+  agentHelpLevel = level;
   document.querySelectorAll('#helpLevelGroup .help-level-btn').forEach(b => {
     b.classList.remove('active');
     b.style.borderColor = 'var(--border)';
@@ -2279,6 +2280,7 @@ var fillCurrentQ = 0;
 var fillTotalQ = 5;
 var fillTimerInterval = null;
 var fillTimeLeft = 25 * 60;
+var agentHelpLevel = 1;
 
 /* Metis Sprite System */
 var metisSprites = {
@@ -2483,10 +2485,9 @@ function updateFillAgentBar() {
   };
   var typeEl = document.getElementById('fillAgentType');
   if (typeEl) typeEl.textContent = typeLabels[type] || typeLabels.multiple;
-  var level = 1;
   var levelLabels = {1: '🎯 Nivel 1 · Preguntas guía', 2: '💡 Nivel 2 · Pistas directas', 3: '📝 Nivel 3 · Ejemplos'};
   var levelEl = document.getElementById('fillAgentLevel');
-  if (levelEl) levelEl.textContent = levelLabels[level] || levelLabels[1];
+  if (levelEl) levelEl.textContent = levelLabels[agentHelpLevel] || levelLabels[1];
 }
 
 function fillNav(dir) {
@@ -2568,14 +2569,31 @@ function sendFillChat() {
     container.removeChild(typing);
     var aiMsg = document.createElement('div');
     aiMsg.className = 'fill-chat-msg ai';
-    var responses = [
-      'Buena pregunta! La membrana plasmática es la estructura que controla el intercambio de sustancias entre la célula y el exterior.',
-      'Recuerda que las mitocondrias son las "centrales energéticas" de la célula, donde se produce ATP mediante respiración celular.',
-      'La meiosis produce células con la mitad de cromosomas (gametos), mientras que la mitosis produce células idénticas.',
-      'El ADN también se encuentra en las mitocondrias (ADNmt) y en los cloroplastos de las células vegetales.',
-      'El cloroplasto es la organela donde se realiza la fotosíntesis, convirtiendo luz solar en energía química.'
-    ];
-    var response = responses[Math.floor(Math.random() * responses.length)];
+    var responsesByLevel = {
+      1: [
+        '¿Qué sabes sobre la función de esa estructura? Piensa en qué papel juega en la célula.',
+        '¿Cómo crees que esa organela interactúa con las demás? ¿Qué pasaría si faltara?',
+        'Intenta recordar: ¿dónde viste este concepto en tu material de estudio?',
+        'Buena observación. ¿Puedes explicar con tus propias palabras qué hace esa estructura?',
+        '¿Qué relación ves entre esa función y las otras organelas que ya conoces?'
+      ],
+      2: [
+        'Buena pregunta. La membrana plasmática es la estructura que controla el intercambio de sustancias. Piensa en ella como una puerta selectiva.',
+        'Recuerda que las mitocondrias son las "centrales energéticas" — producen ATP. ¿Sabes en qué proceso exacto?',
+        'La meiosis produce células con la mitad de cromosomas (gametos). ¿Cuándo crees que sería necesario reducir el número de cromosomas?',
+        'El ADN también se encuentra en mitocondrias y cloroplastos. Esto apoya la teoría endosimbiótica.',
+        'El cloroplasto convierte luz solar en energía química. ¿Qué moléculas están involucradas en este proceso?'
+      ],
+      3: [
+        'Por ejemplo: La membrana plasmática funciona como una puerta inteligente — deja pasar oxígeno y nutrientes pero bloquea sustancias dañinas. Es como un filtro selectivo. ¿Puedes identificar alguna otra estructura que también sea selectiva?',
+        'Ejercicio similar: Si la mitocondria produce ATP, ¿qué pasaría si una célula muscular (que necesita mucha energía) tuviera pocas mitocondrias? Piensa en la relación entre estructura y función.',
+        'Para recordar: Mitosis = 2 células idénticas (para crecimiento). Meiosis = 4 células diferentes (para reproducción). ¿En qué situaciones del cuerpo humano se usaría cada una?',
+        'Dato clave: El ADN mitocondrial se hereda solo por vía materna. Esto se usa en genealogía genética. ¿Por qué crees que solo se hereda de la madre?',
+        'Repaso: En la fotosíntesis, el CO₂ + H₂O + luz → glucosa + O₂. El cloroplasto es el "laboratorio" donde ocurre esta reacción.'
+      ]
+    };
+    var pool = responsesByLevel[agentHelpLevel] || responsesByLevel[1];
+    var response = pool[Math.floor(Math.random() * pool.length)];
     aiMsg.textContent = response;
     container.appendChild(aiMsg);
     container.scrollTop = container.scrollHeight;
