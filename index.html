@@ -304,6 +304,9 @@ input,textarea{font-family:inherit}
 .fill-agent-level{background:#fef3c7;color:#b45309}
 .fill-agent-active{background:#d1fae5;color:#047857}
 .fill-agent-active.off{background:#fee2e2;color:#dc2626}
+.fill-quick-actions{display:flex;gap:6px;padding:0 12px 8px;flex-wrap:wrap}
+.fill-quick-btn{font-size:11px;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);cursor:pointer;transition:all .15s;white-space:nowrap}
+.fill-quick-btn:hover{border-color:var(--green);background:#f0fdf4;color:var(--green-dark)}
 .fill-chat-avatar{width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .fill-chat-info h4{font-size:15px;font-weight:700}
 .fill-chat-info p{font-size:12px;color:var(--muted)}
@@ -1512,6 +1515,10 @@ input,textarea{font-family:inherit}
         </div>
       </div>
       <div class="fill-chat-input-wrap">
+        <div class="fill-quick-actions" id="fillQuickActions">
+          <button class="fill-quick-btn" onclick="requestExample()" title="Solicitar un ejercicio de ejemplo">💡 Ejemplo</button>
+          <button class="fill-quick-btn" onclick="requestReview()" title="Ver material de repaso">📖 Repaso</button>
+        </div>
         <div class="fill-rec-controls" id="fillRecControls">
           <button class="fill-rec-cancel" onclick="cancelFillRec()" title="Cancelar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
           <button class="fill-rec-send" onclick="sendFillRec()" title="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><polyline points="20,6 9,17 4,12"/></svg></button>
@@ -2347,6 +2354,27 @@ function addFillAiMsg(container, text, delay) {
     msg.style.transform = 'translateY(0)';
     container.scrollTop = container.scrollHeight;
   }, delay || 100);
+}
+function requestExample() {
+  var container = document.getElementById('fillChatMessages');
+  if (!container) return;
+  addFillTyping(container, function() {
+    var q = document.querySelector('.fill-question[data-q="'+fillCurrentQ+'"]');
+    var type = q ? q.getAttribute('data-type') : 'multiple';
+    var examples = {
+      multiple: 'Aquí tienes un ejercicio similar: Imagina que estás observando una célula al microscopio. Ves una estructura con doble membrana que genera energía. ¿Cuál sería? Piensa en las funciones de cada organela que conoces.',
+      single: 'Ejercicio de práctica: Si tuvieras que elegir UNA función esencial para la supervivencia celular, ¿cuál sería y por qué? Compara con las opciones que tienes.',
+      open: 'Para preparar este tipo de pregunta, intenta explicar el concepto con tus propias palabras primero. Por ejemplo: "La mitosis es..." y luego completa la definición.'
+    };
+    addFillAiMsg(container, examples[type] || examples.multiple);
+  });
+}
+function requestReview() {
+  var container = document.getElementById('fillChatMessages');
+  if (!container) return;
+  addFillTyping(container, function() {
+    addFillAiMsg(container, '📚 <strong>Material de repaso:</strong><br><br>• <strong>Membrana plasmática:</strong> barrera selectiva que controla el paso de sustancias<br>• <strong>Mitocondria:</strong> centrales energéticas — producen ATP mediante respiración celular<br>• <strong>Núcleo:</strong> contiene el ADN y controla las funciones celulares<br><br>¿Quieres que profundice en alguno de estos temas?');
+  });
 }
 var introModalText = '¡Hola! Soy Metis, tu asistente de estudio. No estoy aquí para darte las respuestas, sino para ayudarte a pensar. Como un compañero que va a tu lado.';
 var introModalCharIdx = 0;
