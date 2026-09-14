@@ -1518,6 +1518,7 @@ input,textarea{font-family:inherit}
         <div class="fill-quick-actions" id="fillQuickActions">
           <button class="fill-quick-btn" onclick="requestExample()" title="Solicitar un ejercicio de ejemplo">💡 Ejemplo</button>
           <button class="fill-quick-btn" onclick="requestReview()" title="Ver material de repaso">📖 Repaso</button>
+          <button class="fill-quick-btn" onclick="suggestMaterial()" title="Sugerir material de estudio">📎 Material</button>
         </div>
         <div class="fill-rec-controls" id="fillRecControls">
           <button class="fill-rec-cancel" onclick="cancelFillRec()" title="Cancelar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -2376,6 +2377,20 @@ function requestReview() {
   if (!container) return;
   addFillTyping(container, function() {
     addFillAiMsg(container, '📚 <strong>Material de repaso:</strong><br><br>• <strong>Membrana plasmática:</strong> barrera selectiva que controla el paso de sustancias<br>• <strong>Mitocondria:</strong> centrales energéticas — producen ATP mediante respiración celular<br>• <strong>Núcleo:</strong> contiene el ADN y controla las funciones celulares<br><br>¿Quieres que profundice en alguno de estos temas?');
+  });
+}
+function suggestMaterial() {
+  var container = document.getElementById('fillChatMessages');
+  if (!container) return;
+  addFillTyping(container, function() {
+    var q = document.querySelector('.fill-question[data-q="'+fillCurrentQ+'"]');
+    var type = q ? q.getAttribute('data-type') : 'multiple';
+    var materials = {
+      multiple: '📎 <strong>Materiales sugeridos para esta pregunta:</strong><br><br>• <strong>Biología Celular, Cap. 1</strong> — Estructuras celulares y sus funciones (sección 1.3: transportes celulares)<br>• <strong>Apuntes: Membrana plasmática</strong> — Diagrama de la bicapa lipídica y proteínas transportadoras<br>• <strong>Video: "La célula y sus componentes"</strong> — Visualización 3D de organelas (12 min)<br><br>¿Te gustaría que te explique algún concepto de estos materiales?',
+      open: '📎 <strong>Materiales para preparar tu respuesta:</strong><br><br>• <strong>Guía de estudio: Mitosis y Meiosis</strong> — Comparación paso a paso con diagramas<br>• <strong>Esquema: Fases del ciclo celular</strong> — Resumen visual de cada fase<br>• <strong>Ejercicio guiado:</strong> "Compara mitosis y meiosis en 5 puntos" — Plantilla para estructurar tu respuesta<br><br>Estos materiales te ayudarán a organizar tu pensamiento. ¿Necesitas que profundice en alguno?',
+      single: '📎 <strong>Materiales de referencia:</strong><br><br>• <strong>Tabla comparativa de organelas</strong> — Función, estructura y ubicación de cada organela<br>• <strong>Ficha: "Organelas y sus funciones"</strong> — Resumen para repaso rápido<br><br>¿Hay algún tema específico que quieras repasar?'
+    };
+    addFillAiMsg(container, materials[type] || materials.multiple);
   });
 }
 var introModalText = '¡Hola! Soy Metis, tu asistente de estudio. No estoy aquí para darte las respuestas, sino para ayudarte a pensar. Como un compañero que va a tu lado.';
