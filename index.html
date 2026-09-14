@@ -286,6 +286,8 @@ input,textarea{font-family:inherit}
 .fill-nav-dot{width:10px;height:10px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .15s}
 .fill-nav-dot.current{background:var(--green);transform:scale(1.2)}
 .fill-nav-dot.answered{background:var(--green);opacity:.5}
+.fill-nav-dot.explored{background:#818cf8;border:2px solid #6366f1}
+.fill-nav-dot.explored.current{background:#6366f1;border-color:#4f46e5}
 .fill-chat{width:340px;border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);flex-shrink:0;transform:translateX(100%);transition:transform .5s cubic-bezier(.4,0,.2,1)}
 .fill-chat.slide-in{transform:translateX(0)}
 .fill-chat-header{padding:20px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--surface)}
@@ -2317,6 +2319,7 @@ var fillTotalQ = 5;
 var fillTimerInterval = null;
 var fillTimeLeft = 25 * 60;
 var agentHelpLevel = 1;
+var fillExplored = {};
 
 /* Metis Sprite System */
 var metisSprites = {
@@ -2394,6 +2397,7 @@ function addFillAiMsg(container, text, delay) {
   }, delay || 100);
 }
 function requestExample() {
+  fillExplored[fillCurrentQ] = true;
   var container = document.getElementById('fillChatMessages');
   if (!container) return;
   addFillTyping(container, function() {
@@ -2408,6 +2412,7 @@ function requestExample() {
   });
 }
 function requestReview() {
+  fillExplored[fillCurrentQ] = true;
   var container = document.getElementById('fillChatMessages');
   if (!container) return;
   addFillTyping(container, function() {
@@ -2415,6 +2420,7 @@ function requestReview() {
   });
 }
 function suggestMaterial() {
+  fillExplored[fillCurrentQ] = true;
   var container = document.getElementById('fillChatMessages');
   if (!container) return;
   addFillTyping(container, function() {
@@ -2508,6 +2514,7 @@ function updateFillNav() {
   var dots = document.querySelectorAll('.fill-nav-dot');
   dots.forEach(function(d, i) {
     d.classList.toggle('current', i === fillCurrentQ);
+    if (fillExplored[i]) d.classList.add('explored');
   });
   document.getElementById('fillPrevBtn').disabled = fillCurrentQ === 0;
   var nextBtn = document.getElementById('fillNextBtn');
@@ -2621,6 +2628,7 @@ function sendFillChat() {
   var input = document.getElementById('fillChatInput');
   var msg = input.value.trim();
   if (!msg) return;
+  fillExplored[fillCurrentQ] = true;
   var container = document.getElementById('fillChatMessages');
   var now = new Date();
   var timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
