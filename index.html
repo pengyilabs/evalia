@@ -298,6 +298,12 @@ input,textarea{font-family:inherit}
 @keyframes avatarFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 @keyframes avatarPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.3);opacity:0}}
 @keyframes statusBlink{0%,100%{opacity:1}50%{opacity:.4}}
+.fill-agent-bar{display:flex;gap:8px;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--bg);flex-wrap:wrap}
+.fill-agent-type,.fill-agent-level,.fill-agent-active{font-size:11px;font-weight:600;padding:3px 8px;border-radius:10px;display:inline-flex;align-items:center;gap:3px}
+.fill-agent-type{background:#dbeafe;color:#1d4ed8}
+.fill-agent-level{background:#fef3c7;color:#b45309}
+.fill-agent-active{background:#d1fae5;color:#047857}
+.fill-agent-active.off{background:#fee2e2;color:#dc2626}
 .fill-chat-avatar{width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .fill-chat-info h4{font-size:15px;font-weight:700}
 .fill-chat-info p{font-size:12px;color:var(--muted)}
@@ -1420,7 +1426,7 @@ input,textarea{font-family:inherit}
         <button class="fill-nav-btn primary" onclick="submitTest()">Entregar</button>
       </div>
       <div class="fill-test-canvas" id="fillCanvas">
-        <div class="fill-question active" data-q="0">
+        <div class="fill-question active" data-q="0" data-type="multiple">
           <div class="fill-question-inner">
             <div class="fill-question-badge">PREGUNTA 1 · OPCIÓN MÚLTIPLE</div>
             <div class="fill-question-text">¿Qué estructura controla el intercambio de sustancias con el exterior?</div>
@@ -1432,7 +1438,7 @@ input,textarea{font-family:inherit}
             </div>
           </div>
         </div>
-        <div class="fill-question" data-q="1">
+        <div class="fill-question" data-q="1" data-type="multiple">
           <div class="fill-question-inner">
             <div class="fill-question-badge">PREGUNTA 2 · OPCIÓN MÚLTIPLE</div>
             <div class="fill-question-text">¿Cuál es la función principal de la mitocondria?</div>
@@ -1444,14 +1450,14 @@ input,textarea{font-family:inherit}
             </div>
           </div>
         </div>
-        <div class="fill-question" data-q="2">
+        <div class="fill-question" data-q="2" data-type="open">
           <div class="fill-question-inner">
             <div class="fill-question-badge">PREGUNTA 3 · PREGUNTA CORTA</div>
             <div class="fill-question-text">Explica brevemente la diferencia entre mitosis y meiosis.</div>
             <textarea class="fill-textarea" placeholder="Escribe tu respuesta aquí..."></textarea>
           </div>
         </div>
-        <div class="fill-question" data-q="3">
+        <div class="fill-question" data-q="3" data-type="single">
           <div class="fill-question-inner">
             <div class="fill-question-badge">PREGUNTA 4 · VERDADERO / FALSO</div>
             <div class="fill-question-text">El ADN se encuentra exclusivamente en el núcleo de la célula.</div>
@@ -1461,7 +1467,7 @@ input,textarea{font-family:inherit}
             </div>
           </div>
         </div>
-        <div class="fill-question" data-q="4">
+        <div class="fill-question" data-q="4" data-type="multiple">
           <div class="fill-question-inner">
             <div class="fill-question-badge">PREGUNTA 5 · OPCIÓN MÚLTIPLE</div>
             <div class="fill-question-text">¿En qué organela se realiza la fotosíntesis?</div>
@@ -1489,6 +1495,11 @@ input,textarea{font-family:inherit}
           </div>
           <div class="fill-chat-info"><h4>Metis AI</h4><p>Asistente de estudio</p></div>
           <div class="fill-chat-status"><span class="fill-chat-status-dot"></span>En línea</div>
+        </div>
+        <div class="fill-agent-bar" id="fillAgentBar">
+          <span class="fill-agent-type" id="fillAgentType">📋 Opción múltiple</span>
+          <span class="fill-agent-level" id="fillAgentLevel">🎯 Nivel 1</span>
+          <span class="fill-agent-active" id="fillAgentActive">🤖 Activo</span>
         </div>
       </div>
       <div class="fill-chat-messages" id="fillChatMessages">
@@ -2430,16 +2441,54 @@ function updateFillNav() {
   var pct = Math.round(((fillCurrentQ + 1) / fillTotalQ) * 100);
   document.getElementById('fillProgressFill').style.width = pct + '%';
   document.getElementById('fillProgressText').textContent = (fillCurrentQ + 1) + '/' + fillTotalQ;
+  updateFillAgentBar();
+}
+
+function updateFillAgentBar() {
+  var q = document.querySelector('.fill-question[data-q="'+fillCurrentQ+'"]');
+  if (!q) return;
+  var type = q.getAttribute('data-type') || 'multiple';
+  var typeLabels = {
+    multiple: '📋 Opción múltiple',
+    single: '✓ Selección única',
+    open: '✎ Respuesta abierta'
+  };
+  var typeEl = document.getElementById('fillAgentType');
+  if (typeEl) typeEl.textContent = typeLabels[type] || typeLabels.multiple;
+  var level = 1;
+  var levelLabels = {1: '🎯 Nivel 1 · Preguntas guía', 2: '💡 Nivel 2 · Pistas directas', 3: '📝 Nivel 3 · Ejemplos'};
+  var levelEl = document.getElementById('fillAgentLevel');
+  if (levelEl) levelEl.textContent = levelLabels[level] || levelLabels[1];
 }
 
 function fillNav(dir) {
   fillCurrentQ = Math.max(0, Math.min(fillTotalQ - 1, fillCurrentQ + dir));
   updateFillNav();
+  sendFillTypeGreeting();
 }
 
 function fillGoTo(idx) {
   fillCurrentQ = idx;
   updateFillNav();
+  sendFillTypeGreeting();
+}
+
+function sendFillTypeGreeting() {
+  var q = document.querySelector('.fill-question[data-q="'+fillCurrentQ+'"]');
+  if (!q) return;
+  var type = q.getAttribute('data-type') || 'multiple';
+  var greetings = {
+    multiple: null,
+    single: null,
+    open: '¿Necesitas ayuda con esta pregunta de desarrollo? Puedo guiarte con preguntas para que llegues a tu propia respuesta.'
+  };
+  var msg = greetings[type];
+  if (!msg) return;
+  var container = document.getElementById('fillChatMessages');
+  if (!container) return;
+  addFillTyping(container, function() {
+    addFillAiMsg(container, msg);
+  });
 }
 
 function selectFillOption(el) {
