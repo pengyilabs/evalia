@@ -288,6 +288,10 @@ input,textarea{font-family:inherit}
 .fill-nav-dot.answered{background:var(--green);opacity:.5}
 .fill-nav-dot.explored{background:#818cf8;border:2px solid #6366f1}
 .fill-nav-dot.explored.current{background:#6366f1;border-color:#4f46e5}
+.fill-flag-btn{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s;z-index:5}
+.fill-flag-btn:hover{border-color:#f59e0b;color:#f59e0b}
+.fill-flag-btn.flagged{background:#fef3c7;border-color:#f59e0b;color:#f59e0b}
+.fill-question-inner{position:relative}
 .fill-chat{width:340px;border-left:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface);flex-shrink:0;transform:translateX(100%);transition:transform .5s cubic-bezier(.4,0,.2,1)}
 .fill-chat.slide-in{transform:translateX(0)}
 .fill-chat-header{padding:20px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--surface)}
@@ -1452,6 +1456,7 @@ input,textarea{font-family:inherit}
       <div class="fill-test-canvas" id="fillCanvas">
         <div class="fill-question active" data-q="0" data-type="multiple">
           <div class="fill-question-inner">
+            <button class="fill-flag-btn" onclick="toggleFillFlag(this)" title="Marcar como pregunta difícil">🚩</button>
             <div class="fill-question-badge">PREGUNTA 1 · OPCIÓN MÚLTIPLE</div>
             <div class="fill-question-text">¿Qué estructura controla el intercambio de sustancias con el exterior?</div>
             <div class="fill-options">
@@ -1464,6 +1469,7 @@ input,textarea{font-family:inherit}
         </div>
         <div class="fill-question" data-q="1" data-type="multiple">
           <div class="fill-question-inner">
+            <button class="fill-flag-btn" onclick="toggleFillFlag(this)" title="Marcar como pregunta difícil">🚩</button>
             <div class="fill-question-badge">PREGUNTA 2 · OPCIÓN MÚLTIPLE</div>
             <div class="fill-question-text">¿Cuál es la función principal de la mitocondria?</div>
             <div class="fill-options">
@@ -1476,6 +1482,7 @@ input,textarea{font-family:inherit}
         </div>
         <div class="fill-question" data-q="2" data-type="open">
           <div class="fill-question-inner">
+            <button class="fill-flag-btn" onclick="toggleFillFlag(this)" title="Marcar como pregunta difícil">🚩</button>
             <div class="fill-question-badge">PREGUNTA 3 · PREGUNTA CORTA</div>
             <div class="fill-question-text">Explica brevemente la diferencia entre mitosis y meiosis.</div>
             <textarea class="fill-textarea" placeholder="Escribe tu respuesta aquí..."></textarea>
@@ -1483,6 +1490,7 @@ input,textarea{font-family:inherit}
         </div>
         <div class="fill-question" data-q="3" data-type="single">
           <div class="fill-question-inner">
+            <button class="fill-flag-btn" onclick="toggleFillFlag(this)" title="Marcar como pregunta difícil">🚩</button>
             <div class="fill-question-badge">PREGUNTA 4 · VERDADERO / FALSO</div>
             <div class="fill-question-text">El ADN se encuentra exclusivamente en el núcleo de la célula.</div>
             <div class="fill-options">
@@ -1493,6 +1501,7 @@ input,textarea{font-family:inherit}
         </div>
         <div class="fill-question" data-q="4" data-type="multiple">
           <div class="fill-question-inner">
+            <button class="fill-flag-btn" onclick="toggleFillFlag(this)" title="Marcar como pregunta difícil">🚩</button>
             <div class="fill-question-badge">PREGUNTA 5 · OPCIÓN MÚLTIPLE</div>
             <div class="fill-question-text">¿En qué organela se realiza la fotosíntesis?</div>
             <div class="fill-options">
@@ -2622,6 +2631,9 @@ function openChatHistory() {
 function closeChatHistory() {
   var modal = document.getElementById('fillHistoryModal');
   if (modal) modal.classList.remove('visible');
+}
+function toggleFillFlag(btn) {
+  btn.classList.toggle('flagged');
 }
 
 function sendFillChat() {
