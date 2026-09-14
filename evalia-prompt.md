@@ -1,131 +1,202 @@
 # METIS — AI Exam Generation Platform
 
-Build a single-page AI-powered exam generation and test-taking platform in Spanish. The app has sidebar navigation, client-side routing, and multiple interactive pages. All UI copy is in Spanish.
+Build an AI-powered exam generation and test-taking platform in Spanish. The platform enables educators to create, manage, and deploy AI-generated assessments while students take tests with real-time AI tutoring assistance.
 
-## Pages
+## Core Functionalities
 
-### 1. Dashboard (`page-dashboard`)
+### 1. Material Ingestion & Processing
 
-- **Welcome banner**: Green gradient background, greeting text ("Hola, [Name]"), subtitle ("¿Listo para crear tu próxima evaluación?"), and a "Crear evaluación" button
-- **AI Idea banner**: Light green gradient, lightbulb icon, "Empezar desde cero" heading, "Usa IDEA para generar una evaluación completa desde tu material" subtitle, "Generar con IDEA" button
-- **Recent evaluations section**: Header with "Evaluaciones recientes" title and "Ver todas" link. Grid of eval cards (min 300px each). Each card has: colored thumbnail area, title, description, metadata (date, questions, duration), and a 3-dot dropdown menu with share/edit/duplicate/delete actions
-- **Quick actions section**: 3 cards in a row — "Subir material" (upload icon), "Generar desde IDEA" (sparkles icon), "Ver reportes" (chart icon)
+- **Multi-format upload**: Accept PDF, PPT, DOC, CSV, TXT files via drag-and-drop or file picker
+- **Educational platform integration**: Connect to Classroom, Moodle, Canvas, Blackboard, Teams, Google Drive to pull materials directly
+- **Material library**: Store uploaded materials with metadata (filename, source, date, size), searchable and filterable by type
+- **AI material analysis**: Parse uploaded documents to extract key concepts, topics, and knowledge areas for question generation
 
-### 2. Materials Page (`page-materials`)
+### 2. Exam Creation Workflow
 
-- **Header**: "Materiales" title, subtitle, and "Subir material" button
-- **Filter bar**: Search input, filter pills (Todos, PDF, PPT, DOC, CSV, TXT), and file count
-- **Materials table**: Rows with checkbox, file type icon (color-coded: PDF=red, PPT=orange, DOC=blue, CSV=green, TXT=gray), filename, source, date, size, and action buttons (download, delete)
-- **Upload modal**: Drag-and-drop zone with dashed border, file input, cancel and upload buttons
+- **Subject configuration**: User specifies exam subject/topic, selects experience level (Básico/Intermedio/Avanzado), and provides custom instructions
+- **Material selection**: Choose which uploaded materials to use as source for question generation
+- **AI generation**: System generates exam questions based on selected materials, subject, and difficulty level
+- **Outline generation**: AI produces a structured outline of questions with types, options, and source citations from the material
 
-### 3. Create Page (`page-create`)
+### 3. Question Management
 
-- Full-screen layout (no sidebar/topbar)
-- **Left side**: Large illustration area with green gradient background
-- **Right side**: "Crear nueva evaluación" heading, subject input, file upload area, experience level selector (Básico/Intermedio/Avanzado as pills), custom instructions textarea, and "Generar con IDEA" button
-- **Attachment button**: Opens dropdown with two tabs — "Subir archivo" (file input) and "Plataforma educativa" (grid of platform options: Classroom, Moodle, Canvas, Blackboard, Teams, Google Drive)
+- **Question types**: Support three question types:
+  - **Única** (Single correct answer): Multiple choice with one correct option
+  - **Múltiple** (Multiple correct answers): Multiple choice with several correct options
+  - **Abierta** (Open-ended): Free text response questions
+- **Question editor**: Full editor for modifying generated questions:
+  - Edit question text
+  - Change question type
+  - Modify answer options (A/B/C/D for multiple choice)
+  - Set correct answers
+  - Add/remove/reorder questions
+  - Preview how questions appear to students
+- **Question configuration**: Set point values, time limits, and other metadata per question
 
-### 4. Wizard (`page-wizard`)
+### 4. Exam Distribution & Sharing
 
-- Full-screen with 4-step progress indicator at top
-- **Step 1 — Processing materials**: Chat-style interface with typing indicators. Borderless textarea at bottom, attachment button, and "Procesar" button. Shows AI processing messages with sprite animations
-- **Step 2 — Outline editor**: Draggable blocks, each containing:
-  - Editable question text input
-  - Clickable type badge that cycles through: ✓ Única (blue), ☑ Múltiple (yellow), ✎ Abierta (green)
-  - Source citation with document icon
-  - Editable option inputs (A/B/C/D for Única/Múltiple)
-  - Move up/down and delete buttons
-  - "Add block" button and question counter ("X preguntas en total")
-- **Step 3 — Question configuration**
-- **Step 4 — Review and generate**
+- **Shareable links**: Generate unique URLs for each exam
+- **QR code generation**: Create QR codes for easy mobile access
+- **Social sharing**: Share exam links via WhatsApp, email
+- **Exam initiation**: Direct link starts the test-taking experience
 
-### 5. Editor (`page-editor`)
+### 5. Test-Taking Experience
 
-- Dark-themed full-screen editor
-- **Topbar**: Back button ("Volver"), title, and "Generar" button
-- **Left sidebar**: Question list with numbered items, click to navigate
-- **Main area**: Question cards showing question text, type badge, options list, correct answer toggle, and edit/delete actions
-- **Right preview panel**: Live preview of how the question will appear to students
+- **Timed exams**: Configurable countdown timer (default 25 minutes) with MM:SS display
+- **Progress tracking**: Visual progress bar and question counter (e.g., "3/12")
+- **Question navigation**: Previous/Next buttons, direct jump to any question via dot indicators
+- **Answer input**: 
+  - Multiple choice: Radio buttons (single answer) or checkboxes (multiple answers)
+  - Open-ended: Text area for free response
+- **Test submission**: Submit completed exam for grading
 
-### 6. Share Modal
+### 6. AI Study Assistant (Metis)
 
-- Centered modal with backdrop
-- Shareable link with copy button
-- Social sharing buttons (WhatsApp, email)
-- QR code preview
-- "Iniciar prueba" button (navigates to fill-test)
+- **Real-time chat**: Students can ask questions about the exam content while taking the test
+- **Contextual responses**: AI provides hints, explanations, and guidance without giving direct answers
+- **Conversational interface**: Chat panel with message history, typing indicators
+- **Voice input**: Microphone button for voice-to-text input (simulated transcription with character-by-character display)
+- **Character animations**: Dynamic avatar expressions that change based on conversation context:
+  - Greeting, thinking, encouraging, explaining, celebrating, listening, concerned, playful, working, neutral states
+  - Automatic sprite switching based on message keywords
+  - Thinking animations during AI response generation
+- **Delayed greetings**: AI proactively sends encouraging messages when student navigates between questions
+- **Typing indicators**: Visual feedback showing AI is processing a response
 
-### 7. Fill Test Page (`page-fill-test`)
+### 7. Dashboard & Analytics
 
-- Full-screen with no sidebar
-- **Intro modal**: Centered card with 300px avatar image, typewriter effect greeting ("¡Hola! Soy Metis, tu asistente de estudio..."), and "Empezar prueba" button
-- **Test interface**:
-  - Left: Question display with one question at a time, radio/checkbox options for multiple choice, textarea for open questions
-  - Top: Progress bar, question counter (1/12), 25-minute countdown timer
-  - Bottom: Previous/Next navigation buttons, dot indicators for each question
-  - Right: Collapsible AI chat panel
+- **Welcome screen**: Personalized greeting with quick access to create new exams
+- **Recent evaluations**: List of recently created/used exams with metadata (date, question count, duration)
+- **Quick actions**: One-click access to upload materials, generate exams, view reports
+- **AI idea generation**: Option to start exam creation from scratch using AI
 
-### 8. AI Chat Panel (in fill-test)
+### 8. Reporting & Insights
 
-- **Header**: Metis avatar (300px SVG sprite), name, status ("En línea")
-- **Messages area**: AI messages with typing indicators (3 bouncing dots), user messages
-- **Sprite system**: 83+ SVG emotion sprites mapped to contexts:
-  - Greeting: waving, happy, peace-sign
-  - Thinking: thinking, chin-rest, looking-up, focusing
-  - Encouraging: thumbs-up, okay-sign, nodding, confident
-  - Explaining: explaining-both-hands, pointing-up, presenting
-  - Celebrating: celebrating, clapping, excited, proud
-  - Listening: listening, headphones
-  - Concerned: worried, nervous-smile, serious
-  - Playful: giggling, heart-hands, mic-drop
-  - Working: typing, writing, reading-notes
-  - Neutral: neutral, shrugging, sipping-coffee
-- **Sprite cycling**: During AI thinking, sprites cycle every 1.5 seconds through thinking variants
-- **Message-based sprite switching**: Keywords in AI messages trigger appropriate sprite (e.g., "¡hola" → greeting, "excelente" → celebrating, "por qué" → explaining)
-- **Mic button**: Pulsing green animation, starts simulated voice recording
-- **Voice recording simulation**: Click mic → creates user chat bubble in messages area → types character-by-character at 35ms/char with blinking cursor → Cancel (X) removes bubble → Send (✓) sends as user message and triggers AI response
-- **Chat input**: Text input with send button, Enter to send
-- **Delayed greetings**: On question change, AI sends delayed greeting after 2 seconds with typing indicator
+- **Performance metrics**: 
+  - Total evaluations created
+  - Number of active students
+  - Average grades across exams
+  - Pass/fail rates
+- **Difficulty analysis**: Breakdown of question difficulty levels (hard/medium/easy)
+- **Question-level analytics**: 
+  - Which questions students struggle with most
+  - Success rates per question
+  - AI prompt usage and effectiveness per question
+- **Student performance**: Individual and aggregate test results with date ranges
+- **Common mistakes**: Identification of frequently missed questions
+- **AI assistant usage**: Statistics on chat sessions, messages, response times
 
-### 9. Reports Page (`page-reports`)
+### 9. Materials Management
 
-- **Summary cards row**: 4 cards — Evaluaciones (12), Estudiantes (345), Nota media (7.8), Tasa aprobación (82%)
-- **Difficulty analysis**: Horizontal bars showing Difícil (35%), Media (45%), Fácil (20%)
-- **AI prompt usage per question**: Table showing question number, prompt used, success rate
-- **Test performance table**: Table with columns: Evaluación, Fecha, Estudiantes, Nota media, Tasa aprobación
-- **Common mistakes section**: List of frequently missed questions
-- **AI assistant usage stats**: Chat sessions, messages sent, avg response time
+- **Material library**: Centralized repository of all uploaded documents
+- **Search and filter**: Find materials by name, type, date, or source
+- **Bulk operations**: Select multiple materials for batch actions
+- **File management**: Download, delete, and organize materials
+
+## Data Model
+
+### Exam
+- `id`: Unique identifier
+- `title`: Exam name
+- `subject`: Topic/subject area
+- `difficulty`: Básico / Intermedio / Avanzado
+- `questions[]`: Array of question objects
+- `timeLimit`: Duration in minutes
+- `createdAt`: Creation timestamp
+- `status`: draft / published / active / completed
+
+### Question
+- `id`: Unique identifier
+- `text`: Question text
+- `type`: single / multiple / open
+- `options[]`: Array of answer options (for single/multiple)
+- `correctAnswer[]`: Correct option ID(s)
+- `points`: Point value
+- `sourceMaterial`: Reference to source document
+- `sourceCitation`: Quote/reference from material
+
+### Material
+- `id`: Unique identifier
+- `filename`: Original filename
+- `type`: pdf / ppt / doc / csv / txt
+- `source`: uploaded / classroom / moodle / canvas / etc.
+- `size`: File size in bytes
+- `uploadedAt`: Upload timestamp
+- `extractedContent`: AI-parsed content for question generation
+
+### Student
+- `id`: Unique identifier
+- `name`: Student name
+- `email`: Contact email
+- `examsTaken[]`: Array of exam attempts
+- `averageGrade`: Calculated average
+
+### ExamAttempt
+- `studentId`: Reference to student
+- `examId`: Reference to exam
+- `answers[]`: Student responses
+- `score`: Calculated score
+- `startedAt`: Start timestamp
+- `completedAt`: Completion timestamp
+- `chatMessages[]`: AI assistant conversation history
+
+### ChatMessage
+- `id`: Unique identifier
+- `role`: student / ai
+- `content`: Message text
+- `timestamp`: Message time
+- `context`: Current question being viewed
+
+## Navigation & Routing
+
+- **Hash-based routing**: `#dashboard`, `#materials`, `#reports`, `#create`, `#wizard`, `#editor`, `#fill-test`
+- **Sidebar navigation**: 3 main sections — Inicio (Dashboard), Materiales (Materials), Reportes (Reports)
+- **Context-dependent UI**: 
+  - Main app: Sidebar + topbar visible
+  - Exam creation/editor/test: Full-screen without sidebar/topbar
+  - Back button returns to previous context
+
+## AI Generation Pipeline
+
+1. **Input processing**: Receive subject, materials, difficulty level, and custom instructions
+2. **Material analysis**: Extract key concepts, definitions, and relationships from source documents
+3. **Question generation**: Generate questions at specified difficulty level using extracted content
+4. **Answer generation**: Create plausible distractors for multiple choice, sample answers for open-ended
+5. **Validation**: Ensure questions are clear, unambiguous, and appropriately difficult
+6. **Outline generation**: Present structured outline for user review and modification
+
+## State Management
+
+- **Page visibility**: Show/hide pages based on current route
+- **Form state**: Preserve form inputs during creation workflow
+- **Exam state**: Track current question, answers, timer during test-taking
+- **Chat state**: Maintain message history and AI context per exam session
+- **Material selection**: Track which materials are selected for generation
 
 ## Key Interactions
 
-- `showPage(page)`: Shows/hides pages, updates sidebar active state, manages sidebar/topbar visibility
-- Hash-based routing with `hashchange` listener
-- `cycleQType(el)`: Cycles question type badge through Única → Múltiple → Abierta
-- `addOutlineBlock()`: Adds new draggable question block with editable fields
-- `removeBlock(btn)`: Removes block with fade animation
-- `moveBlock(btn, dir)`: Reorders blocks up/down
-- `renumberBlocks()`: Updates question numbers and counter
-- `toggleFillMic()`: Starts/stops voice recording simulation
-- `startSimulatedRec()`: Creates user bubble, types text character-by-character
-- `cancelFillRec()`: Removes recording bubble
-- `sendFillRec()`: Sends recorded message, triggers AI response
-- `sendFillChat()`: Sends user message from text input
-- `startSpriteCycle()`: Cycles through thinking sprites every 1.5s
-- `stopSpriteCycle()`: Stops sprite cycling
-- `setSpriteForMessage(text)`: Sets appropriate sprite based on message keywords
-- `addFillTyping(container, cb)`: Shows typing indicator, removes after 1.5s
-- `addFillAiMsg(container, text, delay)`: Adds AI message with fade-in animation
-- `startFillTimer()`: 25-minute countdown with MM:SS display
-- `filterMaterials()`: Filters material list by search query and type pill
-- `handleFileUpload()`: Processes file selection
-- `toggleAttachMenu()`: Shows/hides attachment dropdown
-- `toggleEvalDropdown(btn)`: Shows/hides eval card dropdown menu
+- `createExam()`: Initialize new exam with subject and materials
+- `generateQuestions()`: Trigger AI question generation from materials
+- `editQuestion(id)`: Open question editor for specific question
+- `saveExam()`: Persist exam to storage
+- `shareExam(id)`: Generate shareable link and QR code
+- `startExam(id)`: Begin test-taking session
+- `submitExam()`: Submit answers for grading
+- `sendChatMessage(text)`: Send student message to AI assistant
+- `getAIResponse(message)`: Generate contextual AI response
+- `navigateQuestion(index)`: Jump to specific question
+- `toggleTimer()` / `resetTimer()`: Control exam timer
+- `filterMaterials(query, type)`: Search and filter material library
+- `uploadMaterial(file)`: Process and store uploaded file
+- `deleteMaterial(id)`: Remove material from library
+- `getAnalytics(dateRange)`: Retrieve reporting data
+- `switchPage(page)`: Navigate between sections
 
-## Technical Notes
+## Technical Architecture
 
-- Single self-contained HTML file
-- All SVG character sprites referenced from `evalia-sprites/` folder (Metis character illustrations)
-- Google Fonts loaded for Inter
-- Client-side routing only (no server)
-- No external JS frameworks — vanilla JavaScript
-- CSS transitions for all state changes (fade, slide, scale)
+- **Single-page application**: All routing handled client-side
+- **Vanilla JavaScript**: No framework dependencies
+- **Modular functions**: Separate functions for each major feature
+- **Event-driven**: Use event listeners for user interactions
+- **Local storage**: Persist data client-side (exams, materials, student progress)
+- **Modular architecture**: Separate concerns — UI rendering, data management, AI integration
