@@ -408,6 +408,18 @@ input,textarea{font-family:inherit}
 .outline-action{width:28px;height:28px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;border:none;background:none;cursor:pointer}
 .outline-action:hover{background:var(--bg);color:var(--text)}
 .outline-action.danger:hover{background:#fee2e2;color:#dc2626}
+.agent-toggle{position:relative;display:inline-block;width:42px;height:24px;flex-shrink:0}
+.agent-toggle input{opacity:0;width:0;height:0}
+.agent-toggle-slider{position:absolute;cursor:pointer;inset:0;background:#d1d5db;border-radius:24px;transition:all .2s}
+.agent-toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:all .2s}
+.agent-toggle input:checked+.agent-toggle-slider{background:var(--green)}
+.agent-toggle input:checked+.agent-toggle-slider::before{transform:translateX(18px)}
+.agent-toggle:hover .agent-toggle-slider{box-shadow:0 0 0 2px rgba(92,230,63,.2)}
+.agent-toggle input:focus-visible+.agent-toggle-slider{box-shadow:0 0 0 2px rgba(92,230,63,.4)}
+.agent-q-toggle{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid #d1d5db;background:#fff;color:var(--muted);transition:all .15s;white-space:nowrap;flex-shrink:0;user-select:none}
+.agent-q-toggle.active{background:#f0fdf4;border-color:var(--green);color:var(--green-dark)}
+.agent-q-toggle:hover{border-color:#9ca3af}
+.help-level-btn.active{border-color:var(--green)!important;background:#f0fdf4!important;color:var(--green-dark)!important}
 @keyframes spin{to{transform:rotate(360deg)}}
 .btn-generate{display:inline-flex;align-items:center;gap:8px;background:var(--dark);color:#fff;padding:14px 28px;border-radius:var(--radius);font-size:15px;font-weight:600;transition:all .15s}
 .btn-generate:hover{opacity:.9;transform:translateY(-1px)}
@@ -776,11 +788,13 @@ input,textarea{font-family:inherit}
     <div class="wizard-steps" id="wizardSteps">
       <div class="w-step active"><span class="w-num">1</span>Idea</div>
       <div class="w-divider"></div>
-      <div class="w-step"><span class="w-num">2</span>Procesando</div>
+      <div class="w-step"><span class="w-num">2</span>Agente</div>
       <div class="w-divider"></div>
-      <div class="w-step"><span class="w-num">3</span>Esquema</div>
+      <div class="w-step"><span class="w-num">3</span>Procesando</div>
       <div class="w-divider"></div>
-      <div class="w-step"><span class="w-num">4</span>Generar</div>
+      <div class="w-step"><span class="w-num">4</span>Esquema</div>
+      <div class="w-divider"></div>
+      <div class="w-step"><span class="w-num">5</span>Generar</div>
     </div>
 
     <!-- Step 1: Input idea + files -->
@@ -848,7 +862,7 @@ input,textarea{font-family:inherit}
             </div>
             <input type="file" id="wizardFileUpload" multiple accept=".pdf,.docx,.pptx,.txt,.csv,.xlsx" style="display:none" onchange="handleWizardFiles(this.files)">
             <div style="flex:1"></div>
-            <button class="btn-generate" onclick="startProcessing()" style="padding:10px 20px;font-size:13px"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Generar</button>
+            <button class="btn-generate" onclick="showWizardStep(2)" style="padding:10px 20px;font-size:13px"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Generar</button>
           </div>
           <div id="chatDropOverlay" style="display:none;position:absolute;inset:0;border-radius:var(--radius);background:rgba(92,230,63,.08);border:2px dashed var(--green);z-index:10;align-items:center;justify-content:center;pointer-events:none">
             <div style="text-align:center"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green-dark)" stroke-width="2" stroke-linecap="round" width="40" height="40"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><div style="font-size:14px;font-weight:600;margin-top:8px;color:var(--green-dark)">Soltar archivos aquí</div></div>
@@ -863,8 +877,74 @@ input,textarea{font-family:inherit}
       </div>
     </div>
 
-    <!-- Step 2: Processing/Loading -->
+    <!-- Step 2: Configure Agent -->
     <div id="wizardStep2" style="display:none">
+      <div style="max-width:680px;margin:0 auto;padding:40px 20px">
+        <h2 style="font-size:22px;font-weight:700;margin-bottom:6px">Configura tu agente IA</h2>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:28px">Define cómo Metis interactuará con los estudiantes durante la evaluación.</p>
+
+        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div>
+              <div style="font-size:14px;font-weight:600">No dar respuestas directas</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">Metis guiará al estudiante sin revelar la respuesta correcta</div>
+            </div>
+            <label class="agent-toggle"><input type="checkbox" checked id="agentNoDirect"><span class="agent-toggle-slider"></span></label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div>
+              <div style="font-size:14px;font-weight:600">Guiar el razonamiento con preguntas</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">Hacer preguntas socráticas para ajudar al estudiante a llegar a la respuesta</div>
+            </div>
+            <label class="agent-toggle"><input type="checkbox" checked id="agentGuide"><span class="agent-toggle-slider"></span></label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div>
+              <div style="font-size:14px;font-weight:600">Proporcionar pistas pedagógicas</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">Dar pistas progresivas cuando el estudiante lo necesite</div>
+            </div>
+            <label class="agent-toggle"><input type="checkbox" checked id="agentHints"><span class="agent-toggle-slider"></span></label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:14px;font-weight:600">Adaptar según tipo de pregunta</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">Cambiar comportamiento entre selección múltiple y desarrollo</div>
+            </div>
+            <label class="agent-toggle"><input type="checkbox" checked id="agentAdapt"><span class="agent-toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px">
+          <div style="font-size:14px;font-weight:600;margin-bottom:8px">Nivel de ayuda predeterminado</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Nivel que Metis usará a menos que se configure por pregunta</p>
+          <div style="display:flex;gap:8px" id="helpLevelGroup">
+            <button class="help-level-btn active" onclick="setHelpLevel(1,this)" style="flex:1;padding:10px 12px;border:1.5px solid var(--green);border-radius:var(--radius-sm);background:#f0fdf4;font-size:12px;font-weight:600;color:var(--green-dark);cursor:pointer;transition:all .15s;text-align:center">
+              <div style="font-size:16px;margin-bottom:4px">1</div>Solo preguntas guía
+            </button>
+            <button class="help-level-btn" onclick="setHelpLevel(2,this)" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;text-align:center">
+              <div style="font-size:16px;margin-bottom:4px">2</div>Pistas más directas
+            </button>
+            <button class="help-level-btn" onclick="setHelpLevel(3,this)" style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--surface);font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;text-align:center">
+              <div style="font-size:16px;margin-bottom:4px">3</div>Ejemplos parciales
+            </button>
+          </div>
+        </div>
+
+        <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px">
+          <div style="font-size:14px;font-weight:600;margin-bottom:8px">Instrucciones personalizadas</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Contexto adicional sobre tu materia, enfoque pedagógico o reglas específicas</p>
+          <textarea id="agentCustomInstructions" rows="4" placeholder="Ej: Enfócate en conceptos de biología celular. Si el estudiante confunde organelos, pídele que describa la función de cada uno antes de intentar identificarlo." style="width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;font-size:13px;font-family:var(--font);resize:vertical;outline:none;transition:border-color .15s" onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px">
+          <button class="btn-back-wizard" onclick="showWizardStep(1)" style="padding:10px 20px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:600;color:var(--muted);background:var(--surface);cursor:pointer;transition:all .15s">Volver</button>
+          <button class="btn-generate" onclick="showWizardStep(3)" style="padding:10px 20px;font-size:13px"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/></svg>Continuar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Processing/Loading -->
+    <div id="wizardStep3" style="display:none">
       <div style="text-align:center;padding:60px 20px">
         <div class="processing-spinner" style="width:64px;height:64px;border:4px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 24px"></div>
         <h2 style="font-size:22px;font-weight:700;margin-bottom:8px">Analizando tu idea...</h2>
@@ -900,6 +980,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Qué estructura controla el intercambio de sustancias con el exterior?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type single" onclick="cycleQType(this)">✓ Única</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 1</div>
               </div>
               <div class="outline-options">
@@ -921,6 +1002,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Cuál es la función principal del ribosoma?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type multi" onclick="cycleQType(this)">☑ Múltiple</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 1</div>
               </div>
               <div class="outline-options">
@@ -942,6 +1024,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Qué organela contiene el material genético?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type single" onclick="cycleQType(this)">✓ Única</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 1</div>
               </div>
               <div class="outline-options">
@@ -963,6 +1046,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Qué tipo de transporte celular no requiere energía?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type single" onclick="cycleQType(this)">✓ Única</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 2</div>
               </div>
               <div class="outline-options">
@@ -984,6 +1068,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Hacia dónde se mueve el agua en la ósmosis?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type single" onclick="cycleQType(this)">✓ Única</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 2</div>
               </div>
               <div class="outline-options">
@@ -1005,6 +1090,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Qué proceso celular utiliza vesículas para internalizar sustancias?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type text" onclick="cycleQType(this)">✎ Abierta</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 2</div>
               </div>
               <div class="outline-options" style="color:var(--muted);font-style:italic;font-size:12px;padding:6px 0">Los estudiantes escribirán su respuesta</div>
@@ -1021,6 +1107,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Dónde se produce la mayor cantidad de ATP en la célula?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type single" onclick="cycleQType(this)">✓ Única</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 3</div>
               </div>
               <div class="outline-options">
@@ -1042,6 +1129,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Cuál es el producto final de la glucólisis?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type text" onclick="cycleQType(this)">✎ Abierta</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 3</div>
               </div>
               <div class="outline-options" style="color:var(--muted);font-style:italic;font-size:12px;padding:6px 0">Los estudiantes escribirán su respuesta</div>
@@ -1058,6 +1146,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Qué molécula actúa como transportador de electrones?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type multi" onclick="cycleQType(this)">☑ Múltiple</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 3</div>
               </div>
               <div class="outline-options">
@@ -1079,6 +1168,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Cuántas células hijas produce la mitosis?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type single" onclick="cycleQType(this)">✓ Única</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 4</div>
               </div>
               <div class="outline-options">
@@ -1100,6 +1190,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿En qué fase se separan los cromosomas?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type single" onclick="cycleQType(this)">✓ Única</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 4</div>
               </div>
               <div class="outline-options">
@@ -1121,6 +1212,7 @@ input,textarea{font-family:inherit}
               <input type="text" value="¿Cuál es el resultado final de la meiosis?" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0">
               <div class="outline-q-meta">
                 <span class="q-type text" onclick="cycleQType(this)">✎ Abierta</span>
+                <span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span>
                 <div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Biología Celular, Cap. 4</div>
               </div>
               <div class="outline-options" style="color:var(--muted);font-style:italic;font-size:12px;padding:6px 0">Los estudiantes escribirán su respuesta</div>
@@ -1803,7 +1895,7 @@ function addMaterialChip(btn, fileName, ext) {
 }
 
 function showWizardStep(step) {
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 5; i++) {
     document.getElementById('wizardStep'+i).style.display = i===step ? 'block' : 'none';
   }
   document.querySelectorAll('#wizardSteps .w-step').forEach((s,i) => {
@@ -1813,7 +1905,7 @@ function showWizardStep(step) {
 }
 
 function startProcessing() {
-  showWizardStep(2);
+  showWizardStep(3);
   const steps = [
     { el: 'procStep2', delay: 1200 },
     { el: 'procStep3', delay: 2400 }
@@ -1827,7 +1919,7 @@ function startProcessing() {
       el.querySelector('div').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" width="14" height="14"><polyline points="20,6 9,17 4,12"/></svg>';
     }, s.delay);
   });
-  setTimeout(() => showWizardStep(3), 3200);
+  setTimeout(() => showWizardStep(4), 3200);
 }
 
 function handleWizardFiles(files) {
@@ -2014,7 +2106,7 @@ function addOutlineBlock() {
   const block = document.createElement('div');
   block.className = 'outline-block';
   block.draggable = true;
-  block.innerHTML = `<div class="outline-num">${count}</div><div class="outline-text"><input type="text" value="Nueva pregunta" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0"><div class="outline-q-meta"><span class="q-type single" onclick="cycleQType(this)">✓ Única</span><div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Seleccionar fuente...</div></div><div class="outline-options"><input type="text" value="A. " class="outline-opt"><input type="text" value="B. " class="outline-opt"><input type="text" value="C. " class="outline-opt"><input type="text" value="D. " class="outline-opt"></div></div><div class="outline-actions"><button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button><button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button><button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`;
+  block.innerHTML = `<div class="outline-num">${count}</div><div class="outline-text"><input type="text" value="Nueva pregunta" style="border:none;background:none;font-size:14px;font-weight:600;width:100%;outline:none;padding:0"><div class="outline-q-meta"><span class="q-type single" onclick="cycleQType(this)">✓ Única</span><span class="agent-q-toggle active" onclick="toggleAgentQ(this)" title="Agente IA activo para esta pregunta">🤖 Agente</span><div class="outline-citation"><svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" width="12" height="12"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Seleccionar fuente...</div></div><div class="outline-options"><input type="text" value="A. " class="outline-opt"><input type="text" value="B. " class="outline-opt"><input type="text" value="C. " class="outline-opt"><input type="text" value="D. " class="outline-opt"></div></div><div class="outline-actions"><button class="outline-action" title="Mover arriba" onclick="moveBlock(this,-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="18,15 12,9 6,15"/></svg></button><button class="outline-action" title="Mover abajo" onclick="moveBlock(this,1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="6,9 12,15 18,9"/></svg></button><button class="outline-action danger" title="Eliminar" onclick="removeBlock(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`;
   container.appendChild(block);
   renumberBlocks();
   block.querySelector('input').focus();
@@ -2032,6 +2124,22 @@ function cycleQType(el) {
   el.classList.remove(types[current].cls);
   el.classList.add(types[next].cls);
   el.textContent = types[next].label;
+}
+function toggleAgentQ(el) {
+  el.classList.toggle('active');
+  el.title = el.classList.contains('active') ? 'Agente IA activo para esta pregunta' : 'Agente IA desactivado para esta pregunta';
+}
+function setHelpLevel(level, btn) {
+  document.querySelectorAll('#helpLevelGroup .help-level-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.borderColor = 'var(--border)';
+    b.style.background = 'var(--surface)';
+    b.style.color = 'var(--muted)';
+  });
+  btn.classList.add('active');
+  btn.style.borderColor = 'var(--green)';
+  btn.style.background = '#f0fdf4';
+  btn.style.color = 'var(--green-dark)';
 }
 function removeBlock(btn) {
   const block = btn.closest('.outline-block');
